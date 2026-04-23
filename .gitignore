@@ -1,0 +1,38 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log
+
+# Expo
+.expo/
+dist/
+web-build/
+*.orig.*
+
+# Native
+*.apk
+*.aab
+*.ipa
+android/
+ios/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Supabase
+supabase/.branches
+supabase/.temp
+supabase/.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
