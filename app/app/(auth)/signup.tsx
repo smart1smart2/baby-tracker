@@ -1,15 +1,16 @@
 import { useState } from 'react';
-import { View, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
-import { Button, Text, TextInput, HelperText } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Button, HelperText, TextInput } from 'react-native-paper';
 import { Link } from 'expo-router';
 
+import { AuthScaffold } from '@/components/AuthScaffold';
+import { radii, spacing } from '@/constants';
 import { supabase } from '@/lib/supabase';
 
 export default function SignupScreen() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState<{ kind: 'error' | 'info'; text: string } | null>(null);
 
@@ -33,72 +34,62 @@ export default function SignupScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.kav}
+    <AuthScaffold title="Реєстрація" subtitle="Створи акаунт, щоб почати вести щоденник">
+      <TextInput
+        label="Ім'я"
+        value={fullName}
+        onChangeText={setFullName}
+        mode="outlined"
+        left={<TextInput.Icon icon="account-outline" />}
+      />
+      <TextInput
+        label="Email"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+        keyboardType="email-address"
+        autoComplete="email"
+        mode="outlined"
+        left={<TextInput.Icon icon="email-outline" />}
+      />
+      <TextInput
+        label="Пароль"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry={!showPassword}
+        autoCapitalize="none"
+        mode="outlined"
+        left={<TextInput.Icon icon="lock-outline" />}
+        right={
+          <TextInput.Icon
+            icon={showPassword ? 'eye-off-outline' : 'eye-outline'}
+            onPress={() => setShowPassword((v) => !v)}
+          />
+        }
+      />
+
+      {message ? (
+        <HelperText type={message.kind === 'error' ? 'error' : 'info'}>
+          {message.text}
+        </HelperText>
+      ) : null}
+
+      <Button
+        mode="contained"
+        onPress={onSubmit}
+        loading={submitting}
+        disabled={submitting || !email || !password}
+        contentStyle={{ paddingVertical: spacing.sm }}
+        style={{ marginTop: spacing.sm, borderRadius: radii.lg }}
       >
-        <View style={styles.container}>
-          <Text variant="headlineLarge" style={styles.title}>
-            Реєстрація
-          </Text>
+        Створити акаунт
+      </Button>
 
-          <TextInput
-            label="Ім'я"
-            value={fullName}
-            onChangeText={setFullName}
-            mode="outlined"
-            style={styles.input}
-          />
-          <TextInput
-            label="Email"
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            mode="outlined"
-            style={styles.input}
-          />
-          <TextInput
-            label="Пароль"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            autoCapitalize="none"
-            mode="outlined"
-            style={styles.input}
-          />
-
-          {message ? (
-            <HelperText type={message.kind === 'error' ? 'error' : 'info'}>
-              {message.text}
-            </HelperText>
-          ) : null}
-
-          <Button
-            mode="contained"
-            onPress={onSubmit}
-            loading={submitting}
-            disabled={submitting || !email || !password}
-            style={styles.button}
-          >
-            Створити акаунт
-          </Button>
-
-          <Link href="/(auth)/login" asChild>
-            <Button mode="text">Вже маю акаунт</Button>
-          </Link>
-        </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+      <Link href="/(auth)/login" asChild>
+        <Button mode="text" icon="login">
+          Вже маю акаунт
+        </Button>
+      </Link>
+    </AuthScaffold>
   );
 }
-
-const styles = StyleSheet.create({
-  safe: { flex: 1 },
-  kav: { flex: 1 },
-  container: { flex: 1, justifyContent: 'center', padding: 24, gap: 12 },
-  title: { textAlign: 'center', marginBottom: 16 },
-  input: { marginTop: 4 },
-  button: { marginTop: 8 },
-});
