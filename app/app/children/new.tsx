@@ -1,0 +1,107 @@
+import { useState } from 'react';
+import { View, StyleSheet } from 'react-native';
+import { Button, HelperText, SegmentedButtons, Text, TextInput } from 'react-native-paper';
+import { useRouter } from 'expo-router';
+
+import { FormScreen } from '@/components/FormScreen';
+import { radii, spacing } from '@/constants';
+import { useCreateChild } from '@/features/children/queries';
+import { useActiveChild } from '@/stores/activeChild';
+import type { Sex } from '@/types/domain';
+
+const isValidDate = (value: string) =>
+  /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(Date.parse(value));
+
+export default function NewChildScreen() {
+  const router = useRouter();
+  const createChild = useCreateChild();
+  const setActiveChildId = useActiveChild((s) => s.setActiveChildId);
+
+  const [fullName, setFullName] = useState('');
+  const [dob, setDob] = useState('');
+  const [sex, setSex] = useState<Sex>('unspecified');
+  const [notes, setNotes] = useState('');
+  const [error, setError] = useState<string | null>(null);
+
+  const dobValid = dob === '' || isValidDate(dob);
+  const canSubmit =
+    fullName.trim().length > 0 && isValidDate(dob) && !createChild.isPending;
+
+  const onSubmit = async () => {
+    setError(null);
+    try {
+      const child = await createChild.mutateAsync({
+        full_name: fullName.trim(),
+        date_of_birth: dob,
+        sex,
+        notes: notes.trim() || null,
+      });
+      setActiveChildId(child.id);
+      router.back();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Не вдалося створити запис');
+    }
+  };
+
+  return (
+    <FormScreen>
+      <TextInput
+        label="Ім'я дитини"
+        value={fullName}
+        onChangeText={setFullName}
+        mode="outlined"
+        autoFocus
+      />
+
+      <TextInput
+        label="Дата народження (YYYY-MM-DD)"
+        value={dob}
+        onChangeText={setDob}
+        mode="outlined"
+        placeholder="2026-01-15"
+        keyboardType="numbers-and-punctuation"
+        autoCapitalize="none"
+      />
+      {!dobValid ? <HelperText type="error">Невірний формат дати</HelperText> : null}
+
+      <View style={styles.section}>
+        <Text variant="labelLarge">Стать</Text>
+        <SegmentedButtons
+          value={sex}
+          onValueChange={(v) => setSex(v as Sex)}
+          buttons={[
+            { value: 'female', label: 'Дівчинка' },
+            { value: 'male', label: 'Хлопчик' },
+            { value: 'unspecified', label: 'Інше' },
+          ]}
+        />
+      </View>
+
+      <TextInput
+        label="Нотатки (необов'язково)"
+        value={notes}
+        onChangeText={setNotes}
+        mode="outlined"
+        multiline
+        numberOfLines={3}
+      />
+
+      {error ? <HelperText type="error">{error}</HelperText> : null}
+
+      <Button
+        mode="contained"
+        onPress={onSubmit}
+        loading={createChild.isPending}
+        disabled={!canSubmit}
+        style={styles.submit}
+      >
+        Зберегти
+      </Button>
+    </FormScreen>
+  );
+}
+
+const styles = StyleSheet.create({
+  section: { gap: spacing.sm, marginTop: spacing.xs },
+  submit: { marginTop: spacing.md, borderRadius: radii.lg, paddingVertical: spacing.xs },
+});
