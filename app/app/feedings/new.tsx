@@ -37,7 +37,7 @@ export default function NewFeedingScreen() {
 
   const onSubmit = async () => {
     if (!activeChildId) {
-      setError({ message: 'Спочатку обери дитину' });
+      setError({ messageKey: 'feedings.new.chooseChildFirst' });
       return;
     }
     setError(null);

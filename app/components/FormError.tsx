@@ -1,5 +1,6 @@
 import { View, StyleSheet } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { iconSizes, radii, spacing } from '@/constants';
@@ -13,7 +14,11 @@ type Props = {
 
 export function FormError({ error, inline = false }: Props) {
   const theme = useTheme();
+  const { t } = useTranslation();
   if (!error) return null;
+
+  const message = t(error.messageKey, error.params);
+  const hint = error.hintKey ? t(error.hintKey, error.params) : null;
 
   if (inline) {
     return (
@@ -24,7 +29,7 @@ export function FormError({ error, inline = false }: Props) {
           color={theme.colors.error}
         />
         <Text variant="bodySmall" style={[styles.inlineText, { color: theme.colors.error }]}>
-          {error.message}
+          {message}
         </Text>
       </View>
     );
@@ -50,14 +55,14 @@ export function FormError({ error, inline = false }: Props) {
           variant="labelLarge"
           style={[styles.message, { color: theme.colors.onErrorContainer }]}
         >
-          {error.message}
+          {message}
         </Text>
-        {error.hint ? (
+        {hint ? (
           <Text
             variant="bodySmall"
             style={[styles.hint, { color: theme.colors.onErrorContainer }]}
           >
-            {error.hint}
+            {hint}
           </Text>
         ) : null}
       </View>
