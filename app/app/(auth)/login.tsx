@@ -1,9 +1,12 @@
 import { useState } from 'react';
-import { Button, HelperText, TextInput } from 'react-native-paper';
+import { Button, TextInput } from 'react-native-paper';
 import { Link } from 'expo-router';
 
 import { AuthScaffold } from '@/components/AuthScaffold';
+import { FormError } from '@/components/FormError';
 import { radii, spacing } from '@/constants';
+import { translateError, type FriendlyError } from '@/features/errors/translate';
+import { validateEmail, validatePassword } from '@/features/auth/validation';
 import { supabase } from '@/lib/supabase';
 
 export default function LoginScreen() {
@@ -11,14 +14,25 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<FriendlyError | null>(null);
+  const [emailError, setEmailError] = useState<FriendlyError | null>(null);
+  const [passwordError, setPasswordError] = useState<FriendlyError | null>(null);
 
   const onSubmit = async () => {
     setError(null);
+    const emailIssue = validateEmail(email);
+    const passwordIssue = validatePassword(password);
+    setEmailError(emailIssue);
+    setPasswordError(passwordIssue);
+    if (emailIssue || passwordIssue) return;
+
     setSubmitting(true);
-    const { error: err } = await supabase.auth.signInWithPassword({ email, password });
+    const { error: err } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
     setSubmitting(false);
-    if (err) setError(err.message);
+    if (err) setError(translateError(err));
   };
 
   return (
@@ -26,20 +40,30 @@ export default function LoginScreen() {
       <TextInput
         label="Email"
         value={email}
-        onChangeText={setEmail}
+        onChangeText={(v) => {
+          setEmail(v);
+          if (emailError) setEmailError(null);
+        }}
         autoCapitalize="none"
         keyboardType="email-address"
         autoComplete="email"
         mode="outlined"
+        error={Boolean(emailError)}
         left={<TextInput.Icon icon="email-outline" />}
       />
+      <FormError inline error={emailError} />
+
       <TextInput
         label="Пароль"
         value={password}
-        onChangeText={setPassword}
+        onChangeText={(v) => {
+          setPassword(v);
+          if (passwordError) setPasswordError(null);
+        }}
         secureTextEntry={!showPassword}
         autoCapitalize="none"
         mode="outlined"
+        error={Boolean(passwordError)}
         left={<TextInput.Icon icon="lock-outline" />}
         right={
           <TextInput.Icon
@@ -48,14 +72,15 @@ export default function LoginScreen() {
           />
         }
       />
+      <FormError inline error={passwordError} />
 
-      {error ? <HelperText type="error">{error}</HelperText> : null}
+      <FormError error={error} />
 
       <Button
         mode="contained"
         onPress={onSubmit}
         loading={submitting}
-        disabled={submitting || !email || !password}
+        disabled={submitting}
         contentStyle={{ paddingVertical: spacing.sm }}
         style={{ marginTop: spacing.sm, borderRadius: radii.lg }}
       >

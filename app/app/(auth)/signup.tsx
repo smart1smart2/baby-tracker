@@ -3,7 +3,10 @@ import { Button, HelperText, TextInput } from 'react-native-paper';
 import { Link } from 'expo-router';
 
 import { AuthScaffold } from '@/components/AuthScaffold';
+import { FormError } from '@/components/FormError';
 import { radii, spacing } from '@/constants';
+import { translateError, type FriendlyError } from '@/features/errors/translate';
+import { validateEmail, validateFullName, validatePassword } from '@/features/auth/validation';
 import { supabase } from '@/lib/supabase';
 
 export default function SignupScreen() {
@@ -12,25 +15,43 @@ export default function SignupScreen() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [message, setMessage] = useState<{ kind: 'error' | 'info'; text: string } | null>(null);
+  const [error, setError] = useState<FriendlyError | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
+  const [nameError, setNameError] = useState<FriendlyError | null>(null);
+  const [emailError, setEmailError] = useState<FriendlyError | null>(null);
+  const [passwordError, setPasswordError] = useState<FriendlyError | null>(null);
 
   const onSubmit = async () => {
-    setMessage(null);
+    setError(null);
+    setInfo(null);
+
+    const nameIssue = validateFullName(fullName);
+    const emailIssue = validateEmail(email);
+    const passwordIssue = validatePassword(password);
+    setNameError(nameIssue);
+    setEmailError(emailIssue);
+    setPasswordError(passwordIssue);
+    if (nameIssue || emailIssue || passwordIssue) return;
+
     setSubmitting(true);
-    const { error } = await supabase.auth.signUp({
-      email,
+    const { error: err, data } = await supabase.auth.signUp({
+      email: email.trim(),
       password,
-      options: { data: { full_name: fullName } },
+      options: { data: { full_name: fullName.trim() } },
     });
     setSubmitting(false);
-    if (error) {
-      setMessage({ kind: 'error', text: error.message });
+
+    if (err) {
+      setError(translateError(err));
       return;
     }
-    setMessage({
-      kind: 'info',
-      text: 'Перевір пошту — ми надіслали лист для підтвердження.',
-    });
+
+    if (data.session) {
+      // Auto-confirmed (Confirm email is OFF in Supabase) — AuthGate will redirect.
+      return;
+    }
+
+    setInfo('Перевір пошту — ми надіслали лист для підтвердження.');
   };
 
   return (
@@ -38,27 +59,43 @@ export default function SignupScreen() {
       <TextInput
         label="Ім'я"
         value={fullName}
-        onChangeText={setFullName}
+        onChangeText={(v) => {
+          setFullName(v);
+          if (nameError) setNameError(null);
+        }}
         mode="outlined"
+        error={Boolean(nameError)}
         left={<TextInput.Icon icon="account-outline" />}
       />
+      <FormError inline error={nameError} />
+
       <TextInput
         label="Email"
         value={email}
-        onChangeText={setEmail}
+        onChangeText={(v) => {
+          setEmail(v);
+          if (emailError) setEmailError(null);
+        }}
         autoCapitalize="none"
         keyboardType="email-address"
         autoComplete="email"
         mode="outlined"
+        error={Boolean(emailError)}
         left={<TextInput.Icon icon="email-outline" />}
       />
+      <FormError inline error={emailError} />
+
       <TextInput
         label="Пароль"
         value={password}
-        onChangeText={setPassword}
+        onChangeText={(v) => {
+          setPassword(v);
+          if (passwordError) setPasswordError(null);
+        }}
         secureTextEntry={!showPassword}
         autoCapitalize="none"
         mode="outlined"
+        error={Boolean(passwordError)}
         left={<TextInput.Icon icon="lock-outline" />}
         right={
           <TextInput.Icon
@@ -67,18 +104,16 @@ export default function SignupScreen() {
           />
         }
       />
+      <FormError inline error={passwordError} />
 
-      {message ? (
-        <HelperText type={message.kind === 'error' ? 'error' : 'info'}>
-          {message.text}
-        </HelperText>
-      ) : null}
+      <FormError error={error} />
+      {info ? <HelperText type="info">{info}</HelperText> : null}
 
       <Button
         mode="contained"
         onPress={onSubmit}
         loading={submitting}
-        disabled={submitting || !email || !password}
+        disabled={submitting}
         contentStyle={{ paddingVertical: spacing.sm }}
         style={{ marginTop: spacing.sm, borderRadius: radii.lg }}
       >
