@@ -4,8 +4,10 @@ import { Button, HelperText, SegmentedButtons, Text, TextInput } from 'react-nat
 import { useRouter } from 'expo-router';
 
 import { FormScreen } from '@/components/FormScreen';
+import { FormError } from '@/components/FormError';
 import { radii, spacing } from '@/constants';
 import { useCreateChild } from '@/features/children/queries';
+import { translateError, type FriendlyError } from '@/features/errors/translate';
 import { useActiveChild } from '@/stores/activeChild';
 import type { Sex } from '@/types/domain';
 
@@ -21,7 +23,7 @@ export default function NewChildScreen() {
   const [dob, setDob] = useState('');
   const [sex, setSex] = useState<Sex>('unspecified');
   const [notes, setNotes] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<FriendlyError | null>(null);
 
   const dobValid = dob === '' || isValidDate(dob);
   const canSubmit =
@@ -39,7 +41,7 @@ export default function NewChildScreen() {
       setActiveChildId(child.id);
       router.back();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Не вдалося створити запис');
+      setError(translateError(err));
     }
   };
 
@@ -86,7 +88,7 @@ export default function NewChildScreen() {
         numberOfLines={3}
       />
 
-      {error ? <HelperText type="error">{error}</HelperText> : null}
+      <FormError error={error} />
 
       <Button
         mode="contained"

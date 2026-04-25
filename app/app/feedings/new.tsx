@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Button, HelperText, SegmentedButtons, Text, TextInput } from 'react-native-paper';
+import { Button, SegmentedButtons, Text, TextInput } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 
 import { FormScreen } from '@/components/FormScreen';
+import { FormError } from '@/components/FormError';
 import { radii, spacing } from '@/constants';
 import { useCreateFeeding } from '@/features/feedings/queries';
+import { translateError, type FriendlyError } from '@/features/errors/translate';
 import { useActiveChild } from '@/stores/activeChild';
 import type { FeedingKind } from '@/types/domain';
 
@@ -27,7 +29,7 @@ export default function NewFeedingScreen() {
   const [amountMl, setAmountMl] = useState('');
   const [solidFood, setSolidFood] = useState('');
   const [notes, setNotes] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<FriendlyError | null>(null);
 
   const isBreast = kind === 'breast_left' || kind === 'breast_right';
   const isBottle = kind === 'bottle_breast_milk' || kind === 'bottle_formula';
@@ -35,7 +37,7 @@ export default function NewFeedingScreen() {
 
   const onSubmit = async () => {
     if (!activeChildId) {
-      setError('Спочатку обери дитину');
+      setError({ message: 'Спочатку обери дитину' });
       return;
     }
     setError(null);
@@ -64,7 +66,7 @@ export default function NewFeedingScreen() {
       });
       router.back();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Не вдалося зберегти');
+      setError(translateError(err));
     }
   };
 
@@ -130,7 +132,7 @@ export default function NewFeedingScreen() {
         numberOfLines={2}
       />
 
-      {error ? <HelperText type="error">{error}</HelperText> : null}
+      <FormError error={error} />
 
       <Button
         mode="contained"
