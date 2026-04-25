@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { Alert, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Button, Chip, Text, ActivityIndicator, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { format, parseISO } from 'date-fns';
@@ -17,6 +17,7 @@ import { HeroCard } from '@/components/HeroCard';
 import { StatsRow, type StatItem } from '@/components/StatsRow';
 import { ActionCard } from '@/components/ActionCard';
 import { EventListItem } from '@/components/EventListItem';
+import { useConfirm } from '@/components/ConfirmDialog';
 import { categoryColors, radii, shadows, spacing } from '@/constants';
 
 export default function HomeScreen() {
@@ -45,21 +46,15 @@ export default function HomeScreen() {
     return fullName ?? session?.user.email ?? null;
   }, [session]);
 
-  const confirmLogout = () => {
-    Alert.alert(
-      t('home.logoutConfirm.title'),
-      t('home.logoutConfirm.message'),
-      [
-        { text: t('common.cancel'), style: 'cancel' },
-        {
-          text: t('home.logoutConfirm.action'),
-          style: 'destructive',
-          onPress: () => {
-            void supabase.auth.signOut();
-          },
-        },
-      ],
-    );
+  const confirm = useConfirm();
+  const confirmLogout = async () => {
+    const ok = await confirm({
+      title: t('home.logoutConfirm.title'),
+      message: t('home.logoutConfirm.message'),
+      confirmLabel: t('home.logoutConfirm.action'),
+      destructive: true,
+    });
+    if (ok) await supabase.auth.signOut();
   };
 
   const stats: StatItem[] = useMemo(

@@ -6,6 +6,7 @@
   "common": {
     "save": "Save",
     "cancel": "Cancel",
+    "confirm": "Confirm",
     "retry": "Retry",
     "optional": "optional",
     "loading": "Loading…"
