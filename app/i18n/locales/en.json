@@ -83,6 +83,11 @@
     "today": "Today",
     "noEvents": "No events yet. Tap an action card above.",
     "addAnotherChild": "Add another child",
+    "logoutConfirm": {
+      "title": "Sign out?",
+      "message": "You'll be returned to the login screen.",
+      "action": "Sign out"
+    },
     "stats": {
       "feedings": "Feedings",
       "sleep": "Sleep",

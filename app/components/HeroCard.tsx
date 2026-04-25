@@ -51,8 +51,8 @@ export function HeroCard({ greetingName, activeChild, onLogout }: Props) {
         )}
       </View>
 
-      <View style={styles.decorOuter} />
-      <View style={styles.decorInner} />
+      <View pointerEvents="none" style={styles.decorOuter} />
+      <View pointerEvents="none" style={styles.decorInner} />
     </LinearGradient>
   );
 }

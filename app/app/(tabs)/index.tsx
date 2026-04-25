@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { Alert, View, StyleSheet } from 'react-native';
 import { Button, Chip, Text, ActivityIndicator, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { format, parseISO } from 'date-fns';
@@ -45,6 +45,23 @@ export default function HomeScreen() {
     return fullName ?? session?.user.email ?? null;
   }, [session]);
 
+  const confirmLogout = () => {
+    Alert.alert(
+      t('home.logoutConfirm.title'),
+      t('home.logoutConfirm.message'),
+      [
+        { text: t('common.cancel'), style: 'cancel' },
+        {
+          text: t('home.logoutConfirm.action'),
+          style: 'destructive',
+          onPress: () => {
+            void supabase.auth.signOut();
+          },
+        },
+      ],
+    );
+  };
+
   const stats: StatItem[] = useMemo(
     () => [
       {
@@ -74,7 +91,7 @@ export default function HomeScreen() {
       <HeroCard
         greetingName={greetingName}
         activeChild={activeChild}
-        onLogout={() => supabase.auth.signOut()}
+        onLogout={confirmLogout}
       />
 
       {children.length > 1 ? (

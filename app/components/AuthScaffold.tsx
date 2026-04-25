@@ -27,8 +27,8 @@ export function AuthScaffold({ title, subtitle, children }: Props) {
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
       >
-        <View style={styles.decorOuter} />
-        <View style={styles.decorInner} />
+        <View pointerEvents="none" style={styles.decorOuter} />
+        <View pointerEvents="none" style={styles.decorInner} />
         <SafeAreaView edges={['top']} style={styles.languageSwitcher} pointerEvents="box-none">
           <LanguageSwitcher tone="dark" />
         </SafeAreaView>
