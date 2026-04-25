@@ -1,0 +1,164 @@
+{
+  "brand": {
+    "name": "Baby Tracker",
+    "tagline": "Щоденник здоров'я малюка"
+  },
+  "common": {
+    "save": "Зберегти",
+    "cancel": "Скасувати",
+    "retry": "Повторити",
+    "optional": "необов'язково",
+    "loading": "Завантаження…"
+  },
+  "auth": {
+    "login": {
+      "title": "Вхід",
+      "subtitle": "Раді тебе бачити знов!",
+      "submit": "Увійти",
+      "noAccount": "Немає акаунту? Зареєструватись"
+    },
+    "signup": {
+      "title": "Реєстрація",
+      "subtitle": "Створи акаунт, щоб почати вести щоденник",
+      "submit": "Створити акаунт",
+      "haveAccount": "Вже маю акаунт",
+      "emailConfirmInfo": "Перевір пошту — ми надіслали лист для підтвердження."
+    },
+    "fields": {
+      "email": "Email",
+      "password": "Пароль",
+      "name": "Ім'я"
+    }
+  },
+  "validation": {
+    "emailRequired": "Введи email",
+    "emailInvalid": "Email виглядає некоректним",
+    "emailInvalidHint": "Перевір, що адреса має формат you@example.com.",
+    "passwordRequired": "Введи пароль",
+    "passwordTooShort": "Пароль закороткий",
+    "passwordTooShortHint": "Мінімум {{min}} символів.",
+    "nameRequired": "Введи своє ім'я"
+  },
+  "errors": {
+    "generic": "Сталася помилка. Спробуй ще раз.",
+    "unknown": "Сталася невідома помилка",
+    "network": "Не вдалося з'єднатися з сервером",
+    "networkHint": "Перевір з'єднання з інтернетом і спробуй ще раз.",
+    "auth": {
+      "invalidCredentials": "Невірний email або пароль",
+      "invalidCredentialsHint": "Перевір, що CapsLock вимкнений, і спробуй знов.",
+      "emailNotConfirmed": "Email ще не підтверджений",
+      "emailNotConfirmedHint": "Перевір пошту — ми надіслали тобі лист зі посиланням.",
+      "userExists": "Цей email уже зареєстрований",
+      "userExistsHint": "Спробуй увійти або відновити пароль.",
+      "weakPassword": "Пароль занадто простий",
+      "weakPasswordHint": "Мінімум 6 символів. Краще додай літери різного регістру і цифри.",
+      "rateLimit": "Забагато спроб",
+      "rateLimitHint": "Зачекай кілька хвилин перед наступною спробою.",
+      "emailInvalidServer": "Сервер не прийняв цю адресу",
+      "emailInvalidServerHint": "Generic-адреси (bob@, test@…) блокуються як антиспам. Використай реальну пошту або +суфікс.",
+      "otpExpired": "Посилання вже не дійсне",
+      "otpExpiredHint": "Запитай новий лист для підтвердження.",
+      "noConnection": "Немає з'єднання з сервером"
+    },
+    "db": {
+      "rls": "Немає доступу до цих даних",
+      "rlsHint": "Можливо, твоєї ролі не вистачає для цієї дії.",
+      "unique": "Такий запис уже існує",
+      "uniqueHint": "Перевір, чи не додавали ви це раніше.",
+      "fk": "Не знайдено пов'язаний запис",
+      "fkHint": "Можливо, дитину чи інший об'єкт було видалено.",
+      "notNull": "Не всі обов'язкові поля заповнені",
+      "check": "Введене значення не пройшло перевірку",
+      "checkHint": "Перевір формат і допустимі значення.",
+      "notFound": "Запис не знайдено",
+      "generic": "Помилка бази даних"
+    }
+  },
+  "home": {
+    "greeting": "Привіт, {{name}}!",
+    "defaultName": "батьку",
+    "noChildHint": "Додай дитину, щоб почати вести щоденник",
+    "quickActions": "Швидкі дії",
+    "today": "Сьогодні",
+    "noEvents": "Подій ще немає. Натисни на картку дії вище.",
+    "addAnotherChild": "Додати ще одну дитину",
+    "stats": {
+      "feedings": "Годування",
+      "sleep": "Сон",
+      "diapers": "Підгузки"
+    },
+    "actions": {
+      "feeding": "Годування",
+      "feedingHint": "Додати запис",
+      "sleep": "Сон",
+      "sleepHint": "Старт таймера",
+      "diaper": "Підгузок",
+      "diaperHint": "Зміна",
+      "measurement": "Вимірювання",
+      "measurementHint": "Вага / зріст"
+    },
+    "empty": {
+      "title": "Тут поки що порожньо",
+      "body": "Додай дитину, щоб почати вести щоденник годування, сну, підгузків та ваги.",
+      "cta": "Додати дитину"
+    }
+  },
+  "children": {
+    "new": {
+      "screenTitle": "Нова дитина",
+      "nameLabel": "Ім'я дитини",
+      "dobLabel": "Дата народження (YYYY-MM-DD)",
+      "dobPlaceholder": "2026-01-15",
+      "dobInvalid": "Невірний формат дати",
+      "sexLabel": "Стать",
+      "sexFemale": "Дівчинка",
+      "sexMale": "Хлопчик",
+      "sexUnspecified": "Інше",
+      "notesLabel": "Нотатки (необов'язково)"
+    }
+  },
+  "feedings": {
+    "new": {
+      "screenTitle": "Годування",
+      "typeLabel": "Тип годування",
+      "durationLabel": "Тривалість (хвилини)",
+      "durationPlaceholder": "наприклад, 15",
+      "amountLabel": "Об'єм (мл)",
+      "amountPlaceholder": "наприклад, 120",
+      "solidLabel": "Що їла",
+      "solidPlaceholder": "наприклад, пюре банан",
+      "notesLabel": "Нотатки (необов'язково)",
+      "chooseChildFirst": "Спочатку обери дитину",
+      "timeHint": "Час запису: зараз",
+      "timeHintWithDuration": "Час запису: зараз (− {{minutes}} хв)"
+    },
+    "kinds": {
+      "breastLeft": "Груди (ліва)",
+      "breastRight": "Груди (права)",
+      "bottleBreastMilk": "Пляшечка (молоко)",
+      "bottleFormula": "Пляшечка (суміш)",
+      "solid": "Прикорм"
+    },
+    "amountWithUnit": "{{amount}} мл"
+  },
+  "age": {
+    "notBornYet": "ще не народився",
+    "days_one": "{{count}} день",
+    "days_few": "{{count}} дні",
+    "days_many": "{{count}} днів",
+    "days_other": "{{count}} днів",
+    "weeks_one": "{{count}} тиждень",
+    "weeks_few": "{{count}} тижні",
+    "weeks_many": "{{count}} тижнів",
+    "weeks_other": "{{count}} тижнів",
+    "months_one": "{{count}} місяць",
+    "months_few": "{{count}} місяці",
+    "months_many": "{{count}} місяців",
+    "months_other": "{{count}} місяців",
+    "years_one": "{{count}} рік",
+    "years_few": "{{count}} роки",
+    "years_many": "{{count}} років",
+    "years_other": "{{count}} років"
+  }
+}

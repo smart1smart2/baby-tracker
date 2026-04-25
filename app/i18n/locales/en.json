@@ -1,0 +1,156 @@
+{
+  "brand": {
+    "name": "Baby Tracker",
+    "tagline": "Health diary for your little one"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "retry": "Retry",
+    "optional": "optional",
+    "loading": "Loading…"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in",
+      "subtitle": "Welcome back!",
+      "submit": "Log in",
+      "noAccount": "Don't have an account? Sign up"
+    },
+    "signup": {
+      "title": "Sign up",
+      "subtitle": "Create an account to start your diary",
+      "submit": "Create account",
+      "haveAccount": "I already have an account",
+      "emailConfirmInfo": "Check your email — we sent you a confirmation link."
+    },
+    "fields": {
+      "email": "Email",
+      "password": "Password",
+      "name": "Name"
+    }
+  },
+  "validation": {
+    "emailRequired": "Enter an email",
+    "emailInvalid": "Email looks incorrect",
+    "emailInvalidHint": "Make sure it looks like you@example.com.",
+    "passwordRequired": "Enter a password",
+    "passwordTooShort": "Password is too short",
+    "passwordTooShortHint": "Minimum {{min}} characters.",
+    "nameRequired": "Enter your name"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "unknown": "An unknown error occurred",
+    "network": "Couldn't reach the server",
+    "networkHint": "Check your internet connection and try again.",
+    "auth": {
+      "invalidCredentials": "Wrong email or password",
+      "invalidCredentialsHint": "Make sure CapsLock is off and try again.",
+      "emailNotConfirmed": "Email not confirmed yet",
+      "emailNotConfirmedHint": "Check your inbox — we sent you a confirmation link.",
+      "userExists": "This email is already registered",
+      "userExistsHint": "Try signing in or resetting your password.",
+      "weakPassword": "Password is too weak",
+      "weakPasswordHint": "Use at least 6 characters; mixing letters and digits is even better.",
+      "rateLimit": "Too many attempts",
+      "rateLimitHint": "Wait a few minutes before trying again.",
+      "emailInvalidServer": "The server didn't accept this address",
+      "emailInvalidServerHint": "Generic addresses (bob@, test@…) are blocked as spam protection. Use a real email or +alias.",
+      "otpExpired": "This link has expired",
+      "otpExpiredHint": "Request a new confirmation email.",
+      "noConnection": "No connection to the server"
+    },
+    "db": {
+      "rls": "You don't have access to this data",
+      "rlsHint": "Your role might not allow this action.",
+      "unique": "This record already exists",
+      "uniqueHint": "Check whether it was added earlier.",
+      "fk": "Linked record not found",
+      "fkHint": "The child or related object may have been deleted.",
+      "notNull": "Some required fields are missing",
+      "check": "The value didn't pass validation",
+      "checkHint": "Check the format and allowed values.",
+      "notFound": "Record not found",
+      "generic": "Database error"
+    }
+  },
+  "home": {
+    "greeting": "Hi, {{name}}!",
+    "defaultName": "there",
+    "noChildHint": "Add a child to start your diary",
+    "quickActions": "Quick actions",
+    "today": "Today",
+    "noEvents": "No events yet. Tap an action card above.",
+    "addAnotherChild": "Add another child",
+    "stats": {
+      "feedings": "Feedings",
+      "sleep": "Sleep",
+      "diapers": "Diapers"
+    },
+    "actions": {
+      "feeding": "Feeding",
+      "feedingHint": "Add entry",
+      "sleep": "Sleep",
+      "sleepHint": "Start timer",
+      "diaper": "Diaper",
+      "diaperHint": "Change",
+      "measurement": "Measurement",
+      "measurementHint": "Weight / height"
+    },
+    "empty": {
+      "title": "Nothing here yet",
+      "body": "Add a child to start tracking feedings, sleep, diapers and growth.",
+      "cta": "Add child"
+    }
+  },
+  "children": {
+    "new": {
+      "screenTitle": "New child",
+      "nameLabel": "Child's name",
+      "dobLabel": "Date of birth (YYYY-MM-DD)",
+      "dobPlaceholder": "2026-01-15",
+      "dobInvalid": "Invalid date format",
+      "sexLabel": "Sex",
+      "sexFemale": "Girl",
+      "sexMale": "Boy",
+      "sexUnspecified": "Other",
+      "notesLabel": "Notes (optional)"
+    }
+  },
+  "feedings": {
+    "new": {
+      "screenTitle": "Feeding",
+      "typeLabel": "Feeding type",
+      "durationLabel": "Duration (minutes)",
+      "durationPlaceholder": "e.g., 15",
+      "amountLabel": "Amount (ml)",
+      "amountPlaceholder": "e.g., 120",
+      "solidLabel": "What was eaten",
+      "solidPlaceholder": "e.g., banana puree",
+      "notesLabel": "Notes (optional)",
+      "chooseChildFirst": "Pick a child first",
+      "timeHint": "Time: now",
+      "timeHintWithDuration": "Time: now (− {{minutes}} min)"
+    },
+    "kinds": {
+      "breastLeft": "Breast (left)",
+      "breastRight": "Breast (right)",
+      "bottleBreastMilk": "Bottle (breast milk)",
+      "bottleFormula": "Bottle (formula)",
+      "solid": "Solid food"
+    },
+    "amountWithUnit": "{{amount}} ml"
+  },
+  "age": {
+    "notBornYet": "not born yet",
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days",
+    "weeks_one": "{{count}} week",
+    "weeks_other": "{{count}} weeks",
+    "months_one": "{{count}} month",
+    "months_other": "{{count}} months",
+    "years_one": "{{count}} year",
+    "years_other": "{{count}} years"
+  }
+}
