@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button, TextInput } from 'react-native-paper';
 import { Link } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 import { AuthScaffold } from '@/components/AuthScaffold';
 import { FormError } from '@/components/FormError';
@@ -10,6 +11,7 @@ import { validateEmail, validatePassword } from '@/features/auth/validation';
 import { supabase } from '@/lib/supabase';
 
 export default function LoginScreen() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -36,9 +38,9 @@ export default function LoginScreen() {
   };
 
   return (
-    <AuthScaffold title="Вхід" subtitle="Раді тебе бачити знов!">
+    <AuthScaffold title={t('auth.login.title')} subtitle={t('auth.login.subtitle')}>
       <TextInput
-        label="Email"
+        label={t('auth.fields.email')}
         value={email}
         onChangeText={(v) => {
           setEmail(v);
@@ -54,7 +56,7 @@ export default function LoginScreen() {
       <FormError inline error={emailError} />
 
       <TextInput
-        label="Пароль"
+        label={t('auth.fields.password')}
         value={password}
         onChangeText={(v) => {
           setPassword(v);
@@ -84,12 +86,12 @@ export default function LoginScreen() {
         contentStyle={{ paddingVertical: spacing.sm }}
         style={{ marginTop: spacing.sm, borderRadius: radii.lg }}
       >
-        Увійти
+        {t('auth.login.submit')}
       </Button>
 
       <Link href="/(auth)/signup" asChild>
         <Button mode="text" icon="account-plus-outline">
-          Немає акаунту? Зареєструватись
+          {t('auth.login.noAccount')}
         </Button>
       </Link>
     </AuthScaffold>

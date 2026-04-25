@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button, HelperText, TextInput } from 'react-native-paper';
 import { Link } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 import { AuthScaffold } from '@/components/AuthScaffold';
 import { FormError } from '@/components/FormError';
@@ -10,6 +11,7 @@ import { validateEmail, validateFullName, validatePassword } from '@/features/au
 import { supabase } from '@/lib/supabase';
 
 export default function SignupScreen() {
+  const { t } = useTranslation();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -46,18 +48,14 @@ export default function SignupScreen() {
       return;
     }
 
-    if (data.session) {
-      // Auto-confirmed (Confirm email is OFF in Supabase) — AuthGate will redirect.
-      return;
-    }
-
-    setInfo('Перевір пошту — ми надіслали лист для підтвердження.');
+    if (data.session) return;
+    setInfo(t('auth.signup.emailConfirmInfo'));
   };
 
   return (
-    <AuthScaffold title="Реєстрація" subtitle="Створи акаунт, щоб почати вести щоденник">
+    <AuthScaffold title={t('auth.signup.title')} subtitle={t('auth.signup.subtitle')}>
       <TextInput
-        label="Ім'я"
+        label={t('auth.fields.name')}
         value={fullName}
         onChangeText={(v) => {
           setFullName(v);
@@ -70,7 +68,7 @@ export default function SignupScreen() {
       <FormError inline error={nameError} />
 
       <TextInput
-        label="Email"
+        label={t('auth.fields.email')}
         value={email}
         onChangeText={(v) => {
           setEmail(v);
@@ -86,7 +84,7 @@ export default function SignupScreen() {
       <FormError inline error={emailError} />
 
       <TextInput
-        label="Пароль"
+        label={t('auth.fields.password')}
         value={password}
         onChangeText={(v) => {
           setPassword(v);
@@ -117,12 +115,12 @@ export default function SignupScreen() {
         contentStyle={{ paddingVertical: spacing.sm }}
         style={{ marginTop: spacing.sm, borderRadius: radii.lg }}
       >
-        Створити акаунт
+        {t('auth.signup.submit')}
       </Button>
 
       <Link href="/(auth)/login" asChild>
         <Button mode="text" icon="login">
-          Вже маю акаунт
+          {t('auth.signup.haveAccount')}
         </Button>
       </Link>
     </AuthScaffold>

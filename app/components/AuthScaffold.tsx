@@ -2,6 +2,7 @@ import { type ReactNode } from 'react';
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -15,6 +16,7 @@ type Props = {
 
 export function AuthScaffold({ title, subtitle, children }: Props) {
   const theme = useTheme();
+  const { t } = useTranslation();
 
   return (
     <View style={[styles.root, { backgroundColor: theme.colors.background }]}>
@@ -37,10 +39,10 @@ export function AuthScaffold({ title, subtitle, children }: Props) {
             </View>
           </View>
           <Text variant="displaySmall" style={styles.appName}>
-            Baby Tracker
+            {t('brand.name')}
           </Text>
           <Text variant="bodyMedium" style={styles.tagline}>
-            Щоденник здоров'я малюка
+            {t('brand.tagline')}
           </Text>
         </SafeAreaView>
       </LinearGradient>
