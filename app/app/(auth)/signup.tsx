@@ -119,7 +119,7 @@ export default function SignupScreen() {
       </Button>
 
       <Link href="/(auth)/login" asChild>
-        <Button mode="text" icon="login">
+        <Button mode="text" icon="account-check-outline">
           {t('auth.signup.haveAccount')}
         </Button>
       </Link>
