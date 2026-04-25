@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, SegmentedButtons, Text, TextInput } from 'react-native-paper';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 import { FormScreen } from '@/components/FormScreen';
 import { FormError } from '@/components/FormError';
@@ -11,16 +12,25 @@ import { translateError, type FriendlyError } from '@/features/errors/translate'
 import { useActiveChild } from '@/stores/activeChild';
 import type { FeedingKind } from '@/types/domain';
 
-const KIND_OPTIONS: { value: FeedingKind; label: string }[] = [
-  { value: 'breast_left', label: 'Груди (ліва)' },
-  { value: 'breast_right', label: 'Груди (права)' },
-  { value: 'bottle_breast_milk', label: 'Пляшечка (молоко)' },
-  { value: 'bottle_formula', label: 'Пляшечка (суміш)' },
-  { value: 'solid', label: 'Прикорм' },
+const KINDS: FeedingKind[] = [
+  'breast_left',
+  'breast_right',
+  'bottle_breast_milk',
+  'bottle_formula',
+  'solid',
 ];
+
+const KIND_LABEL_KEYS: Record<FeedingKind, string> = {
+  breast_left: 'feedings.kinds.breastLeft',
+  breast_right: 'feedings.kinds.breastRight',
+  bottle_breast_milk: 'feedings.kinds.bottleBreastMilk',
+  bottle_formula: 'feedings.kinds.bottleFormula',
+  solid: 'feedings.kinds.solid',
+};
 
 export default function NewFeedingScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const activeChildId = useActiveChild((s) => s.activeChildId);
   const createFeeding = useCreateFeeding();
 
@@ -34,6 +44,11 @@ export default function NewFeedingScreen() {
   const isBreast = kind === 'breast_left' || kind === 'breast_right';
   const isBottle = kind === 'bottle_breast_milk' || kind === 'bottle_formula';
   const isSolid = kind === 'solid';
+
+  const kindButtons = useMemo(
+    () => KINDS.map((k) => ({ value: k, label: t(KIND_LABEL_KEYS[k]) })),
+    [t],
+  );
 
   const onSubmit = async () => {
     if (!activeChildId) {
@@ -73,58 +88,58 @@ export default function NewFeedingScreen() {
   return (
     <FormScreen>
       <View style={styles.section}>
-        <Text variant="labelLarge">Тип годування</Text>
+        <Text variant="labelLarge">{t('feedings.new.typeLabel')}</Text>
         <SegmentedButtons
           value={kind}
           onValueChange={(v) => setKind(v as FeedingKind)}
-          buttons={KIND_OPTIONS.slice(0, 2)}
+          buttons={kindButtons.slice(0, 2)}
         />
         <SegmentedButtons
           value={kind}
           onValueChange={(v) => setKind(v as FeedingKind)}
-          buttons={KIND_OPTIONS.slice(2, 4)}
+          buttons={kindButtons.slice(2, 4)}
         />
         <SegmentedButtons
           value={kind}
           onValueChange={(v) => setKind(v as FeedingKind)}
-          buttons={[KIND_OPTIONS[4]]}
+          buttons={[kindButtons[4]]}
         />
       </View>
 
       {isBreast ? (
         <TextInput
-          label="Тривалість (хвилини)"
+          label={t('feedings.new.durationLabel')}
           value={durationMin}
           onChangeText={setDurationMin}
           mode="outlined"
           keyboardType="number-pad"
-          placeholder="наприклад, 15"
+          placeholder={t('feedings.new.durationPlaceholder')}
         />
       ) : null}
 
       {isBottle ? (
         <TextInput
-          label="Об'єм (мл)"
+          label={t('feedings.new.amountLabel')}
           value={amountMl}
           onChangeText={setAmountMl}
           mode="outlined"
           keyboardType="number-pad"
-          placeholder="наприклад, 120"
+          placeholder={t('feedings.new.amountPlaceholder')}
         />
       ) : null}
 
       {isSolid ? (
         <TextInput
-          label="Що їла"
+          label={t('feedings.new.solidLabel')}
           value={solidFood}
           onChangeText={setSolidFood}
           mode="outlined"
-          placeholder="наприклад, пюре банан"
+          placeholder={t('feedings.new.solidPlaceholder')}
         />
       ) : null}
 
       <TextInput
-        label="Нотатки (необов'язково)"
+        label={t('feedings.new.notesLabel')}
         value={notes}
         onChangeText={setNotes}
         mode="outlined"
@@ -141,11 +156,13 @@ export default function NewFeedingScreen() {
         disabled={createFeeding.isPending}
         style={styles.submit}
       >
-        Зберегти
+        {t('common.save')}
       </Button>
 
       <Text variant="bodySmall" style={styles.hint}>
-        Час запису: зараз{isBreast && durationMin ? ` (− ${durationMin} хв)` : ''}
+        {isBreast && durationMin
+          ? t('feedings.new.timeHintWithDuration', { minutes: durationMin })
+          : t('feedings.new.timeHint')}
       </Text>
     </FormScreen>
   );

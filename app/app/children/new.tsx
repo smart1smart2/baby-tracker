@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, HelperText, SegmentedButtons, Text, TextInput } from 'react-native-paper';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 import { FormScreen } from '@/components/FormScreen';
 import { FormError } from '@/components/FormError';
@@ -16,6 +17,7 @@ const isValidDate = (value: string) =>
 
 export default function NewChildScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const createChild = useCreateChild();
   const setActiveChildId = useActiveChild((s) => s.setActiveChildId);
 
@@ -48,7 +50,7 @@ export default function NewChildScreen() {
   return (
     <FormScreen>
       <TextInput
-        label="Ім'я дитини"
+        label={t('children.new.nameLabel')}
         value={fullName}
         onChangeText={setFullName}
         mode="outlined"
@@ -56,31 +58,31 @@ export default function NewChildScreen() {
       />
 
       <TextInput
-        label="Дата народження (YYYY-MM-DD)"
+        label={t('children.new.dobLabel')}
         value={dob}
         onChangeText={setDob}
         mode="outlined"
-        placeholder="2026-01-15"
+        placeholder={t('children.new.dobPlaceholder')}
         keyboardType="numbers-and-punctuation"
         autoCapitalize="none"
       />
-      {!dobValid ? <HelperText type="error">Невірний формат дати</HelperText> : null}
+      {!dobValid ? <HelperText type="error">{t('children.new.dobInvalid')}</HelperText> : null}
 
       <View style={styles.section}>
-        <Text variant="labelLarge">Стать</Text>
+        <Text variant="labelLarge">{t('children.new.sexLabel')}</Text>
         <SegmentedButtons
           value={sex}
           onValueChange={(v) => setSex(v as Sex)}
           buttons={[
-            { value: 'female', label: 'Дівчинка' },
-            { value: 'male', label: 'Хлопчик' },
-            { value: 'unspecified', label: 'Інше' },
+            { value: 'female', label: t('children.new.sexFemale') },
+            { value: 'male', label: t('children.new.sexMale') },
+            { value: 'unspecified', label: t('children.new.sexUnspecified') },
           ]}
         />
       </View>
 
       <TextInput
-        label="Нотатки (необов'язково)"
+        label={t('children.new.notesLabel')}
         value={notes}
         onChangeText={setNotes}
         mode="outlined"
@@ -97,7 +99,7 @@ export default function NewChildScreen() {
         disabled={!canSubmit}
         style={styles.submit}
       >
-        Зберегти
+        {t('common.save')}
       </Button>
     </FormScreen>
   );
