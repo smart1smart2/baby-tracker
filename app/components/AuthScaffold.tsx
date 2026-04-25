@@ -82,7 +82,6 @@ export function AuthScaffold({ title, subtitle, children }: Props) {
 }
 
 const GRADIENT_HEIGHT = 320;
-const CARD_OVERLAP = 48;
 
 const styles = StyleSheet.create({
   root: { flex: 1 },
@@ -135,7 +134,7 @@ const styles = StyleSheet.create({
   },
   appName: { color: '#FFFFFF', fontWeight: '700' },
   tagline: { color: 'rgba(255,255,255,0.85)', marginTop: spacing.xs },
-  kav: { flex: 1, marginTop: -CARD_OVERLAP },
+  kav: { flex: 1, marginTop: -spacing.xl },
   scroll: {
     flexGrow: 1,
     paddingHorizontal: layout.screenPadding + spacing.sm,
