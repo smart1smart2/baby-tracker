@@ -1,5 +1,6 @@
 import { View, StyleSheet } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 
 import { palette, radii, shadows, spacing } from '@/constants';
 import { formatAge } from '@/lib/age';
@@ -7,6 +8,7 @@ import type { Child } from '@/types/domain';
 
 export function ChildCard({ child }: { child: Child }) {
   const theme = useTheme();
+  const { t } = useTranslation();
   const initials = child.full_name
     .split(' ')
     .filter(Boolean)
@@ -42,7 +44,7 @@ export function ChildCard({ child }: { child: Child }) {
           variant="bodyMedium"
           style={[styles.age, { color: theme.colors.onSurfaceVariant }]}
         >
-          {formatAge(child.date_of_birth)}
+          {formatAge(child.date_of_birth, t)}
         </Text>
       </View>
     </View>

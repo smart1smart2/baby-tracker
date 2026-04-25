@@ -1,11 +1,12 @@
 import type { FeedingKind } from '@/types/domain';
 
-const LABELS: Record<FeedingKind, string> = {
-  breast_left: 'Груди (ліва)',
-  breast_right: 'Груди (права)',
-  bottle_breast_milk: 'Пляшечка (молоко)',
-  bottle_formula: 'Пляшечка (суміш)',
-  solid: 'Прикорм',
+const KEYS: Record<FeedingKind, string> = {
+  breast_left: 'feedings.kinds.breastLeft',
+  breast_right: 'feedings.kinds.breastRight',
+  bottle_breast_milk: 'feedings.kinds.bottleBreastMilk',
+  bottle_formula: 'feedings.kinds.bottleFormula',
+  solid: 'feedings.kinds.solid',
 };
 
-export const feedingKindLabel = (kind: FeedingKind) => LABELS[kind];
+/** i18next key for a feeding kind. UI does the t() call. */
+export const feedingKindKey = (kind: FeedingKind) => KEYS[kind];

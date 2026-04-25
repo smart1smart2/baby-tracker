@@ -3,11 +3,12 @@ import { View, StyleSheet } from 'react-native';
 import { Button, Chip, Text, ActivityIndicator, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { format, parseISO } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
 import { supabase } from '@/lib/supabase';
 import { useChildren } from '@/features/children/queries';
 import { useFeedingsToday } from '@/features/feedings/queries';
-import { feedingKindLabel } from '@/features/feedings/labels';
+import { feedingKindKey } from '@/features/feedings/labels';
 import { useActiveChild } from '@/stores/activeChild';
 import { useAuth } from '@/providers/AuthProvider';
 
@@ -21,6 +22,7 @@ import { categoryColors, radii, shadows, spacing } from '@/constants';
 export default function HomeScreen() {
   const router = useRouter();
   const theme = useTheme();
+  const { t } = useTranslation();
   const { session } = useAuth();
   const { data: children = [], isLoading, isRefetching, refetch } = useChildren();
   const activeChildId = useActiveChild((s) => s.activeChildId);
@@ -49,17 +51,22 @@ export default function HomeScreen() {
         icon: 'baby-bottle-outline',
         tint: categoryColors.feeding,
         value: String(feedingsToday.length),
-        label: 'Годування',
+        label: t('home.stats.feedings'),
       },
-      { icon: 'sleep', tint: categoryColors.sleep, value: '—', label: 'Сон' },
+      {
+        icon: 'sleep',
+        tint: categoryColors.sleep,
+        value: '—',
+        label: t('home.stats.sleep'),
+      },
       {
         icon: 'human-baby-changing-table',
         tint: categoryColors.diaper,
         value: '—',
-        label: 'Підгузки',
+        label: t('home.stats.diapers'),
       },
     ],
-    [feedingsToday.length],
+    [feedingsToday.length, t],
   );
 
   return (
@@ -95,42 +102,42 @@ export default function HomeScreen() {
           <StatsRow items={stats} />
 
           <Text variant="titleMedium" style={[styles.sectionTitle, { color: theme.colors.onBackground }]}>
-            Швидкі дії
+            {t('home.quickActions')}
           </Text>
 
           <View style={styles.actionsGrid}>
             <ActionCard
               icon="baby-bottle-outline"
-              label="Годування"
-              hint="Додати запис"
+              label={t('home.actions.feeding')}
+              hint={t('home.actions.feedingHint')}
               tint={categoryColors.feeding}
               onPress={() => router.push('/feedings/new')}
             />
             <ActionCard
               icon="sleep"
-              label="Сон"
-              hint="Старт таймера"
+              label={t('home.actions.sleep')}
+              hint={t('home.actions.sleepHint')}
               tint={categoryColors.sleep}
               onPress={() => {}}
             />
             <ActionCard
               icon="human-baby-changing-table"
-              label="Підгузок"
-              hint="Зміна"
+              label={t('home.actions.diaper')}
+              hint={t('home.actions.diaperHint')}
               tint={categoryColors.diaper}
               onPress={() => {}}
             />
             <ActionCard
               icon="scale-bathroom"
-              label="Вимірювання"
-              hint="Вага / зріст"
+              label={t('home.actions.measurement')}
+              hint={t('home.actions.measurementHint')}
               tint={categoryColors.growth}
               onPress={() => {}}
             />
           </View>
 
           <Text variant="titleMedium" style={[styles.sectionTitle, { color: theme.colors.onBackground }]}>
-            Сьогодні
+            {t('home.today')}
           </Text>
 
           <View
@@ -145,7 +152,7 @@ export default function HomeScreen() {
                 variant="bodyMedium"
                 style={[styles.emptyList, { color: theme.colors.onSurfaceVariant }]}
               >
-                Подій ще немає. Натисни на картку дії вище.
+                {t('home.noEvents')}
               </Text>
             ) : (
               feedingsToday.slice(0, 6).map((f, idx) => (
@@ -158,8 +165,8 @@ export default function HomeScreen() {
                   <EventListItem
                     icon="baby-bottle-outline"
                     tint={categoryColors.feeding}
-                    title={feedingKindLabel(f.kind)}
-                    subtitle={f.amount_ml ? `${f.amount_ml} мл` : undefined}
+                    title={t(feedingKindKey(f.kind))}
+                    subtitle={f.amount_ml ? t('feedings.amountWithUnit', { amount: f.amount_ml }) : undefined}
                     time={format(parseISO(f.started_at), 'HH:mm')}
                   />
                 </View>
@@ -173,7 +180,7 @@ export default function HomeScreen() {
             onPress={() => router.push('/children/new')}
             style={styles.addChild}
           >
-            Додати ще одну дитину
+            {t('home.addAnotherChild')}
           </Button>
         </>
       )}
@@ -183,21 +190,22 @@ export default function HomeScreen() {
 
 function EmptyState({ onAdd }: { onAdd: () => void }) {
   const theme = useTheme();
+  const { t } = useTranslation();
   return (
     <View
       style={[styles.empty, shadows.sm, { backgroundColor: theme.colors.surface }]}
     >
       <Text variant="titleMedium" style={{ color: theme.colors.onSurface }}>
-        Тут поки що порожньо
+        {t('home.empty.title')}
       </Text>
       <Text
         variant="bodyMedium"
         style={[styles.emptyBody, { color: theme.colors.onSurfaceVariant }]}
       >
-        Додай дитину, щоб почати вести щоденник годування, сну, підгузків та ваги.
+        {t('home.empty.body')}
       </Text>
       <Button mode="contained" onPress={onAdd} style={styles.emptyAction}>
-        Додати дитину
+        {t('home.empty.cta')}
       </Button>
     </View>
   );

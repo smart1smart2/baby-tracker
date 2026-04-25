@@ -1,5 +1,6 @@
 import { View, StyleSheet } from 'react-native';
 import { IconButton, Text } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { heroGradient, iconSizes, radii, shadows, spacing } from '@/constants';
@@ -13,7 +14,9 @@ type Props = {
 };
 
 export function HeroCard({ greetingName, activeChild, onLogout }: Props) {
-  const displayName = greetingName?.trim().split(' ')[0] || 'батьку';
+  const { t } = useTranslation();
+  const displayName =
+    greetingName?.trim().split(' ')[0] || t('home.defaultName');
 
   return (
     <LinearGradient
@@ -34,15 +37,15 @@ export function HeroCard({ greetingName, activeChild, onLogout }: Props) {
 
       <View style={styles.content}>
         <Text variant="headlineLarge" style={styles.greeting}>
-          Привіт, {displayName}!
+          {t('home.greeting', { name: displayName })}
         </Text>
         {activeChild ? (
           <Text variant="bodyLarge" style={styles.tagline}>
-            {activeChild.full_name} · {formatAge(activeChild.date_of_birth)}
+            {activeChild.full_name} · {formatAge(activeChild.date_of_birth, t)}
           </Text>
         ) : (
           <Text variant="bodyLarge" style={styles.tagline}>
-            Додай дитину, щоб почати вести щоденник
+            {t('home.noChildHint')}
           </Text>
         )}
       </View>

@@ -1,30 +1,28 @@
 import { differenceInDays, differenceInMonths, differenceInYears, parseISO } from 'date-fns';
+import type { TFunction } from 'i18next';
 
-export function formatAge(dateOfBirth: string): string {
+/**
+ * Localised age formatter. Accepts an i18next `t` function so plural rules
+ * pick the correct form for the active language (English: one/other,
+ * Ukrainian: one/few/many/other).
+ */
+export function formatAge(dateOfBirth: string, t: TFunction): string {
   const dob = parseISO(dateOfBirth);
   const now = new Date();
   const days = differenceInDays(now, dob);
 
-  if (days < 0) return 'ще не народився';
-  if (days < 14) return `${days} ${plural(days, 'день', 'дні', 'днів')}`;
+  if (days < 0) return t('age.notBornYet');
+  if (days < 14) return t('age.days', { count: days });
 
   const weeks = Math.floor(days / 7);
-  if (weeks < 12) return `${weeks} ${plural(weeks, 'тиждень', 'тижні', 'тижнів')}`;
+  if (weeks < 12) return t('age.weeks', { count: weeks });
 
   const months = differenceInMonths(now, dob);
-  if (months < 24) return `${months} ${plural(months, 'місяць', 'місяці', 'місяців')}`;
+  if (months < 24) return t('age.months', { count: months });
 
   const years = differenceInYears(now, dob);
   const remMonths = months - years * 12;
-  const yearPart = `${years} ${plural(years, 'рік', 'роки', 'років')}`;
+  const yearPart = t('age.years', { count: years });
   if (remMonths === 0) return yearPart;
-  return `${yearPart} ${remMonths} ${plural(remMonths, 'місяць', 'місяці', 'місяців')}`;
-}
-
-function plural(n: number, one: string, few: string, many: string) {
-  const mod10 = n % 10;
-  const mod100 = n % 100;
-  if (mod10 === 1 && mod100 !== 11) return one;
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return few;
-  return many;
+  return `${yearPart} ${t('age.months', { count: remMonths })}`;
 }
