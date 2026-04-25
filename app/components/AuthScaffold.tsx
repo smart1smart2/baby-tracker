@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { heroGradient, iconSizes, layout, radii, shadows, spacing } from '@/constants';
 
 type Props = {
@@ -28,6 +29,9 @@ export function AuthScaffold({ title, subtitle, children }: Props) {
       >
         <View style={styles.decorOuter} />
         <View style={styles.decorInner} />
+        <SafeAreaView edges={['top']} style={styles.languageSwitcher} pointerEvents="box-none">
+          <LanguageSwitcher tone="dark" />
+        </SafeAreaView>
         <SafeAreaView edges={['top']} style={styles.brandSafe}>
           <View style={styles.brandRing}>
             <View style={styles.brandInner}>
@@ -116,6 +120,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: layout.screenPadding,
+  },
+  languageSwitcher: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    padding: layout.screenPadding,
+    zIndex: 1,
   },
   brandRing: {
     width: 96,

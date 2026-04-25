@@ -3,6 +3,7 @@ import { IconButton, Text } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { heroGradient, iconSizes, radii, shadows, spacing } from '@/constants';
 import { formatAge } from '@/lib/age';
 import type { Child } from '@/types/domain';
@@ -26,7 +27,7 @@ export function HeroCard({ greetingName, activeChild, onLogout }: Props) {
       style={[styles.card, shadows.lg]}
     >
       <View style={styles.headerRow}>
-        <View style={styles.menuDot} />
+        <LanguageSwitcher tone="dark" />
         <IconButton
           icon="logout"
           iconColor="#FFFFFF"
@@ -67,12 +68,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  menuDot: {
-    width: 28,
-    height: 4,
-    borderRadius: radii.pill,
-    backgroundColor: 'rgba(255,255,255,0.4)',
   },
   content: {
     marginTop: spacing.md,
