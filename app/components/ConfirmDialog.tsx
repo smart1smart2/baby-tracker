@@ -7,8 +7,8 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { Dimensions, StyleSheet, View, Pressable } from 'react-native';
-import { Button, Portal, Text, useTheme } from 'react-native-paper';
+import { Dimensions, Modal, StyleSheet, View, Pressable } from 'react-native';
+import { Button, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
@@ -137,7 +137,13 @@ function ConfirmSheet({ options, onCancel, onConfirm }: SheetProps) {
   const confirmColor = renderedOptions.destructive ? palette.error : theme.colors.primary;
 
   return (
-    <Portal>
+    <Modal
+      visible
+      transparent
+      animationType="none"
+      statusBarTranslucent
+      onRequestClose={onCancel}
+    >
       <View style={StyleSheet.absoluteFill} pointerEvents="box-none">
         <Animated.View style={[StyleSheet.absoluteFill, styles.backdrop, backdropStyle]}>
           <Pressable style={StyleSheet.absoluteFill} onPress={onCancel} />
@@ -195,7 +201,7 @@ function ConfirmSheet({ options, onCancel, onConfirm }: SheetProps) {
           </Animated.View>
         </GestureDetector>
       </View>
-    </Portal>
+    </Modal>
   );
 }
 
