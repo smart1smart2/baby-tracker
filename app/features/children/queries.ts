@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
-import type { Child, ChildInsert } from '@/types/domain';
+import type { Child, ChildInsert, ChildUpdate } from '@/types/domain';
 
 export const childrenKey = ['children'] as const;
 
@@ -37,30 +37,38 @@ export function useChild(id: string | null | undefined) {
 
 type CreateChildInput = Pick<ChildInsert, 'full_name' | 'date_of_birth' | 'sex' | 'notes'>;
 
+export function useUpdateChild() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, patch }: { id: string; patch: ChildUpdate }): Promise<Child> => {
+      const { data, error } = await supabase
+        .from('children')
+        .update(patch)
+        .eq('id', id)
+        .select('*')
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: childrenKey });
+    },
+  });
+}
+
 export function useCreateChild() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: CreateChildInput): Promise<Child> => {
-      const { data: session } = await supabase.auth.getSession();
-      const userId = session.session?.user.id;
-      if (!userId) throw new Error('Not authenticated');
-
-      const { data: child, error: insertError } = await supabase
+      // The on_child_created trigger inserts the caregiver(owner) row,
+      // so a single round-trip is enough.
+      const { data, error } = await supabase
         .from('children')
         .insert(input)
         .select('*')
         .single();
-      if (insertError) throw insertError;
-
-      const { error: caregiverError } = await supabase
-        .from('caregivers')
-        .insert({ child_id: child.id, profile_id: userId, role: 'owner' });
-      if (caregiverError) {
-        await supabase.from('children').delete().eq('id', child.id);
-        throw caregiverError;
-      }
-
-      return child;
+      if (error) throw error;
+      return data;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: childrenKey });
