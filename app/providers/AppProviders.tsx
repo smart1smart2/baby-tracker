@@ -4,6 +4,7 @@ import { PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+import { ActionSheetProvider } from '@/components/ActionSheet';
 import { ConfirmProvider } from '@/components/ConfirmDialog';
 import { queryClient } from '@/lib/queryClient';
 import { paperDarkTheme, paperLightTheme } from '@/lib/theme';
@@ -20,7 +21,9 @@ export function AppProviders({ children }: { children: ReactNode }) {
         <QueryClientProvider client={queryClient}>
           <PaperProvider theme={theme}>
             <AuthProvider>
-              <ConfirmProvider>{children}</ConfirmProvider>
+              <ConfirmProvider>
+                <ActionSheetProvider>{children}</ActionSheetProvider>
+              </ConfirmProvider>
             </AuthProvider>
           </PaperProvider>
         </QueryClientProvider>
