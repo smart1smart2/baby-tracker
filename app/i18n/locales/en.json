@@ -114,14 +114,22 @@
     "new": {
       "screenTitle": "New child",
       "nameLabel": "Child's name",
-      "dobLabel": "Date of birth (YYYY-MM-DD)",
+      "dobLabel": "Date of birth",
       "dobPlaceholder": "2026-01-15",
       "dobInvalid": "Invalid date format",
       "sexLabel": "Sex",
       "sexFemale": "Girl",
       "sexMale": "Boy",
       "sexUnspecified": "Other",
-      "notesLabel": "Notes (optional)"
+      "notesLabel": "Notes (optional)",
+      "photoTitle": "Child photo",
+      "photoMessage": "Pick a source for the photo.",
+      "takePhoto": "Take a photo",
+      "chooseFromLibrary": "Choose from library",
+      "removePhoto": "Remove photo",
+      "uploadingPhoto": "Uploading photo…",
+      "permissionDenied": "Permission required",
+      "permissionDeniedMessage": "Allow camera or photo library access in Settings to attach a photo."
     }
   },
   "feedings": {

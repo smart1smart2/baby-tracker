@@ -114,14 +114,22 @@
     "new": {
       "screenTitle": "Нова дитина",
       "nameLabel": "Ім'я дитини",
-      "dobLabel": "Дата народження (YYYY-MM-DD)",
+      "dobLabel": "Дата народження",
       "dobPlaceholder": "2026-01-15",
       "dobInvalid": "Невірний формат дати",
       "sexLabel": "Стать",
       "sexFemale": "Дівчинка",
       "sexMale": "Хлопчик",
       "sexUnspecified": "Інше",
-      "notesLabel": "Нотатки (необов'язково)"
+      "notesLabel": "Нотатки (необов'язково)",
+      "photoTitle": "Фото дитини",
+      "photoMessage": "Обери джерело для фото.",
+      "takePhoto": "Зробити фото",
+      "chooseFromLibrary": "Вибрати з галереї",
+      "removePhoto": "Прибрати фото",
+      "uploadingPhoto": "Завантаження фото…",
+      "permissionDenied": "Потрібен дозвіл",
+      "permissionDeniedMessage": "Дозволь доступ до камери або галереї в налаштуваннях, щоб додати фото."
     }
   },
   "feedings": {

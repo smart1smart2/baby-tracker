@@ -24,11 +24,11 @@ export default function RootLayout() {
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
           <Stack.Screen
             name="children/new"
-            options={{ title: t('children.new.screenTitle'), presentation: 'modal' }}
+            options={{ title: t('children.new.screenTitle'), presentation: 'fullScreenModal' }}
           />
           <Stack.Screen
             name="feedings/new"
-            options={{ title: t('feedings.new.screenTitle'), presentation: 'modal' }}
+            options={{ title: t('feedings.new.screenTitle'), presentation: 'fullScreenModal' }}
           />
           <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
         </Stack>
