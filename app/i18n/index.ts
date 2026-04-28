@@ -11,11 +11,12 @@ export type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number];
 
 const STORAGE_KEY = 'app-language';
 
+const isSupported = (lang: string | null | undefined): lang is SupportedLanguage =>
+  Boolean(lang) && (SUPPORTED_LANGUAGES as readonly string[]).includes(lang as string);
+
 const deviceLanguageCode = Localization.getLocales()[0]?.languageCode ?? 'en';
-const fallbackLanguage: SupportedLanguage = (SUPPORTED_LANGUAGES as readonly string[]).includes(
-  deviceLanguageCode,
-)
-  ? (deviceLanguageCode as SupportedLanguage)
+const fallbackLanguage: SupportedLanguage = isSupported(deviceLanguageCode)
+  ? deviceLanguageCode
   : 'en';
 
 i18n.use(initReactI18next).init({
@@ -33,9 +34,7 @@ i18n.use(initReactI18next).init({
 // Restore previously chosen language from storage; falls back to device locale.
 AsyncStorage.getItem(STORAGE_KEY)
   .then((stored) => {
-    if (stored && (SUPPORTED_LANGUAGES as readonly string[]).includes(stored)) {
-      void i18n.changeLanguage(stored);
-    }
+    if (isSupported(stored)) void i18n.changeLanguage(stored);
   })
   .catch(() => {
     /* ignore — startup falls back to device locale */

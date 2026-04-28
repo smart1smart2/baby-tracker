@@ -76,6 +76,9 @@ export const palette = {
   warning: '#E8A53B',
   error: '#E15454',
   info: '#7B66F6',
+
+  // Modal scrim — dark violet-tinted overlay used behind bottom sheets.
+  scrim: 'rgba(15, 12, 35, 0.55)',
 } as const;
 
 /**
