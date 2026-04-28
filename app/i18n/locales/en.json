@@ -83,6 +83,7 @@
     "quickActions": "Quick actions",
     "today": "Today",
     "noEvents": "No events yet. Tap an action card above.",
+    "activeChild": "Active child",
     "addAnotherChild": "Add another child",
     "logoutConfirm": {
       "title": "Sign out?",

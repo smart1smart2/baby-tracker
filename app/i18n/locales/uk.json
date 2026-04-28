@@ -83,6 +83,7 @@
     "quickActions": "Швидкі дії",
     "today": "Сьогодні",
     "noEvents": "Подій ще немає. Натисни на картку дії вище.",
+    "activeChild": "Активна дитина",
     "addAnotherChild": "Додати ще одну дитину",
     "logoutConfirm": {
       "title": "Вийти з акаунту?",

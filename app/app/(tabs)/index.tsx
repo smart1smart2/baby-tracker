@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Button, Chip, Text, ActivityIndicator, useTheme } from 'react-native-paper';
+import { Button, Text, ActivityIndicator, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { format, parseISO } from 'date-fns';
 import { useTranslation } from 'react-i18next';
@@ -17,6 +17,7 @@ import { HeroCard } from '@/components/HeroCard';
 import { StatsRow, type StatItem } from '@/components/StatsRow';
 import { ActionCard } from '@/components/ActionCard';
 import { EventListItem } from '@/components/EventListItem';
+import { ActiveChildPanel } from '@/components/ActiveChildPanel';
 import { useConfirm } from '@/components/ConfirmDialog';
 import { categoryColors, radii, shadows, spacing } from '@/constants';
 
@@ -83,24 +84,15 @@ export default function HomeScreen() {
 
   return (
     <ScreenContainer refreshing={isRefetching} onRefresh={refetch}>
-      <HeroCard
-        greetingName={greetingName}
-        activeChild={activeChild}
-        onLogout={confirmLogout}
-      />
+      <HeroCard greetingName={greetingName} onLogout={confirmLogout} />
 
-      {children.length > 1 ? (
-        <View style={styles.childSwitch}>
-          {children.map((c) => (
-            <Chip
-              key={c.id}
-              selected={c.id === activeChildId}
-              onPress={() => setActiveChildId(c.id)}
-            >
-              {c.full_name}
-            </Chip>
-          ))}
-        </View>
+      {children.length > 0 ? (
+        <ActiveChildPanel
+          children={children}
+          activeId={activeChildId}
+          onSelect={setActiveChildId}
+          onAdd={() => router.push('/children/new')}
+        />
       ) : null}
 
       {isLoading ? (
@@ -225,7 +217,6 @@ function EmptyState({ onAdd }: { onAdd: () => void }) {
 
 const styles = StyleSheet.create({
   loading: { paddingVertical: spacing.xxxl, alignItems: 'center' },
-  childSwitch: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   sectionTitle: { fontWeight: '700', marginTop: spacing.xs },
   actionsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md },
   listCard: {
