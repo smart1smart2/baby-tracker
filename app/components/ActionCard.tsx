@@ -2,7 +2,7 @@ import { View, StyleSheet, Pressable } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { iconSizes, radii, shadows, spacing } from '@/constants';
+import { iconSizes, palette, radii, shadows, spacing } from '@/constants';
 
 type Props = {
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
@@ -29,7 +29,7 @@ export function ActionCard({ icon, label, hint, tint, onPress }: Props) {
       ]}
     >
       <View style={[styles.iconWrap, { backgroundColor: tint }]}>
-        <MaterialCommunityIcons name={icon} size={iconSizes.lg} color="#FFFFFF" />
+        <MaterialCommunityIcons name={icon} size={iconSizes.lg} color={palette.white} />
       </View>
       <View style={styles.textBlock}>
         <Text

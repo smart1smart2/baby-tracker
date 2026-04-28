@@ -79,6 +79,11 @@ export const palette = {
 
   // Modal scrim — dark violet-tinted overlay used behind bottom sheets.
   scrim: 'rgba(15, 12, 35, 0.55)',
+
+  // Brand surface (gradient hero) auxiliary tints.
+  white: '#FFFFFF',
+  whiteMuted: 'rgba(255,255,255,0.85)',
+  brandDecor: 'rgba(255,255,255,0.08)',
 } as const;
 
 /**

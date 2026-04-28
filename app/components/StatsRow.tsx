@@ -2,7 +2,7 @@ import { View, StyleSheet } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { iconSizes, radii, shadows, spacing } from '@/constants';
+import { iconSizes, palette, radii, shadows, spacing } from '@/constants';
 
 export type StatItem = {
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
@@ -29,7 +29,7 @@ export function StatsRow({ items }: { items: StatItem[] }) {
             <MaterialCommunityIcons
               name={item.icon}
               size={iconSizes.md}
-              color="#FFFFFF"
+              color={palette.white}
             />
           </View>
           <View style={styles.textBlock}>

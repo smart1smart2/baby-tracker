@@ -1,17 +1,15 @@
 import { useState } from 'react';
-import { Image, View, StyleSheet, Pressable } from 'react-native';
-import { Button, Menu, Portal, useTheme } from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
+import { Button, Portal, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
 
 import { AppTextInput } from './AppTextInput';
+import { AvatarPicker, type LocalPhoto } from './AvatarPicker';
 import { FormScreen } from './FormScreen';
 import { FormError } from './FormError';
 import { ChoiceTile } from './ChoiceTile';
 import { DateField } from './DateField';
-import { useConfirm } from './ConfirmDialog';
-import { iconSizes, palette, radii, shadows, spacing } from '@/constants';
+import { palette, radii, spacing } from '@/constants';
 import { useCreateChild, useUpdateChild } from '@/features/children/queries';
 import { uploadChildAvatar } from '@/features/children/avatar';
 import { translateError, type FriendlyError } from '@/features/errors/translate';
@@ -30,8 +28,6 @@ const SEX_OPTIONS: {
   { value: 'male', icon: 'gender-male', tint: palette.primary[500], labelKey: 'children.new.sexMale' },
 ];
 
-type LocalPhoto = { uri: string; mimeType: string };
-
 type Props = {
   /** When provided, the form runs in edit mode pre-filled from this child. */
   initial?: Child;
@@ -40,14 +36,11 @@ type Props = {
 
 /**
  * Shared create/edit form for a Child. Pre-fills fields when `initial` is given,
- * otherwise creates a new record. Handles avatar replace and removal — for edit
- * mode the new photo is uploaded after the row update, or `avatar_url` is
- * cleared if the user removed the existing one.
+ * otherwise creates a new record. Avatar replace/removal is delegated to
+ * AvatarPicker; we just track the pending photo and removal flag.
  */
 export function ChildForm({ initial, onClose }: Props) {
-  const theme = useTheme();
   const { t } = useTranslation();
-  const confirm = useConfirm();
   const createChild = useCreateChild();
   const updateChild = useUpdateChild();
   const setActiveChildId = useActiveChild((s) => s.setActiveChildId);
@@ -66,61 +59,12 @@ export function ChildForm({ initial, onClose }: Props) {
   const [removeExistingPhoto, setRemoveExistingPhoto] = useState(false);
   const [error, setError] = useState<FriendlyError | null>(null);
   const [busy, setBusy] = useState(false);
-  const [photoMenuOpen, setPhotoMenuOpen] = useState(false);
 
   const displayUri = pendingPhoto?.uri
     ?? (removeExistingPhoto ? null : initial?.avatar_url ?? null);
-  const hasPhoto = displayUri !== null;
 
   const canSubmit =
     fullName.trim().length > 0 && dob !== null && sex !== null && !busy;
-
-  const pickImage = async (mode: 'camera' | 'library') => {
-    const permission =
-      mode === 'camera'
-        ? await ImagePicker.requestCameraPermissionsAsync()
-        : await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!permission.granted) {
-      await confirm({
-        title: t('children.new.permissionDenied'),
-        message: t('children.new.permissionDeniedMessage'),
-        confirmLabel: t('common.confirm'),
-        cancelLabel: t('common.cancel'),
-      });
-      return;
-    }
-
-    const result =
-      mode === 'camera'
-        ? await ImagePicker.launchCameraAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [1, 1],
-            quality: 0.8,
-          })
-        : await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [1, 1],
-            quality: 0.8,
-          });
-
-    if (result.canceled || !result.assets[0]) return;
-    const asset = result.assets[0];
-    setPendingPhoto({ uri: asset.uri, mimeType: asset.mimeType ?? 'image/jpeg' });
-    setRemoveExistingPhoto(false);
-  };
-
-  const closeMenu = () => setPhotoMenuOpen(false);
-  const handleMenuChoice = async (choice: 'camera' | 'library' | 'remove') => {
-    closeMenu();
-    if (choice === 'camera' || choice === 'library') {
-      await pickImage(choice);
-    } else {
-      setPendingPhoto(null);
-      setRemoveExistingPhoto(true);
-    }
-  };
 
   const onSubmit = async () => {
     if (!canSubmit || !dob || !sex) return;
@@ -164,72 +108,17 @@ export function ChildForm({ initial, onClose }: Props) {
   return (
     <Portal.Host>
       <FormScreen onClose={onClose}>
-        <View style={styles.avatarBlock}>
-          <Menu
-            visible={photoMenuOpen}
-            onDismiss={closeMenu}
-            anchor={
-              <Pressable
-                onPress={() => setPhotoMenuOpen(true)}
-                style={styles.avatarPressable}
-              >
-                {displayUri ? (
-                  <Image source={{ uri: displayUri }} style={styles.avatarImage} />
-                ) : (
-                  <View
-                    style={[
-                      styles.avatarPlaceholder,
-                      { backgroundColor: theme.colors.primaryContainer },
-                    ]}
-                  >
-                    <MaterialCommunityIcons
-                      name="baby-face-outline"
-                      size={iconSizes.xxl + 16}
-                      color={theme.colors.primary}
-                    />
-                  </View>
-                )}
-                <View
-                  style={[
-                    styles.cameraBadge,
-                    shadows.sm,
-                    {
-                      backgroundColor: theme.colors.primary,
-                      borderColor: theme.colors.surface,
-                    },
-                  ]}
-                >
-                  <MaterialCommunityIcons
-                    name={hasPhoto ? 'pencil' : 'camera-plus-outline'}
-                    size={iconSizes.md}
-                    color={theme.colors.onPrimary}
-                  />
-                </View>
-              </Pressable>
-            }
-            anchorPosition="bottom"
-            contentStyle={[styles.menu, { backgroundColor: theme.colors.surface }]}
-          >
-            <Menu.Item
-              leadingIcon="camera-outline"
-              title={t('children.new.takePhoto')}
-              onPress={() => handleMenuChoice('camera')}
-            />
-            <Menu.Item
-              leadingIcon="image-outline"
-              title={t('children.new.chooseFromLibrary')}
-              onPress={() => handleMenuChoice('library')}
-            />
-            {hasPhoto ? (
-              <Menu.Item
-                leadingIcon="trash-can-outline"
-                title={t('children.new.removePhoto')}
-                titleStyle={{ color: palette.error }}
-                onPress={() => handleMenuChoice('remove')}
-              />
-            ) : null}
-          </Menu>
-        </View>
+        <AvatarPicker
+          displayUri={displayUri}
+          onPickPhoto={(photo) => {
+            setPendingPhoto(photo);
+            setRemoveExistingPhoto(false);
+          }}
+          onRemovePhoto={() => {
+            setPendingPhoto(null);
+            setRemoveExistingPhoto(true);
+          }}
+        />
 
         <AppTextInput
           label={t('children.new.nameLabel')}
@@ -287,44 +176,8 @@ export function ChildForm({ initial, onClose }: Props) {
   );
 }
 
-const AVATAR_SIZE = 120;
-
 const styles = StyleSheet.create({
-  avatarBlock: {
-    alignItems: 'center',
-    marginTop: spacing.sm,
-    marginBottom: spacing.md,
-  },
-  avatarPressable: { width: AVATAR_SIZE, height: AVATAR_SIZE },
-  avatarImage: {
-    width: AVATAR_SIZE,
-    height: AVATAR_SIZE,
-    borderRadius: radii.pill,
-  },
-  avatarPlaceholder: {
-    width: AVATAR_SIZE,
-    height: AVATAR_SIZE,
-    borderRadius: radii.pill,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  cameraBadge: {
-    position: 'absolute',
-    right: -2,
-    bottom: -2,
-    width: 36,
-    height: 36,
-    borderRadius: radii.pill,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 2,
-  },
   sexRow: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.xs },
   submit: { marginTop: spacing.lg, borderRadius: radii.xl },
   submitContent: { paddingVertical: spacing.md },
-  menu: {
-    borderRadius: radii.lg,
-    marginTop: -(spacing.xxxxl + spacing.xl),
-    marginLeft: spacing.xxxl,
-  },
 });

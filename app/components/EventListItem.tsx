@@ -2,7 +2,7 @@ import { View, StyleSheet } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { iconSizes, radii, spacing } from '@/constants';
+import { iconSizes, palette, radii, spacing } from '@/constants';
 
 type Props = {
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
@@ -17,7 +17,7 @@ export function EventListItem({ icon, tint, title, subtitle, time }: Props) {
   return (
     <View style={styles.row}>
       <View style={[styles.iconWrap, { backgroundColor: tint }]}>
-        <MaterialCommunityIcons name={icon} size={iconSizes.md} color="#FFFFFF" />
+        <MaterialCommunityIcons name={icon} size={iconSizes.md} color={palette.white} />
       </View>
       <View style={styles.textBlock}>
         <Text variant="titleSmall" style={{ color: theme.colors.onSurface }}>

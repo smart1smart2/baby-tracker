@@ -2,7 +2,7 @@ import { View, StyleSheet, Pressable } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 
-import { radii, spacing } from '@/constants';
+import { palette, radii, spacing } from '@/constants';
 import { setLanguage, SUPPORTED_LANGUAGES, type SupportedLanguage } from '@/i18n';
 
 type Props = {
@@ -17,8 +17,8 @@ export function LanguageSwitcher({ tone = 'light' }: Props) {
 
   const isDark = tone === 'dark';
   const containerBg = isDark ? 'rgba(255,255,255,0.16)' : theme.colors.surfaceVariant;
-  const activeBg = isDark ? '#FFFFFF' : theme.colors.primary;
-  const inactiveColor = isDark ? 'rgba(255,255,255,0.85)' : theme.colors.onSurfaceVariant;
+  const activeBg = isDark ? palette.white : theme.colors.primary;
+  const inactiveColor = isDark ? palette.whiteMuted : theme.colors.onSurfaceVariant;
   const activeColor = isDark ? theme.colors.primary : theme.colors.onPrimary;
 
   return (

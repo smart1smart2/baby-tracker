@@ -6,7 +6,7 @@ import { format } from 'date-fns';
 import { enUS, uk } from 'date-fns/locale';
 
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
-import { heroGradient, iconSizes, radii, shadows, spacing } from '@/constants';
+import { heroGradient, iconSizes, palette, radii, shadows, spacing } from '@/constants';
 
 type Props = {
   greetingName: string | null;
@@ -30,7 +30,7 @@ export function HeroCard({ greetingName, onLogout }: Props) {
         <LanguageSwitcher tone="dark" />
         <IconButton
           icon="logout"
-          iconColor="#FFFFFF"
+          iconColor={palette.white}
           size={iconSizes.md}
           onPress={onLogout}
         />
@@ -67,8 +67,8 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
     gap: spacing.xs,
   },
-  greeting: { color: '#FFFFFF' },
-  tagline: { color: 'rgba(255,255,255,0.85)' },
+  greeting: { color: palette.white },
+  tagline: { color: palette.whiteMuted },
   decorOuter: {
     position: 'absolute',
     right: -60,
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     borderRadius: radii.pill,
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: palette.brandDecor,
   },
   decorInner: {
     position: 'absolute',
@@ -85,6 +85,6 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: radii.pill,
-    backgroundColor: 'rgba(255,255,255,0.07)',
+    backgroundColor: palette.brandDecor,
   },
 });

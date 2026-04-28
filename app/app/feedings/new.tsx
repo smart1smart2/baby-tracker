@@ -31,10 +31,10 @@ export default function NewFeedingScreen() {
   const isBottle = kind === 'bottle_breast_milk' || kind === 'bottle_formula';
   const isSolid = kind === 'solid';
 
-  const kindButtons = useMemo(
-    () => FEEDING_KINDS.map((k) => ({ value: k, label: t(feedingKindKey(k)) })),
-    [t],
-  );
+  const kindButtonRows = useMemo(() => {
+    const all = FEEDING_KINDS.map((k) => ({ value: k, label: t(feedingKindKey(k)) }));
+    return [all.slice(0, 2), all.slice(2, 4), all.slice(4, 5)];
+  }, [t]);
 
   const onSubmit = async () => {
     if (!activeChildId) {
@@ -75,21 +75,14 @@ export default function NewFeedingScreen() {
     <FormScreen onClose={() => router.back()}>
       <View style={styles.section}>
         <Text variant="labelLarge">{t('feedings.new.typeLabel')}</Text>
-        <SegmentedButtons
-          value={kind}
-          onValueChange={(v) => setKind(v as FeedingKind)}
-          buttons={kindButtons.slice(0, 2)}
-        />
-        <SegmentedButtons
-          value={kind}
-          onValueChange={(v) => setKind(v as FeedingKind)}
-          buttons={kindButtons.slice(2, 4)}
-        />
-        <SegmentedButtons
-          value={kind}
-          onValueChange={(v) => setKind(v as FeedingKind)}
-          buttons={[kindButtons[4]]}
-        />
+        {kindButtonRows.map((row, idx) => (
+          <SegmentedButtons
+            key={idx}
+            value={kind}
+            onValueChange={(v) => setKind(v as FeedingKind)}
+            buttons={row}
+          />
+        ))}
       </View>
 
       {isBreast ? (

@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
-import { heroGradient, iconSizes, layout, radii, shadows, spacing } from '@/constants';
+import { heroGradient, iconSizes, layout, palette, radii, shadows, spacing } from '@/constants';
 
 type Props = {
   title: string;
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     width: 240,
     height: 240,
     borderRadius: radii.pill,
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: palette.brandDecor,
   },
   decorInner: {
     position: 'absolute',
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     width: 160,
     height: 160,
     borderRadius: radii.pill,
-    backgroundColor: 'rgba(255,255,255,0.07)',
+    backgroundColor: palette.brandDecor,
   },
   brandSafe: {
     flex: 1,
@@ -141,12 +141,12 @@ const styles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: radii.pill,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: palette.white,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  appName: { color: '#FFFFFF', fontWeight: '700' },
-  tagline: { color: 'rgba(255,255,255,0.85)', marginTop: spacing.xs },
+  appName: { color: palette.white, fontWeight: '700' },
+  tagline: { color: palette.whiteMuted, marginTop: spacing.xs },
   kav: { flex: 1, marginTop: -spacing.xl },
   scroll: {
     flexGrow: 1,

@@ -39,7 +39,6 @@ export default function HomeScreen() {
     if (!stillExists) setActiveChildId(children[0].id);
   }, [children, activeChildId, setActiveChildId]);
 
-  const activeChild = children.find((c) => c.id === activeChildId) ?? null;
   const { data: feedingsToday = [] } = useFeedingsToday(activeChildId);
 
   const greetingName = useMemo(() => {
