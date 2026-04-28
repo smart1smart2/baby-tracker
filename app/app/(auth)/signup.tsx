@@ -10,37 +10,35 @@ import { PasswordField } from '@/components/PasswordField';
 import { radii, spacing } from '@/constants';
 import { translateError, type FriendlyError } from '@/features/errors/translate';
 import { validateEmail, validateFullName, validatePassword } from '@/features/auth/validation';
+import { useFormField } from '@/hooks/use-form-field';
 import { supabase } from '@/lib/supabase';
 
 export default function SignupScreen() {
   const { t } = useTranslation();
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const fullName = useFormField();
+  const email = useFormField();
+  const password = useFormField();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<FriendlyError | null>(null);
   const [info, setInfo] = useState<string | null>(null);
-  const [nameError, setNameError] = useState<FriendlyError | null>(null);
-  const [emailError, setEmailError] = useState<FriendlyError | null>(null);
-  const [passwordError, setPasswordError] = useState<FriendlyError | null>(null);
 
   const onSubmit = async () => {
     setError(null);
     setInfo(null);
 
-    const nameIssue = validateFullName(fullName);
-    const emailIssue = validateEmail(email);
-    const passwordIssue = validatePassword(password);
-    setNameError(nameIssue);
-    setEmailError(emailIssue);
-    setPasswordError(passwordIssue);
+    const nameIssue = validateFullName(fullName.value);
+    const emailIssue = validateEmail(email.value);
+    const passwordIssue = validatePassword(password.value);
+    fullName.setError(nameIssue);
+    email.setError(emailIssue);
+    password.setError(passwordIssue);
     if (nameIssue || emailIssue || passwordIssue) return;
 
     setSubmitting(true);
     const { error: err, data } = await supabase.auth.signUp({
-      email: email.trim(),
-      password,
-      options: { data: { full_name: fullName.trim() } },
+      email: email.value.trim(),
+      password: password.value,
+      options: { data: { full_name: fullName.value.trim() } },
     });
     setSubmitting(false);
 
@@ -57,41 +55,32 @@ export default function SignupScreen() {
     <AuthScaffold title={t('auth.signup.title')} subtitle={t('auth.signup.subtitle')}>
       <AppTextInput
         label={t('auth.fields.name')}
-        value={fullName}
-        onChangeText={(v) => {
-          setFullName(v);
-          if (nameError) setNameError(null);
-        }}
-        error={Boolean(nameError)}
+        value={fullName.value}
+        onChangeText={fullName.onChangeText}
+        error={Boolean(fullName.error)}
         leftIcon="account-outline"
       />
-      <FormError inline error={nameError} />
+      <FormError inline error={fullName.error} />
 
       <AppTextInput
         label={t('auth.fields.email')}
-        value={email}
-        onChangeText={(v) => {
-          setEmail(v);
-          if (emailError) setEmailError(null);
-        }}
+        value={email.value}
+        onChangeText={email.onChangeText}
         autoCapitalize="none"
         keyboardType="email-address"
         autoComplete="email"
-        error={Boolean(emailError)}
+        error={Boolean(email.error)}
         leftIcon="email-outline"
       />
-      <FormError inline error={emailError} />
+      <FormError inline error={email.error} />
 
       <PasswordField
         label={t('auth.fields.password')}
-        value={password}
-        onChangeText={(v) => {
-          setPassword(v);
-          if (passwordError) setPasswordError(null);
-        }}
-        error={Boolean(passwordError)}
+        value={password.value}
+        onChangeText={password.onChangeText}
+        error={Boolean(password.error)}
       />
-      <FormError inline error={passwordError} />
+      <FormError inline error={password.error} />
 
       <FormError error={error} />
       {info ? <HelperText type="info">{info}</HelperText> : null}

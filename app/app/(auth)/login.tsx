@@ -10,29 +10,28 @@ import { PasswordField } from '@/components/PasswordField';
 import { radii, spacing } from '@/constants';
 import { translateError, type FriendlyError } from '@/features/errors/translate';
 import { validateEmail, validatePassword } from '@/features/auth/validation';
+import { useFormField } from '@/hooks/use-form-field';
 import { supabase } from '@/lib/supabase';
 
 export default function LoginScreen() {
   const { t } = useTranslation();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const email = useFormField();
+  const password = useFormField();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<FriendlyError | null>(null);
-  const [emailError, setEmailError] = useState<FriendlyError | null>(null);
-  const [passwordError, setPasswordError] = useState<FriendlyError | null>(null);
 
   const onSubmit = async () => {
     setError(null);
-    const emailIssue = validateEmail(email);
-    const passwordIssue = validatePassword(password);
-    setEmailError(emailIssue);
-    setPasswordError(passwordIssue);
+    const emailIssue = validateEmail(email.value);
+    const passwordIssue = validatePassword(password.value);
+    email.setError(emailIssue);
+    password.setError(passwordIssue);
     if (emailIssue || passwordIssue) return;
 
     setSubmitting(true);
     const { error: err } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
-      password,
+      email: email.value.trim(),
+      password: password.value,
     });
     setSubmitting(false);
     if (err) setError(translateError(err));
@@ -42,29 +41,23 @@ export default function LoginScreen() {
     <AuthScaffold title={t('auth.login.title')} subtitle={t('auth.login.subtitle')}>
       <AppTextInput
         label={t('auth.fields.email')}
-        value={email}
-        onChangeText={(v) => {
-          setEmail(v);
-          if (emailError) setEmailError(null);
-        }}
+        value={email.value}
+        onChangeText={email.onChangeText}
         autoCapitalize="none"
         keyboardType="email-address"
         autoComplete="email"
-        error={Boolean(emailError)}
+        error={Boolean(email.error)}
         leftIcon="email-outline"
       />
-      <FormError inline error={emailError} />
+      <FormError inline error={email.error} />
 
       <PasswordField
         label={t('auth.fields.password')}
-        value={password}
-        onChangeText={(v) => {
-          setPassword(v);
-          if (passwordError) setPasswordError(null);
-        }}
-        error={Boolean(passwordError)}
+        value={password.value}
+        onChangeText={password.onChangeText}
+        error={Boolean(password.error)}
       />
-      <FormError inline error={passwordError} />
+      <FormError inline error={password.error} />
 
       <FormError error={error} />
 
