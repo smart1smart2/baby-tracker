@@ -48,7 +48,7 @@ export default function NewFeedingScreen() {
     let endedAt: Date | null = null;
 
     if (isBreast && durationMin) {
-      const mins = parseInt(durationMin, 10);
+      const mins = Number(durationMin);
       if (Number.isFinite(mins) && mins > 0) {
         startedAt.setMinutes(now.getMinutes() - mins);
         endedAt = now;
@@ -61,7 +61,10 @@ export default function NewFeedingScreen() {
         kind,
         started_at: startedAt.toISOString(),
         ended_at: endedAt?.toISOString() ?? null,
-        amount_ml: isBottle && amountMl ? Number(amountMl) : null,
+        amount_ml:
+          isBottle && amountMl && Number.isFinite(Number(amountMl))
+            ? Number(amountMl)
+            : null,
         solid_food: isSolid && solidFood.trim() ? solidFood.trim() : null,
         notes: notes.trim() || null,
       });

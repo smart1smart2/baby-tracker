@@ -18,6 +18,9 @@ export function ActionCard({ icon, label, hint, tint, onPress }: Props) {
   return (
     <Pressable
       onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      accessibilityHint={hint}
       style={({ pressed }) => [
         styles.card,
         shadows.sm,
