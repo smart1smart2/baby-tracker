@@ -16,7 +16,7 @@ export function SectionHeader({ title, subtitle, right }: Props) {
   return (
     <View style={styles.row}>
       <View style={styles.textBlock}>
-        <Text variant="headlineMedium" style={{ color: theme.colors.onBackground }}>
+        <Text variant="titleLarge" style={{ color: theme.colors.onBackground }}>
           {title}
         </Text>
         {subtitle ? (

@@ -1,6 +1,20 @@
 /**
  * Typography scale — follows Material Design 3 type system.
  * System fonts only (no custom font loading) to keep bundle small.
+ *
+ * Semantic role → variant cheat sheet (use these consistently):
+ *  - Brand wordmark (auth only):           displaySmall   (32px / 700)
+ *  - Hero greeting:                        headlineLarge  (28px / 700)
+ *  - Section header on a screen:           titleLarge     (20px / 600)
+ *  - Card hero / focused-entity name:      headlineSmall  (20px / 600)
+ *  - Stat figure / prominent number:       headlineSmall  (20px / 600)
+ *  - Card row title (action, event):       titleSmall     (14px / 600)
+ *  - Body text / age / descriptive:        bodyMedium     (14px / 400)
+ *  - Emphasised body (hero subtitle):      bodyLarge      (16px / 400)
+ *  - Caption / muted note:                 bodySmall      (12px / 400)
+ *  - Form / button label:                  labelLarge     (14px / 600)
+ *  - Pill toggle, list timestamp:          labelMedium    (12px / 600)
+ *  - Tiny stat label / category caption:   labelSmall     (11px / 600)
  */
 import { Platform } from 'react-native';
 

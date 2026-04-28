@@ -33,7 +33,7 @@ export function StatsRow({ items }: { items: StatItem[] }) {
             />
           </View>
           <View style={styles.textBlock}>
-            <Text variant="titleMedium" style={{ color: theme.colors.onSurface }}>
+            <Text variant="headlineSmall" style={{ color: theme.colors.onSurface }}>
               {item.value}
             </Text>
             <Text

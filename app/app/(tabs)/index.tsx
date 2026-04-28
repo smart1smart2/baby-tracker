@@ -106,7 +106,7 @@ export default function HomeScreen() {
         <>
           <StatsRow items={stats} />
 
-          <Text variant="titleMedium" style={[styles.sectionTitle, { color: theme.colors.onBackground }]}>
+          <Text variant="titleLarge" style={[styles.sectionTitle, { color: theme.colors.onBackground }]}>
             {t('home.quickActions')}
           </Text>
 
@@ -141,7 +141,7 @@ export default function HomeScreen() {
             />
           </View>
 
-          <Text variant="titleMedium" style={[styles.sectionTitle, { color: theme.colors.onBackground }]}>
+          <Text variant="titleLarge" style={[styles.sectionTitle, { color: theme.colors.onBackground }]}>
             {t('home.today')}
           </Text>
 
@@ -192,7 +192,7 @@ function EmptyState({ onAdd }: { onAdd: () => void }) {
     <View
       style={[styles.empty, shadows.sm, { backgroundColor: theme.colors.surface }]}
     >
-      <Text variant="titleMedium" style={{ color: theme.colors.onSurface }}>
+      <Text variant="titleLarge" style={{ color: theme.colors.onSurface }}>
         {t('home.empty.title')}
       </Text>
       <Text

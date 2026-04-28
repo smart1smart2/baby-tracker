@@ -68,7 +68,7 @@ export function AuthScaffold({ title, subtitle, children }: Props) {
             ]}
           >
             <Text
-              variant="headlineSmall"
+              variant="titleLarge"
               style={[styles.title, { color: theme.colors.onSurface }]}
             >
               {title}

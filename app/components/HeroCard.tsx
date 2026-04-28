@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
     gap: spacing.xs,
   },
-  greeting: { color: '#FFFFFF', fontWeight: '700' },
+  greeting: { color: '#FFFFFF' },
   tagline: { color: 'rgba(255,255,255,0.85)' },
   decorOuter: {
     position: 'absolute',

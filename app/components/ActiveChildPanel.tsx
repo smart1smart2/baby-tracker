@@ -83,6 +83,15 @@ export function ActiveChildPanel({ children, activeId, onSelect, onAdd, onEdit }
           >
             {formatAge(active.date_of_birth, t)}
           </Text>
+          {active.notes ? (
+            <Text
+              variant="bodySmall"
+              numberOfLines={2}
+              style={[styles.notes, { color: theme.colors.onSurfaceVariant }]}
+            >
+              {active.notes}
+            </Text>
+          ) : null}
         </Animated.View>
         <Pressable
           onPress={() => onEdit(active.id)}
@@ -212,6 +221,7 @@ const styles = StyleSheet.create({
   },
   heroText: { flex: 1, gap: spacing.xs },
   heroName: { fontWeight: '700' },
+  notes: { fontStyle: 'italic', marginTop: 2 },
   divider: { height: StyleSheet.hairlineWidth, marginTop: spacing.xs },
   pillRow: {
     paddingVertical: spacing.xs,
