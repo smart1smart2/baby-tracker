@@ -21,7 +21,7 @@ const lightColors: MD3Theme['colors'] = {
   tertiaryContainer: palette.tertiary[100],
   onTertiaryContainer: palette.tertiary[800],
 
-  background: palette.neutral[25],
+  background: palette.neutral[50],
   onBackground: palette.neutral[800],
 
   surface: palette.neutral[0],
