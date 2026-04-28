@@ -70,19 +70,21 @@ export function ActiveChildPanel({ children, activeId, onSelect, onAdd, onEdit }
           exiting={FadeOut.duration(150)}
           style={styles.heroText}
         >
-          <Text
-            variant="headlineSmall"
-            numberOfLines={1}
-            style={[styles.heroName, { color: theme.colors.onSurface }]}
-          >
-            {active.full_name}
-          </Text>
-          <Text
-            variant="bodyMedium"
-            style={{ color: theme.colors.onSurfaceVariant }}
-          >
-            {formatAge(active.date_of_birth, t)}
-          </Text>
+          <View style={styles.nameRow}>
+            <Text
+              variant="headlineSmall"
+              numberOfLines={1}
+              style={[styles.heroName, { color: theme.colors.onSurface }]}
+            >
+              {active.full_name}
+            </Text>
+            <Text
+              variant="bodyMedium"
+              style={{ color: theme.colors.onSurfaceVariant }}
+            >
+              {formatAge(active.date_of_birth, t)}
+            </Text>
+          </View>
           {active.notes ? (
             <Text
               variant="bodySmall"
@@ -220,7 +222,8 @@ const styles = StyleSheet.create({
     gap: spacing.lg,
   },
   heroText: { flex: 1, gap: spacing.xs },
-  heroName: { fontWeight: '700' },
+  nameRow: { flexDirection: 'row', alignItems: 'baseline', gap: spacing.sm },
+  heroName: { fontWeight: '700', flexShrink: 1 },
   notes: { fontStyle: 'italic', marginTop: 2 },
   divider: { height: StyleSheet.hairlineWidth, marginTop: spacing.xs },
   pillRow: {
