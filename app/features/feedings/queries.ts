@@ -41,7 +41,7 @@ export function useCreateFeeding() {
       return data;
     },
     onSuccess: (feeding) => {
-      qc.invalidateQueries({ queryKey: ['feedings', feeding.child_id] });
+      qc.invalidateQueries({ queryKey: feedingsKey(feeding.child_id) });
     },
   });
 }

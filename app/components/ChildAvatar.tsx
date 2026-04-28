@@ -2,11 +2,17 @@ import { Image, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 
 import { palette, radii } from '@/constants';
-import type { Child } from '@/types/domain';
+import type { Child, Sex } from '@/types/domain';
 
 type Props = {
   child: Child;
   size: number;
+};
+
+const TINTS: Record<Sex, { bg: string; fg: string }> = {
+  female: { bg: palette.secondary[200], fg: palette.secondary[700] },
+  male: { bg: palette.primary[200], fg: palette.primary[700] },
+  unspecified: { bg: palette.tertiary[200], fg: palette.tertiary[700] },
 };
 
 /** Photo (when available) or sex-tinted initials inside a circle. */
@@ -18,19 +24,6 @@ export function ChildAvatar({ child, size }: Props) {
     .map((p) => p[0]?.toUpperCase() ?? '')
     .join('');
 
-  const tintBg =
-    child.sex === 'female'
-      ? palette.secondary[200]
-      : child.sex === 'male'
-        ? palette.primary[200]
-        : palette.tertiary[200];
-  const tintFg =
-    child.sex === 'female'
-      ? palette.secondary[700]
-      : child.sex === 'male'
-        ? palette.primary[700]
-        : palette.tertiary[700];
-
   if (child.avatar_url) {
     return (
       <Image
@@ -39,6 +32,8 @@ export function ChildAvatar({ child, size }: Props) {
       />
     );
   }
+
+  const { bg, fg } = TINTS[(child.sex as Sex) ?? 'unspecified'] ?? TINTS.unspecified;
 
   return (
     <View
@@ -49,14 +44,14 @@ export function ChildAvatar({ child, size }: Props) {
           width: size,
           height: size,
           borderRadius: size / 2,
-          backgroundColor: tintBg,
+          backgroundColor: bg,
         },
       ]}
     >
       <Text
         style={[
           styles.initials,
-          { color: tintFg, fontSize: Math.round(size * 0.34) },
+          { color: fg, fontSize: Math.round(size * 0.34) },
         ]}
       >
         {initials || '👶'}

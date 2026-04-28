@@ -9,25 +9,10 @@ import { FormScreen } from '@/components/FormScreen';
 import { FormError } from '@/components/FormError';
 import { radii, spacing } from '@/constants';
 import { useCreateFeeding } from '@/features/feedings/queries';
+import { FEEDING_KINDS, feedingKindKey } from '@/features/feedings/labels';
 import { translateError, type FriendlyError } from '@/features/errors/translate';
 import { useActiveChild } from '@/stores/activeChild';
 import type { FeedingKind } from '@/types/domain';
-
-const KINDS: FeedingKind[] = [
-  'breast_left',
-  'breast_right',
-  'bottle_breast_milk',
-  'bottle_formula',
-  'solid',
-];
-
-const KIND_LABEL_KEYS: Record<FeedingKind, string> = {
-  breast_left: 'feedings.kinds.breastLeft',
-  breast_right: 'feedings.kinds.breastRight',
-  bottle_breast_milk: 'feedings.kinds.bottleBreastMilk',
-  bottle_formula: 'feedings.kinds.bottleFormula',
-  solid: 'feedings.kinds.solid',
-};
 
 export default function NewFeedingScreen() {
   const router = useRouter();
@@ -47,7 +32,7 @@ export default function NewFeedingScreen() {
   const isSolid = kind === 'solid';
 
   const kindButtons = useMemo(
-    () => KINDS.map((k) => ({ value: k, label: t(KIND_LABEL_KEYS[k]) })),
+    () => FEEDING_KINDS.map((k) => ({ value: k, label: t(feedingKindKey(k)) })),
     [t],
   );
 

@@ -11,6 +11,9 @@
     "optional": "optional",
     "loading": "Loading…"
   },
+  "tabs": {
+    "home": "Home"
+  },
   "auth": {
     "login": {
       "title": "Sign in",
