@@ -38,6 +38,9 @@ export function StatsRow({ items }: { items: StatItem[] }) {
             </Text>
             <Text
               variant="labelSmall"
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.7}
               style={{ color: theme.colors.onSurfaceVariant }}
             >
               {item.label}

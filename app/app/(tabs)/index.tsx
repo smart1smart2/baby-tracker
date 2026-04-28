@@ -69,13 +69,13 @@ export default function HomeScreen() {
       {
         icon: 'sleep',
         tint: categoryColors.sleep,
-        value: '—',
+        value: '0',
         label: t('home.stats.sleep'),
       },
       {
         icon: 'human-baby-changing-table',
         tint: categoryColors.diaper,
-        value: '—',
+        value: '0',
         label: t('home.stats.diapers'),
       },
     ],
