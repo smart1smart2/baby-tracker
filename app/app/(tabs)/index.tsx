@@ -20,6 +20,22 @@ import { EventListItem } from '@/components/EventListItem';
 import { ActiveChildPanel } from '@/components/ActiveChildPanel';
 import { useConfirm } from '@/components/ConfirmDialog';
 import { categoryColors, radii, shadows, spacing } from '@/constants';
+import type { MaterialCommunityIcons } from '@expo/vector-icons';
+
+type QuickAction = {
+  key: 'feeding' | 'sleep' | 'diaper' | 'measurement';
+  icon: keyof typeof MaterialCommunityIcons.glyphMap;
+  tint: string;
+  /** When set, tapping the card pushes this route. Else it's a no-op stub. */
+  path?: '/feedings/new';
+};
+
+const QUICK_ACTIONS: QuickAction[] = [
+  { key: 'feeding', icon: 'baby-bottle-outline', tint: categoryColors.feeding, path: '/feedings/new' },
+  { key: 'sleep', icon: 'sleep', tint: categoryColors.sleep },
+  { key: 'diaper', icon: 'human-baby-changing-table', tint: categoryColors.diaper },
+  { key: 'measurement', icon: 'scale-bathroom', tint: categoryColors.growth },
+];
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -110,34 +126,18 @@ export default function HomeScreen() {
           </Text>
 
           <View style={styles.actionsGrid}>
-            <ActionCard
-              icon="baby-bottle-outline"
-              label={t('home.actions.feeding')}
-              hint={t('home.actions.feedingHint')}
-              tint={categoryColors.feeding}
-              onPress={() => router.push('/feedings/new')}
-            />
-            <ActionCard
-              icon="sleep"
-              label={t('home.actions.sleep')}
-              hint={t('home.actions.sleepHint')}
-              tint={categoryColors.sleep}
-              onPress={() => {}}
-            />
-            <ActionCard
-              icon="human-baby-changing-table"
-              label={t('home.actions.diaper')}
-              hint={t('home.actions.diaperHint')}
-              tint={categoryColors.diaper}
-              onPress={() => {}}
-            />
-            <ActionCard
-              icon="scale-bathroom"
-              label={t('home.actions.measurement')}
-              hint={t('home.actions.measurementHint')}
-              tint={categoryColors.growth}
-              onPress={() => {}}
-            />
+            {QUICK_ACTIONS.map((a) => (
+              <ActionCard
+                key={a.key}
+                icon={a.icon}
+                label={t(`home.actions.${a.key}`)}
+                hint={t(`home.actions.${a.key}Hint`)}
+                tint={a.tint}
+                onPress={() => {
+                  if (a.path) router.push(a.path);
+                }}
+              />
+            ))}
           </View>
 
           <Text variant="titleLarge" style={[styles.sectionTitle, { color: theme.colors.onBackground }]}>
