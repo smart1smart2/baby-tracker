@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Button, TextInput } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import { Link } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
+import { AppTextInput } from '@/components/AppTextInput';
 import { AuthScaffold } from '@/components/AuthScaffold';
 import { FormError } from '@/components/FormError';
 import { radii, spacing } from '@/constants';
@@ -39,7 +40,7 @@ export default function LoginScreen() {
 
   return (
     <AuthScaffold title={t('auth.login.title')} subtitle={t('auth.login.subtitle')}>
-      <TextInput
+      <AppTextInput
         label={t('auth.fields.email')}
         value={email}
         onChangeText={(v) => {
@@ -49,13 +50,12 @@ export default function LoginScreen() {
         autoCapitalize="none"
         keyboardType="email-address"
         autoComplete="email"
-        mode="outlined"
         error={Boolean(emailError)}
-        left={<TextInput.Icon icon="email-outline" />}
+        leftIcon="email-outline"
       />
       <FormError inline error={emailError} />
 
-      <TextInput
+      <AppTextInput
         label={t('auth.fields.password')}
         value={password}
         onChangeText={(v) => {
@@ -64,15 +64,10 @@ export default function LoginScreen() {
         }}
         secureTextEntry={!showPassword}
         autoCapitalize="none"
-        mode="outlined"
         error={Boolean(passwordError)}
-        left={<TextInput.Icon icon="lock-outline" />}
-        right={
-          <TextInput.Icon
-            icon={showPassword ? 'eye-off-outline' : 'eye-outline'}
-            onPress={() => setShowPassword((v) => !v)}
-          />
-        }
+        leftIcon="lock-outline"
+        rightIcon={showPassword ? 'eye-off-outline' : 'eye-outline'}
+        onRightIconPress={() => setShowPassword((v) => !v)}
       />
       <FormError inline error={passwordError} />
 

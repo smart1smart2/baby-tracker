@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { Image, View, StyleSheet, Pressable } from 'react-native';
-import { Avatar, Button, Menu, Portal, TextInput, Text, useTheme } from 'react-native-paper';
+import { Avatar, Button, Menu, Portal, Text, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 
+import { AppTextInput } from '@/components/AppTextInput';
 import { FormScreen } from '@/components/FormScreen';
 import { FormError } from '@/components/FormError';
 import { ChoiceTile } from '@/components/ChoiceTile';
@@ -184,13 +185,12 @@ export default function NewChildScreen() {
         </Menu>
       </View>
 
-      <TextInput
+      <AppTextInput
         label={t('children.new.nameLabel')}
         value={fullName}
         onChangeText={setFullName}
-        mode="outlined"
         autoFocus
-        left={<TextInput.Icon icon="account-outline" />}
+        leftIcon="account-outline"
       />
 
       <DateField
@@ -222,14 +222,13 @@ export default function NewChildScreen() {
         </View>
       </View>
 
-      <TextInput
+      <AppTextInput
         label={t('children.new.notesLabel')}
         value={notes}
         onChangeText={setNotes}
-        mode="outlined"
         multiline
         numberOfLines={3}
-        left={<TextInput.Icon icon="note-outline" />}
+        leftIcon="note-outline"
       />
 
       <FormError error={error} />

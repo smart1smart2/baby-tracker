@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Button, HelperText, TextInput } from 'react-native-paper';
+import { Button, HelperText } from 'react-native-paper';
 import { Link } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
+import { AppTextInput } from '@/components/AppTextInput';
 import { AuthScaffold } from '@/components/AuthScaffold';
 import { FormError } from '@/components/FormError';
 import { radii, spacing } from '@/constants';
@@ -54,20 +55,19 @@ export default function SignupScreen() {
 
   return (
     <AuthScaffold title={t('auth.signup.title')} subtitle={t('auth.signup.subtitle')}>
-      <TextInput
+      <AppTextInput
         label={t('auth.fields.name')}
         value={fullName}
         onChangeText={(v) => {
           setFullName(v);
           if (nameError) setNameError(null);
         }}
-        mode="outlined"
         error={Boolean(nameError)}
-        left={<TextInput.Icon icon="account-outline" />}
+        leftIcon="account-outline"
       />
       <FormError inline error={nameError} />
 
-      <TextInput
+      <AppTextInput
         label={t('auth.fields.email')}
         value={email}
         onChangeText={(v) => {
@@ -77,13 +77,12 @@ export default function SignupScreen() {
         autoCapitalize="none"
         keyboardType="email-address"
         autoComplete="email"
-        mode="outlined"
         error={Boolean(emailError)}
-        left={<TextInput.Icon icon="email-outline" />}
+        leftIcon="email-outline"
       />
       <FormError inline error={emailError} />
 
-      <TextInput
+      <AppTextInput
         label={t('auth.fields.password')}
         value={password}
         onChangeText={(v) => {
@@ -92,15 +91,10 @@ export default function SignupScreen() {
         }}
         secureTextEntry={!showPassword}
         autoCapitalize="none"
-        mode="outlined"
         error={Boolean(passwordError)}
-        left={<TextInput.Icon icon="lock-outline" />}
-        right={
-          <TextInput.Icon
-            icon={showPassword ? 'eye-off-outline' : 'eye-outline'}
-            onPress={() => setShowPassword((v) => !v)}
-          />
-        }
+        leftIcon="lock-outline"
+        rightIcon={showPassword ? 'eye-off-outline' : 'eye-outline'}
+        onRightIconPress={() => setShowPassword((v) => !v)}
       />
       <FormError inline error={passwordError} />
 

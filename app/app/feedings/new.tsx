@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Button, SegmentedButtons, Text, TextInput } from 'react-native-paper';
+import { Button, SegmentedButtons, Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
+import { AppTextInput } from '@/components/AppTextInput';
 import { FormScreen } from '@/components/FormScreen';
 import { FormError } from '@/components/FormError';
 import { radii, spacing } from '@/constants';
@@ -107,44 +108,44 @@ export default function NewFeedingScreen() {
       </View>
 
       {isBreast ? (
-        <TextInput
+        <AppTextInput
           label={t('feedings.new.durationLabel')}
           value={durationMin}
           onChangeText={setDurationMin}
-          mode="outlined"
           keyboardType="number-pad"
           placeholder={t('feedings.new.durationPlaceholder')}
+          leftIcon="timer-outline"
         />
       ) : null}
 
       {isBottle ? (
-        <TextInput
+        <AppTextInput
           label={t('feedings.new.amountLabel')}
           value={amountMl}
           onChangeText={setAmountMl}
-          mode="outlined"
           keyboardType="number-pad"
           placeholder={t('feedings.new.amountPlaceholder')}
+          leftIcon="cup-outline"
         />
       ) : null}
 
       {isSolid ? (
-        <TextInput
+        <AppTextInput
           label={t('feedings.new.solidLabel')}
           value={solidFood}
           onChangeText={setSolidFood}
-          mode="outlined"
           placeholder={t('feedings.new.solidPlaceholder')}
+          leftIcon="food-apple-outline"
         />
       ) : null}
 
-      <TextInput
+      <AppTextInput
         label={t('feedings.new.notesLabel')}
         value={notes}
         onChangeText={setNotes}
-        mode="outlined"
         multiline
         numberOfLines={2}
+        leftIcon="note-outline"
       />
 
       <FormError error={error} />
