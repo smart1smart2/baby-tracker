@@ -179,14 +179,6 @@ export default function HomeScreen() {
             )}
           </View>
 
-          <Button
-            mode="outlined"
-            icon="plus"
-            onPress={() => router.push('/children/new')}
-            style={styles.addChild}
-          >
-            {t('home.addAnotherChild')}
-          </Button>
         </>
       )}
     </ScreenContainer>
@@ -227,7 +219,6 @@ const styles = StyleSheet.create({
   },
   divider: { height: StyleSheet.hairlineWidth },
   emptyList: { paddingVertical: spacing.lg, textAlign: 'center' },
-  addChild: { marginTop: spacing.sm, borderRadius: radii.lg },
   empty: {
     padding: spacing.xl,
     borderRadius: radii.xl,

@@ -29,16 +29,30 @@ export function ActionCard({ icon, label, hint, tint, onPress }: Props) {
       ]}
     >
       <View style={[styles.iconWrap, { backgroundColor: tint }]}>
-        <MaterialCommunityIcons name={icon} size={iconSizes.xl} color="#FFFFFF" />
+        <MaterialCommunityIcons name={icon} size={iconSizes.lg} color="#FFFFFF" />
       </View>
-      <Text variant="titleSmall" style={[styles.label, { color: theme.colors.onSurface }]}>
-        {label}
-      </Text>
-      {hint ? (
-        <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
-          {hint}
+      <View style={styles.textBlock}>
+        <Text
+          variant="titleSmall"
+          numberOfLines={1}
+          adjustsFontSizeToFit
+          minimumFontScale={0.8}
+          style={[styles.label, { color: theme.colors.onSurface }]}
+        >
+          {label}
         </Text>
-      ) : null}
+        {hint ? (
+          <Text
+            variant="bodySmall"
+            numberOfLines={1}
+            adjustsFontSizeToFit
+            minimumFontScale={0.8}
+            style={{ color: theme.colors.onSurfaceVariant }}
+          >
+            {hint}
+          </Text>
+        ) : null}
+      </View>
     </Pressable>
   );
 }
@@ -47,17 +61,20 @@ const styles = StyleSheet.create({
   card: {
     flexBasis: '47%',
     flexGrow: 1,
-    padding: spacing.lg,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
+    padding: spacing.md,
     borderRadius: radii.xl,
-    gap: spacing.sm,
-    minHeight: 124,
+    minHeight: 76,
   },
   iconWrap: {
-    width: 56,
-    height: 56,
-    borderRadius: radii.lg,
+    width: 44,
+    height: 44,
+    borderRadius: radii.md,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  textBlock: { flex: 1, gap: 2 },
   label: { fontWeight: '700' },
 });
