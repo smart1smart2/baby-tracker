@@ -86,7 +86,7 @@ export default function NewFeedingScreen() {
   };
 
   return (
-    <FormScreen>
+    <FormScreen onClose={() => router.back()}>
       <View style={styles.section}>
         <Text variant="labelLarge">{t('feedings.new.typeLabel')}</Text>
         <SegmentedButtons

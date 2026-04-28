@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Image, View, StyleSheet, Pressable } from 'react-native';
-import { Avatar, Button, IconButton, Menu, Portal, TextInput, Text, useTheme } from 'react-native-paper';
-import { Stack, useRouter } from 'expo-router';
+import { Avatar, Button, Menu, Portal, TextInput, Text, useTheme } from 'react-native-paper';
+import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -125,20 +125,7 @@ export default function NewChildScreen() {
 
   return (
     <Portal.Host>
-    <Stack.Screen
-      options={{
-        headerLeft: () => null,
-        headerRight: () => (
-          <IconButton
-            icon="close"
-            size={iconSizes.lg}
-            onPress={() => router.back()}
-            style={{ marginTop: spacing.xs }}
-          />
-        ),
-      }}
-    />
-    <FormScreen>
+    <FormScreen onClose={() => router.back()}>
       <View style={styles.avatarBlock}>
         <Menu
           visible={photoMenuOpen}
