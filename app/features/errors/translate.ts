@@ -41,88 +41,76 @@ export function translateError(error: unknown): FriendlyError {
 // Supabase Auth
 // -----------------------------------------------------------------------------
 
+type AuthCtx = { code: string; lower: string; status: number | undefined };
+
+const AUTH_MATCHES: {
+  test: (ctx: AuthCtx) => boolean;
+  message: string;
+  hint: string;
+}[] = [
+  {
+    test: ({ code, lower }) =>
+      code === 'invalid_credentials' || lower.includes('invalid login credentials'),
+    message: 'errors.auth.invalidCredentials',
+    hint: 'errors.auth.invalidCredentialsHint',
+  },
+  {
+    test: ({ code, lower }) =>
+      code === 'email_not_confirmed' || lower.includes('email not confirmed'),
+    message: 'errors.auth.emailNotConfirmed',
+    hint: 'errors.auth.emailNotConfirmedHint',
+  },
+  {
+    test: ({ code, lower }) =>
+      code === 'user_already_exists' ||
+      lower.includes('already registered') ||
+      lower.includes('already been registered'),
+    message: 'errors.auth.userExists',
+    hint: 'errors.auth.userExistsHint',
+  },
+  {
+    test: ({ code, lower }) =>
+      code === 'weak_password' || (lower.includes('password') && lower.includes('6 characters')),
+    message: 'errors.auth.weakPassword',
+    hint: 'errors.auth.weakPasswordHint',
+  },
+  {
+    test: ({ code, lower, status }) =>
+      code === 'over_request_rate_limit' ||
+      code === 'over_email_send_rate_limit' ||
+      lower.includes('rate limit') ||
+      status === 429,
+    message: 'errors.auth.rateLimit',
+    hint: 'errors.auth.rateLimitHint',
+  },
+  {
+    test: ({ code, lower }) =>
+      code === 'email_address_invalid' ||
+      (lower.includes('email') && (lower.includes('invalid') || lower.includes('not valid'))),
+    message: 'errors.auth.emailInvalidServer',
+    hint: 'errors.auth.emailInvalidServerHint',
+  },
+  {
+    test: ({ code, lower }) => code === 'otp_expired' || lower.includes('expired'),
+    message: 'errors.auth.otpExpired',
+    hint: 'errors.auth.otpExpiredHint',
+  },
+  {
+    test: ({ status, lower }) => status === 0 || lower.includes('network'),
+    message: 'errors.auth.noConnection',
+    hint: 'errors.networkHint',
+  },
+];
+
 function translateAuthError(error: AuthError): FriendlyError {
-  const code = error.code ?? '';
-  const status = error.status;
-  const lower = (error.message ?? '').toLowerCase();
+  const ctx: AuthCtx = {
+    code: error.code ?? '',
+    lower: (error.message ?? '').toLowerCase(),
+    status: error.status,
+  };
   const raw = error.message;
-
-  if (code === 'invalid_credentials' || lower.includes('invalid login credentials')) {
-    return {
-      messageKey: 'errors.auth.invalidCredentials',
-      hintKey: 'errors.auth.invalidCredentialsHint',
-      raw,
-    };
-  }
-
-  if (code === 'email_not_confirmed' || lower.includes('email not confirmed')) {
-    return {
-      messageKey: 'errors.auth.emailNotConfirmed',
-      hintKey: 'errors.auth.emailNotConfirmedHint',
-      raw,
-    };
-  }
-
-  if (
-    code === 'user_already_exists' ||
-    lower.includes('already registered') ||
-    lower.includes('already been registered')
-  ) {
-    return {
-      messageKey: 'errors.auth.userExists',
-      hintKey: 'errors.auth.userExistsHint',
-      raw,
-    };
-  }
-
-  if (code === 'weak_password' || (lower.includes('password') && lower.includes('6 characters'))) {
-    return {
-      messageKey: 'errors.auth.weakPassword',
-      hintKey: 'errors.auth.weakPasswordHint',
-      raw,
-    };
-  }
-
-  if (
-    code === 'over_request_rate_limit' ||
-    code === 'over_email_send_rate_limit' ||
-    lower.includes('rate limit') ||
-    status === 429
-  ) {
-    return {
-      messageKey: 'errors.auth.rateLimit',
-      hintKey: 'errors.auth.rateLimitHint',
-      raw,
-    };
-  }
-
-  if (
-    code === 'email_address_invalid' ||
-    (lower.includes('email') && (lower.includes('invalid') || lower.includes('not valid')))
-  ) {
-    return {
-      messageKey: 'errors.auth.emailInvalidServer',
-      hintKey: 'errors.auth.emailInvalidServerHint',
-      raw,
-    };
-  }
-
-  if (code === 'otp_expired' || lower.includes('expired')) {
-    return {
-      messageKey: 'errors.auth.otpExpired',
-      hintKey: 'errors.auth.otpExpiredHint',
-      raw,
-    };
-  }
-
-  if (status === 0 || lower.includes('network')) {
-    return {
-      messageKey: 'errors.auth.noConnection',
-      hintKey: 'errors.networkHint',
-      raw,
-    };
-  }
-
+  const match = AUTH_MATCHES.find((m) => m.test(ctx));
+  if (match) return { messageKey: match.message, hintKey: match.hint, raw };
   return { messageKey: 'errors.generic', raw };
 }
 

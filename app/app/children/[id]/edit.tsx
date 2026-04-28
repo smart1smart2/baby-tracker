@@ -1,7 +1,7 @@
-import { ActivityIndicator, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
 import { ChildForm } from '@/components/ChildForm';
+import { LoadingScreen } from '@/components/LoadingScreen';
 import { useChild } from '@/features/children/queries';
 
 export default function EditChildScreen() {
@@ -9,13 +9,7 @@ export default function EditChildScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { data: child, isLoading } = useChild(id);
 
-  if (isLoading || !child) {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator />
-      </View>
-    );
-  }
+  if (isLoading || !child) return <LoadingScreen />;
 
   return <ChildForm initial={child} onClose={() => router.back()} />;
 }

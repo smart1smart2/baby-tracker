@@ -1,6 +1,7 @@
 import { useEffect, type ReactNode } from 'react';
-import { View, ActivityIndicator } from 'react-native';
 import { useRouter, useSegments } from 'expo-router';
+
+import { LoadingScreen } from '@/components/LoadingScreen';
 import { useAuth } from '@/providers/AuthProvider';
 
 export function AuthGate({ children }: { children: ReactNode }) {
@@ -20,13 +21,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
     }
   }, [session, loading, segments, router]);
 
-  if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator />
-      </View>
-    );
-  }
+  if (loading) return <LoadingScreen />;
 
   return <>{children}</>;
 }
