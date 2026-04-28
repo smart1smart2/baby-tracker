@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Image, View, StyleSheet, Pressable } from 'react-native';
-import { Avatar, Button, Menu, Portal, Text, useTheme } from 'react-native-paper';
+import { Button, Menu, Portal, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -176,12 +176,18 @@ export function ChildForm({ initial, onClose }: Props) {
                 {displayUri ? (
                   <Image source={{ uri: displayUri }} style={styles.avatarImage} />
                 ) : (
-                  <Avatar.Icon
-                    size={AVATAR_SIZE}
-                    icon="baby-face-outline"
-                    style={{ backgroundColor: theme.colors.primaryContainer }}
-                    color={theme.colors.primary}
-                  />
+                  <View
+                    style={[
+                      styles.avatarPlaceholder,
+                      { backgroundColor: theme.colors.primaryContainer },
+                    ]}
+                  >
+                    <MaterialCommunityIcons
+                      name="baby-face-outline"
+                      size={iconSizes.xxl + 16}
+                      color={theme.colors.primary}
+                    />
+                  </View>
                 )}
                 <View
                   style={[
@@ -241,29 +247,22 @@ export function ChildForm({ initial, onClose }: Props) {
           maximumDate={new Date()}
         />
 
-        <View style={styles.sexBlock}>
-          <Text
-            variant="labelLarge"
-            style={[styles.sexLabel, { color: theme.colors.onSurfaceVariant }]}
-          >
-            {t('children.new.sexLabel')}
-          </Text>
-          <View style={styles.sexRow}>
-            {SEX_OPTIONS.map((option) => (
-              <ChoiceTile
-                key={option.value}
-                icon={option.icon}
-                label={t(option.labelKey)}
-                tint={option.tint}
-                selected={sex === option.value}
-                onPress={() => setSex(option.value)}
-              />
-            ))}
-          </View>
+        <View style={styles.sexRow}>
+          {SEX_OPTIONS.map((option) => (
+            <ChoiceTile
+              key={option.value}
+              icon={option.icon}
+              label={t(option.labelKey)}
+              tint={option.tint}
+              selected={sex === option.value}
+              onPress={() => setSex(option.value)}
+            />
+          ))}
         </View>
 
         <AppTextInput
           label={t('children.new.notesLabel')}
+          placeholder={t('children.new.notesPlaceholder')}
           value={notes}
           onChangeText={setNotes}
           multiline
@@ -288,7 +287,7 @@ export function ChildForm({ initial, onClose }: Props) {
   );
 }
 
-const AVATAR_SIZE = iconSizes.brand + 24;
+const AVATAR_SIZE = 120;
 
 const styles = StyleSheet.create({
   avatarBlock: {
@@ -302,6 +301,13 @@ const styles = StyleSheet.create({
     height: AVATAR_SIZE,
     borderRadius: radii.pill,
   },
+  avatarPlaceholder: {
+    width: AVATAR_SIZE,
+    height: AVATAR_SIZE,
+    borderRadius: radii.pill,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   cameraBadge: {
     position: 'absolute',
     right: -2,
@@ -313,11 +319,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 2,
   },
-  sexBlock: { gap: spacing.sm, marginTop: spacing.xs },
-  sexLabel: { marginLeft: spacing.xs },
-  sexRow: { flexDirection: 'row', gap: spacing.sm },
-  submit: { marginTop: spacing.lg, borderRadius: radii.lg },
-  submitContent: { paddingVertical: spacing.sm },
+  sexRow: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.xs },
+  submit: { marginTop: spacing.lg, borderRadius: radii.xl },
+  submitContent: { paddingVertical: spacing.md },
   menu: {
     borderRadius: radii.lg,
     marginTop: -(spacing.xxxxl + spacing.xl),

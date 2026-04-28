@@ -19,10 +19,9 @@ type Props = {
  */
 export function ChoiceTile({ icon, label, tint, selected, onPress }: Props) {
   const theme = useTheme();
-  const bg = selected ? tint : theme.colors.surface;
-  const fg = selected ? '#FFFFFF' : theme.colors.onSurface;
+  const bg = selected ? `${tint}22` : theme.colors.surface;
   const border = selected ? tint : theme.colors.outline;
-  const iconColor = selected ? '#FFFFFF' : tint;
+  const innerBg = selected ? `${tint}44` : `${tint}22`;
 
   return (
     <Pressable
@@ -39,10 +38,13 @@ export function ChoiceTile({ icon, label, tint, selected, onPress }: Props) {
       accessibilityRole="button"
       accessibilityState={{ selected }}
     >
-      <View style={[styles.iconWrap, { backgroundColor: selected ? 'rgba(255,255,255,0.18)' : `${tint}22` }]}>
-        <MaterialCommunityIcons name={icon} size={iconSizes.lg} color={iconColor} />
+      <View style={[styles.iconWrap, { backgroundColor: innerBg }]}>
+        <MaterialCommunityIcons name={icon} size={iconSizes.xl} color={tint} />
       </View>
-      <Text variant="labelLarge" style={[styles.label, { color: fg, fontWeight: '600' }]}>
+      <Text
+        variant="labelLarge"
+        style={[styles.label, { color: theme.colors.onSurface, fontWeight: '600' }]}
+      >
         {label}
       </Text>
     </Pressable>
@@ -53,15 +55,15 @@ const styles = StyleSheet.create({
   tile: {
     flex: 1,
     borderWidth: 1.5,
-    borderRadius: radii.lg,
-    paddingVertical: spacing.md,
+    borderRadius: radii.xl,
+    paddingVertical: spacing.lg,
     paddingHorizontal: spacing.sm,
     alignItems: 'center',
     gap: spacing.sm,
   },
   iconWrap: {
-    width: 44,
-    height: 44,
+    width: 56,
+    height: 56,
     borderRadius: radii.pill,
     alignItems: 'center',
     justifyContent: 'center',

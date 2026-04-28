@@ -122,6 +122,7 @@
       "sexMale": "Хлопчик",
       "sexUnspecified": "Інше",
       "notesLabel": "Нотатки (необов'язково)",
+      "notesPlaceholder": "Алергії, коментарі…",
       "photoTitle": "Фото дитини",
       "photoMessage": "Обери джерело для фото.",
       "takePhoto": "Зробити фото",

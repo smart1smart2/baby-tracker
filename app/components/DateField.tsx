@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import { Platform, Pressable, StyleSheet, View } from 'react-native';
-import { Text, useTheme } from 'react-native-paper';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Text, TextInput, useTheme } from 'react-native-paper';
 import DateTimePicker, {
   type DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
 
-import { iconSizes, layout, radii, spacing } from '@/constants';
+import { radii, spacing } from '@/constants';
 
 type Props = {
   label: string;
@@ -18,10 +17,15 @@ type Props = {
   minimumDate?: Date;
 };
 
+/**
+ * Date picker styled as a regular Paper TextInput so it sits in the form
+ * with identical chrome to AppTextInput. The TextInput is non-editable; the
+ * surrounding Pressable opens the native picker on tap.
+ */
 export function DateField({
   label,
   value,
-  placeholder = 'Select date',
+  placeholder,
   onChange,
   maximumDate,
   minimumDate,
@@ -29,8 +33,7 @@ export function DateField({
   const theme = useTheme();
   const [open, setOpen] = useState(false);
 
-  const display = value ? format(value, 'd MMM yyyy') : placeholder;
-  const hasValue = Boolean(value);
+  const display = value ? format(value, 'd MMM yyyy') : '';
 
   const handleNativeChange = (event: DateTimePickerEvent, date?: Date) => {
     // Android dispatches `dismissed` on cancel and `set` on confirm — close in either case.
@@ -41,46 +44,34 @@ export function DateField({
   return (
     <View>
       <Pressable
-        onPress={() => setOpen(true)}
-        style={[
-          styles.field,
-          {
-            backgroundColor: theme.colors.surface,
-            borderColor: theme.colors.outline,
-          },
-        ]}
+        onPress={() => setOpen((o) => !o)}
+        accessibilityRole="button"
       >
-        <MaterialCommunityIcons
-          name="calendar-month-outline"
-          size={iconSizes.lg}
-          color={theme.colors.onSurfaceVariant}
-        />
-        <View style={styles.textBlock}>
-          <Text variant="labelSmall" style={{ color: theme.colors.onSurfaceVariant }}>
-            {label}
-          </Text>
-          <Text
-            variant="bodyLarge"
-            style={{
-              color: hasValue ? theme.colors.onSurface : theme.colors.onSurfaceVariant,
-              fontWeight: hasValue ? '600' : '400',
-            }}
-          >
-            {display}
-          </Text>
+        <View pointerEvents="none">
+          <TextInput
+            mode="outlined"
+            label={label}
+            value={display}
+            placeholder={placeholder}
+            editable={false}
+            outlineStyle={{ borderRadius: radii.lg, borderWidth: 1.5 }}
+            outlineColor={theme.colors.outlineVariant}
+            activeOutlineColor={theme.colors.primary}
+            style={{ backgroundColor: theme.colors.surface }}
+            left={<TextInput.Icon icon="calendar-month-outline" />}
+            right={<TextInput.Icon icon={open ? 'chevron-up' : 'chevron-down'} />}
+          />
         </View>
-        <MaterialCommunityIcons
-          name="chevron-right"
-          size={iconSizes.lg}
-          color={theme.colors.onSurfaceVariant}
-        />
       </Pressable>
 
       {open && Platform.OS === 'ios' ? (
         <View
           style={[
             styles.iosPicker,
-            { backgroundColor: theme.colors.surface, borderColor: theme.colors.outlineVariant },
+            {
+              backgroundColor: theme.colors.surface,
+              borderColor: theme.colors.outlineVariant,
+            },
           ]}
         >
           <DateTimePicker
@@ -94,12 +85,16 @@ export function DateField({
             }}
             themeVariant={theme.dark ? 'dark' : 'light'}
             accentColor={theme.colors.primary}
+            style={styles.iosCalendar}
           />
           <Pressable
             onPress={() => setOpen(false)}
             style={[styles.iosDone, { backgroundColor: theme.colors.primary }]}
           >
-            <Text variant="labelLarge" style={{ color: theme.colors.onPrimary, fontWeight: '700' }}>
+            <Text
+              variant="labelLarge"
+              style={{ color: theme.colors.onPrimary, fontWeight: '700' }}
+            >
               OK
             </Text>
           </Pressable>
@@ -121,29 +116,22 @@ export function DateField({
 }
 
 const styles = StyleSheet.create({
-  field: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    borderRadius: radii.lg,
-    borderWidth: 1,
-    minHeight: layout.fieldHeight,
-  },
-  textBlock: { flex: 1, gap: 2 },
   iosPicker: {
     marginTop: spacing.sm,
     borderRadius: radii.lg,
     borderWidth: 1,
-    paddingHorizontal: spacing.md,
-    paddingTop: spacing.sm,
-    paddingBottom: spacing.md,
-    gap: spacing.sm,
+    paddingTop: spacing.lg,
+    paddingBottom: spacing.lg,
+    gap: spacing.lg,
+    alignItems: 'center',
+  },
+  iosCalendar: {
+    transform: [{ scale: 1.1 }],
   },
   iosDone: {
     alignSelf: 'stretch',
     alignItems: 'center',
+    marginHorizontal: spacing.md,
     paddingVertical: spacing.sm + 2,
     borderRadius: radii.md,
   },

@@ -122,6 +122,7 @@
       "sexMale": "Boy",
       "sexUnspecified": "Other",
       "notesLabel": "Notes (optional)",
+      "notesPlaceholder": "Allergies, comments…",
       "photoTitle": "Child photo",
       "photoMessage": "Pick a source for the photo.",
       "takePhoto": "Take a photo",
