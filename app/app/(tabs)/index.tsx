@@ -92,6 +92,7 @@ export default function HomeScreen() {
           activeId={activeChildId}
           onSelect={setActiveChildId}
           onAdd={() => router.push('/children/new')}
+          onEdit={(id) => router.push(`/children/${id}/edit`)}
         />
       ) : null}
 

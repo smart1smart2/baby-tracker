@@ -7,10 +7,10 @@ import Animated, {
   Easing,
   FadeIn,
   FadeOut,
+  interpolate,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-  withTiming,
 } from 'react-native-reanimated';
 
 import { iconSizes, radii, shadows, spacing } from '@/constants';
@@ -19,54 +19,57 @@ import type { Child } from '@/types/domain';
 
 import { ChildAvatar } from './ChildAvatar';
 
+const HERO_AVATAR = 72;
+
+const PILL_AVATAR = 44;
+const PILL_RING_BORDER = 2;
+const PILL_RING_GAP = 4;
+const PILL_SLOT = PILL_AVATAR + (PILL_RING_BORDER + PILL_RING_GAP) * 2;
+
 type Props = {
   children: Child[];
   activeId: string | null;
   onSelect: (id: string) => void;
   onAdd: () => void;
+  onEdit: (id: string) => void;
 };
 
-const HERO_AVATAR = 72;
-const HERO_RING = 3;
-const PILL_AVATAR = 44;
-const RING_PADDING = 4;
-const RING_BORDER = 2;
-
 /**
- * "Data surface" pair to the gradient HeroCard: white background with brand
- * violet accents (decorative tint blob, ringed avatar, violet pill ring) so it
- * reads as part of the same surface family without stacking two gradients.
+ * White-surface companion to the gradient HeroCard: the focused child as a
+ * "hero" row, a horizontal switcher for siblings, and a primary-tinted
+ * add affordance. Brand accents (violet ring, decorative tint blob) tie it
+ * back to the hero without stacking another gradient.
  */
-export function ActiveChildPanel({ children, activeId, onSelect, onAdd }: Props) {
+export function ActiveChildPanel({ children, activeId, onSelect, onAdd, onEdit }: Props) {
   const theme = useTheme();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const active = children.find((c) => c.id === activeId) ?? children[0] ?? null;
   if (!active) return null;
 
+  const hasSiblings = children.length > 1;
+
   return (
-    <View style={[styles.card, shadows.sm, { backgroundColor: theme.colors.surface }]}>
+    <View
+      style={[
+        styles.card,
+        shadows.sm,
+        { backgroundColor: theme.colors.surface },
+      ]}
+    >
       <View
         pointerEvents="none"
         style={[styles.decor, { backgroundColor: theme.colors.primaryContainer }]}
       />
 
       <View style={styles.heroRow}>
-        <View style={[styles.avatarRing, { borderColor: theme.colors.primary }]}>
-          <ChildAvatar child={active} size={HERO_AVATAR} />
-        </View>
+        <ChildAvatar child={active} size={HERO_AVATAR} />
         <Animated.View
           key={active.id}
           entering={FadeIn.duration(200).easing(Easing.out(Easing.cubic))}
           exiting={FadeOut.duration(150)}
           style={styles.heroText}
         >
-          <Text
-            variant="labelSmall"
-            style={[styles.heroLabel, { color: theme.colors.primary }]}
-          >
-            {t('home.activeChild')}
-          </Text>
           <Text
             variant="headlineSmall"
             numberOfLines={1}
@@ -81,47 +84,62 @@ export function ActiveChildPanel({ children, activeId, onSelect, onAdd }: Props)
             {formatAge(active.date_of_birth, t)}
           </Text>
         </Animated.View>
+        <Pressable
+          onPress={() => onEdit(active.id)}
+          hitSlop={spacing.sm}
+          style={[
+            styles.editButton,
+            { backgroundColor: theme.colors.primaryContainer },
+          ]}
+          accessibilityRole="button"
+          accessibilityLabel={t('children.edit.screenTitle')}
+        >
+          <MaterialCommunityIcons
+            name="pencil-outline"
+            size={iconSizes.md}
+            color={theme.colors.primary}
+          />
+        </Pressable>
       </View>
 
-      {children.length > 1 || onAdd ? (
-        <>
-          <View
-            style={[styles.divider, { backgroundColor: theme.colors.outlineVariant }]}
-          />
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.pillRow}
-            key={i18n.language}
-          >
-            {children.map((c) => (
+      <View
+        style={[styles.divider, { backgroundColor: theme.colors.outlineVariant }]}
+      />
+
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.pillRow}
+      >
+        {hasSiblings
+          ? children.map((c) => (
               <SwitchPill
                 key={c.id}
                 child={c}
                 isActive={c.id === active.id}
                 onPress={() => onSelect(c.id)}
               />
-            ))}
-            <Pressable
-              onPress={onAdd}
-              style={[
-                styles.addPill,
-                {
-                  backgroundColor: theme.colors.primaryContainer,
-                  borderColor: theme.colors.primary,
-                },
-              ]}
-              accessibilityRole="button"
-            >
-              <MaterialCommunityIcons
-                name="plus"
-                size={iconSizes.lg}
-                color={theme.colors.primary}
-              />
-            </Pressable>
-          </ScrollView>
-        </>
-      ) : null}
+            ))
+          : null}
+        <Pressable
+          onPress={onAdd}
+          style={[
+            styles.addPill,
+            {
+              backgroundColor: theme.colors.primaryContainer,
+              borderColor: theme.colors.primary,
+            },
+          ]}
+          accessibilityRole="button"
+          accessibilityLabel={t('home.addAnotherChild')}
+        >
+          <MaterialCommunityIcons
+            name="plus"
+            size={iconSizes.lg}
+            color={theme.colors.primary}
+          />
+        </Pressable>
+      </ScrollView>
     </View>
   );
 }
@@ -134,42 +152,35 @@ type PillProps = {
 
 function SwitchPill({ child, isActive, onPress }: PillProps) {
   const theme = useTheme();
-  const scale = useSharedValue(isActive ? 1.06 : 1);
-  const ringOpacity = useSharedValue(isActive ? 1 : 0);
-  const inactiveOpacity = useSharedValue(isActive ? 1 : 0.55);
+  const progress = useSharedValue(isActive ? 1 : 0);
 
   useEffect(() => {
-    scale.value = withSpring(isActive ? 1.06 : 1, {
-      damping: 14,
+    progress.value = withSpring(isActive ? 1 : 0, {
+      damping: 16,
       stiffness: 220,
       mass: 0.9,
     });
-    ringOpacity.value = withTiming(isActive ? 1 : 0, { duration: 200 });
-    inactiveOpacity.value = withTiming(isActive ? 1 : 0.55, { duration: 200 });
-  }, [isActive, scale, ringOpacity, inactiveOpacity]);
+  }, [isActive, progress]);
 
   const ringStyle = useAnimatedStyle(() => ({
-    opacity: ringOpacity.value,
-    transform: [{ scale: scale.value }],
+    opacity: progress.value,
   }));
   const avatarStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-    opacity: inactiveOpacity.value,
+    transform: [{ scale: interpolate(progress.value, [0, 1], [1, 1.06]) }],
+    opacity: interpolate(progress.value, [0, 1], [0.7, 1]),
   }));
 
   return (
     <Pressable
       onPress={onPress}
       style={styles.pillSlot}
+      accessibilityRole="button"
       accessibilityState={{ selected: isActive }}
+      accessibilityLabel={child.full_name}
     >
       <Animated.View
         pointerEvents="none"
-        style={[
-          styles.pillRing,
-          { borderColor: theme.colors.primary },
-          ringStyle,
-        ]}
+        style={[styles.pillRing, { borderColor: theme.colors.primary }, ringStyle]}
       />
       <Animated.View style={avatarStyle}>
         <ChildAvatar child={child} size={PILL_AVATAR} />
@@ -177,9 +188,6 @@ function SwitchPill({ child, isActive, onPress }: PillProps) {
     </Pressable>
   );
 }
-
-const RING_SIZE = PILL_AVATAR + RING_PADDING * 2 + RING_BORDER * 2;
-const HERO_RING_SIZE = HERO_AVATAR + HERO_RING * 2;
 
 const styles = StyleSheet.create({
   card: {
@@ -202,16 +210,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: spacing.lg,
   },
-  avatarRing: {
-    width: HERO_RING_SIZE,
-    height: HERO_RING_SIZE,
-    borderRadius: radii.pill,
-    borderWidth: HERO_RING,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  heroText: { flex: 1, gap: 2 },
-  heroLabel: { fontWeight: '700', letterSpacing: 1, textTransform: 'uppercase' },
+  heroText: { flex: 1, gap: spacing.xs },
   heroName: { fontWeight: '700' },
   divider: { height: StyleSheet.hairlineWidth, marginTop: spacing.xs },
   pillRow: {
@@ -220,17 +219,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   pillSlot: {
-    width: RING_SIZE,
-    height: RING_SIZE,
+    width: PILL_SLOT,
+    height: PILL_SLOT,
     alignItems: 'center',
     justifyContent: 'center',
   },
   pillRing: {
     position: 'absolute',
-    width: RING_SIZE,
-    height: RING_SIZE,
+    width: PILL_SLOT,
+    height: PILL_SLOT,
     borderRadius: radii.pill,
-    borderWidth: RING_BORDER,
+    borderWidth: PILL_RING_BORDER,
   },
   addPill: {
     width: PILL_AVATAR,
@@ -238,6 +237,13 @@ const styles = StyleSheet.create({
     borderRadius: radii.pill,
     borderWidth: 1,
     borderStyle: 'dashed',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  editButton: {
+    width: 36,
+    height: 36,
+    borderRadius: radii.pill,
     alignItems: 'center',
     justifyContent: 'center',
   },
