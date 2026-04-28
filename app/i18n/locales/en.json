@@ -83,7 +83,6 @@
     "quickActions": "Quick actions",
     "today": "Today",
     "noEvents": "No events yet. Tap an action card above.",
-    "activeChild": "Active child",
     "addAnotherChild": "Add another child",
     "logoutConfirm": {
       "title": "Sign out?",
@@ -131,6 +130,9 @@
       "uploadingPhoto": "Uploading photo…",
       "permissionDenied": "Permission required",
       "permissionDeniedMessage": "Allow camera or photo library access in Settings to attach a photo."
+    },
+    "edit": {
+      "screenTitle": "Edit child"
     }
   },
   "feedings": {

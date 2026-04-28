@@ -83,7 +83,6 @@
     "quickActions": "Швидкі дії",
     "today": "Сьогодні",
     "noEvents": "Подій ще немає. Натисни на картку дії вище.",
-    "activeChild": "Активна дитина",
     "addAnotherChild": "Додати ще одну дитину",
     "logoutConfirm": {
       "title": "Вийти з акаунту?",
@@ -131,6 +130,9 @@
       "uploadingPhoto": "Завантаження фото…",
       "permissionDenied": "Потрібен дозвіл",
       "permissionDeniedMessage": "Дозволь доступ до камери або галереї в налаштуваннях, щоб додати фото."
+    },
+    "edit": {
+      "screenTitle": "Редагувати дитину"
     }
   },
   "feedings": {

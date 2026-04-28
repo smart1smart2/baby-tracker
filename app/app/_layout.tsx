@@ -27,6 +27,10 @@ export default function RootLayout() {
             options={{ title: t('children.new.screenTitle'), presentation: 'fullScreenModal' }}
           />
           <Stack.Screen
+            name="children/[id]/edit"
+            options={{ title: t('children.edit.screenTitle'), presentation: 'fullScreenModal' }}
+          />
+          <Stack.Screen
             name="feedings/new"
             options={{ title: t('feedings.new.screenTitle'), presentation: 'fullScreenModal' }}
           />
