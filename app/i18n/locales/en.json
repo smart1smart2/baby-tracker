@@ -147,18 +147,18 @@
       "durationPlaceholder": "e.g., 15",
       "amountLabel": "Amount (ml)",
       "amountPlaceholder": "e.g., 120",
-      "solidLabel": "What was eaten",
+      "solidLabel": "Food",
       "solidPlaceholder": "e.g., banana puree",
       "notesLabel": "Notes (optional)",
+      "notesPlaceholder": "Anything to add",
       "chooseChildFirst": "Pick a child first",
-      "timeHint": "Time: now",
-      "timeHintWithDuration": "Time: now (− {{minutes}} min)"
+      "startedAt": "Started at {{time}}"
     },
     "kinds": {
-      "breastLeft": "Breast (left)",
-      "breastRight": "Breast (right)",
-      "bottleBreastMilk": "Bottle (breast milk)",
-      "bottleFormula": "Bottle (formula)",
+      "breastLeft": "Breast L",
+      "breastRight": "Breast R",
+      "bottleBreastMilk": "Bottle • milk",
+      "bottleFormula": "Bottle • formula",
       "solid": "Solid food"
     },
     "amountWithUnit": "{{amount}} ml"

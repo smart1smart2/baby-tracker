@@ -144,22 +144,22 @@
       "screenTitle": "Годування",
       "typeLabel": "Тип годування",
       "durationLabel": "Тривалість (хвилини)",
-      "durationPlaceholder": "наприклад, 15",
+      "durationPlaceholder": "Наприклад, 15",
       "amountLabel": "Об'єм (мл)",
-      "amountPlaceholder": "наприклад, 120",
-      "solidLabel": "Що їла",
-      "solidPlaceholder": "наприклад, пюре банан",
+      "amountPlaceholder": "Наприклад, 120",
+      "solidLabel": "Їжа",
+      "solidPlaceholder": "Наприклад, пюре банан",
       "notesLabel": "Нотатки (необов'язково)",
+      "notesPlaceholder": "Що зазначити",
       "chooseChildFirst": "Спочатку обери дитину",
-      "timeHint": "Час запису: зараз",
-      "timeHintWithDuration": "Час запису: зараз (− {{minutes}} хв)"
+      "startedAt": "Початок: {{time}}"
     },
     "kinds": {
-      "breastLeft": "Груди (ліва)",
-      "breastRight": "Груди (права)",
-      "bottleBreastMilk": "Пляшечка (молоко)",
-      "bottleFormula": "Пляшечка (суміш)",
-      "solid": "Прикорм"
+      "breastLeft": "Груди Л",
+      "breastRight": "Груди П",
+      "bottleBreastMilk": "Пляшка • молоко",
+      "bottleFormula": "Пляшка • суміш",
+      "solid": "Тверда їжа"
     },
     "amountWithUnit": "{{amount}} мл"
   },
