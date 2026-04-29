@@ -10,7 +10,7 @@ import type { MaterialCommunityIcons } from '@expo/vector-icons';
 import { supabase } from '@/lib/supabase';
 import { useChildren } from '@/features/children/queries';
 import { useDiapersForDay } from '@/features/diapers/queries';
-import { useFeedingsForDay } from '@/features/feedings/queries';
+import { useActiveFeeding, useFeedingsForDay } from '@/features/feedings/queries';
 import { useMeasurementsForDay } from '@/features/measurements/queries';
 import { useActiveSleep, useSleepsForDay } from '@/features/sleeps/queries';
 import { useActiveChild } from '@/stores/activeChild';
@@ -35,6 +35,7 @@ import { ScreenContainer } from '@/components/ScreenContainer';
 import { HeroCard } from '@/components/HeroCard';
 import { StatsRow, type StatItem } from '@/components/StatsRow';
 import { ActionCard } from '@/components/ActionCard';
+import { ActiveFeedingCard } from '@/components/ActiveFeedingCard';
 import { ActiveSleepCard } from '@/components/ActiveSleepCard';
 import { EventListItem } from '@/components/EventListItem';
 import { ActiveChildPanel } from '@/components/ActiveChildPanel';
@@ -85,6 +86,8 @@ export default function HomeScreen() {
   const { data: diapers = [] } = useDiapersForDay(activeChildId, selectedDay);
   const { data: measurements = [] } = useMeasurementsForDay(activeChildId, selectedDay);
   const { data: activeSleep } = useActiveSleep(activeChildId);
+  const { data: activeFeeding } = useActiveFeeding(activeChildId);
+  const hasActiveTimer = Boolean(activeSleep || activeFeeding);
 
   const greetingName = useMemo(() => {
     const fullName = (session?.user.user_metadata as { full_name?: string } | undefined)?.full_name;
@@ -164,15 +167,23 @@ export default function HomeScreen() {
         <>
           <StatsRow items={stats} />
 
-          {activeSleep ? (
+          {hasActiveTimer ? (
             <>
               <Text variant="titleLarge" style={[styles.sectionTitle, { color: theme.colors.onBackground }]}>
                 {t('home.inProgress')}
               </Text>
-              <ActiveSleepCard
-                sleep={activeSleep}
-                onPress={() => router.push('/sleeps/new')}
-              />
+              {activeFeeding ? (
+                <ActiveFeedingCard
+                  feeding={activeFeeding}
+                  onPress={() => router.push('/feedings/new')}
+                />
+              ) : null}
+              {activeSleep ? (
+                <ActiveSleepCard
+                  sleep={activeSleep}
+                  onPress={() => router.push('/sleeps/new')}
+                />
+              ) : null}
             </>
           ) : null}
 

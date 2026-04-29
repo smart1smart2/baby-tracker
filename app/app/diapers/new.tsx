@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Button, Text, useTheme } from 'react-native-paper';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 import { AppTextInput } from '@/components/AppTextInput';
+import { ChoiceTile } from '@/components/ChoiceTile';
 import { DateField } from '@/components/DateField';
 import { FormError } from '@/components/FormError';
 import { FormScreen } from '@/components/FormScreen';
-import { iconSizes, radii, spacing } from '@/constants';
+import { radii, spacing } from '@/constants';
 import { useCreateDiaper } from '@/features/diapers/queries';
 import {
   DIAPER_KINDS,
@@ -53,45 +53,24 @@ export default function NewDiaperScreen() {
 
   return (
     <FormScreen onClose={() => router.back()}>
-      <View style={styles.kindRow}>
-        {DIAPER_KINDS.map((k) => {
-          const isActive = kind === k;
-          return (
-            <Pressable
-              key={k}
+      <Text
+        variant="labelSmall"
+        style={[styles.sectionLabel, { color: theme.colors.onSurfaceVariant }]}
+      >
+        {t('common.type')}
+      </Text>
+      <View style={styles.kindGrid}>
+        {DIAPER_KINDS.map((k) => (
+          <View key={k} style={styles.kindCell}>
+            <ChoiceTile
+              icon={diaperKindIcon(k)}
+              label={t(diaperKindKey(k))}
+              tint={theme.colors.primary}
+              selected={kind === k}
               onPress={() => setKind(k)}
-              accessibilityRole="button"
-              accessibilityState={{ selected: isActive }}
-              style={({ pressed }) => [
-                styles.kindTile,
-                {
-                  backgroundColor: isActive
-                    ? theme.colors.primary
-                    : theme.colors.surface,
-                  borderColor: isActive
-                    ? theme.colors.primary
-                    : theme.colors.outlineVariant,
-                  opacity: pressed ? 0.85 : 1,
-                },
-              ]}
-            >
-              <MaterialCommunityIcons
-                name={diaperKindIcon(k)}
-                size={iconSizes.xl}
-                color={isActive ? theme.colors.onPrimary : theme.colors.primary}
-              />
-              <Text
-                variant="labelLarge"
-                style={{
-                  color: isActive ? theme.colors.onPrimary : theme.colors.onSurface,
-                  fontWeight: '600',
-                }}
-              >
-                {t(diaperKindKey(k))}
-              </Text>
-            </Pressable>
-          );
-        })}
+            />
+          </View>
+        ))}
       </View>
 
       <DateField
@@ -127,19 +106,13 @@ export default function NewDiaperScreen() {
 }
 
 const styles = StyleSheet.create({
-  kindRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-  kindTile: {
-    flexBasis: '47%',
-    flexGrow: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.md,
-    borderRadius: radii.lg,
-    borderWidth: 1.5,
-    minHeight: 56,
+  sectionLabel: {
+    fontWeight: '700',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
+  kindGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
+  kindCell: { flexBasis: '48%', flexGrow: 1, flexDirection: 'row' },
   submit: { marginTop: spacing.lg, borderRadius: radii.xl },
   submitContent: { paddingVertical: spacing.md },
 });

@@ -9,7 +9,8 @@
     "confirm": "Confirm",
     "retry": "Retry",
     "optional": "optional",
-    "loading": "Loading…"
+    "loading": "Loading…",
+    "type": "Type"
   },
   "tabs": {
     "home": "Home",
@@ -191,7 +192,10 @@
       "notesLabel": "Notes (optional)",
       "notesPlaceholder": "Anything to add",
       "chooseChildFirst": "Pick a child first",
-      "startedAt": "Started at {{time}}"
+      "startedAt": "Started at {{time}}",
+      "startNow": "Start now",
+      "stopNow": "Stop",
+      "orLogPast": "or log past feeding"
     },
     "kinds": {
       "breastLeft": "Breast L",

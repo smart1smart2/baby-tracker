@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Button, Text, useTheme } from 'react-native-paper';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 import { AppTextInput } from '@/components/AppTextInput';
+import { ChoiceTile } from '@/components/ChoiceTile';
 import { DateField } from '@/components/DateField';
 import { FormError } from '@/components/FormError';
 import { FormScreen } from '@/components/FormScreen';
-import { iconSizes, radii, spacing } from '@/constants';
+import { radii, spacing } from '@/constants';
 import { useCreateMeasurement } from '@/features/measurements/queries';
 import {
   MEASUREMENT_KINDS,
@@ -65,48 +65,24 @@ export default function NewMeasurementScreen() {
 
   return (
     <FormScreen onClose={() => router.back()}>
-      <View style={styles.kindRow}>
-        {MEASUREMENT_KINDS.map((k) => {
-          const isActive = kind === k;
-          return (
-            <Pressable
-              key={k}
+      <Text
+        variant="labelSmall"
+        style={[styles.sectionLabel, { color: theme.colors.onSurfaceVariant }]}
+      >
+        {t('common.type')}
+      </Text>
+      <View style={styles.kindGrid}>
+        {MEASUREMENT_KINDS.map((k) => (
+          <View key={k} style={styles.kindCell}>
+            <ChoiceTile
+              icon={measurementKindIcon(k)}
+              label={t(measurementKindKey(k))}
+              tint={theme.colors.primary}
+              selected={kind === k}
               onPress={() => setKind(k)}
-              accessibilityRole="button"
-              accessibilityState={{ selected: isActive }}
-              style={({ pressed }) => [
-                styles.kindTile,
-                {
-                  backgroundColor: isActive
-                    ? theme.colors.primary
-                    : theme.colors.surface,
-                  borderColor: isActive
-                    ? theme.colors.primary
-                    : theme.colors.outlineVariant,
-                  opacity: pressed ? 0.85 : 1,
-                },
-              ]}
-            >
-              <MaterialCommunityIcons
-                name={measurementKindIcon(k)}
-                size={iconSizes.xl}
-                color={isActive ? theme.colors.onPrimary : theme.colors.primary}
-              />
-              <Text
-                variant="labelLarge"
-                numberOfLines={1}
-                adjustsFontSizeToFit
-                minimumFontScale={0.7}
-                style={{
-                  color: isActive ? theme.colors.onPrimary : theme.colors.onSurface,
-                  fontWeight: '600',
-                }}
-              >
-                {t(measurementKindKey(k))}
-              </Text>
-            </Pressable>
-          );
-        })}
+            />
+          </View>
+        ))}
       </View>
 
       <AppTextInput
@@ -151,18 +127,13 @@ export default function NewMeasurementScreen() {
 }
 
 const styles = StyleSheet.create({
-  kindRow: { flexDirection: 'row', gap: spacing.sm },
-  kindTile: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: spacing.sm,
-    paddingVertical: spacing.lg,
-    paddingHorizontal: spacing.sm,
-    borderRadius: radii.lg,
-    borderWidth: 1.5,
-    minHeight: 96,
+  sectionLabel: {
+    fontWeight: '700',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
+  kindGrid: { flexDirection: 'row', gap: spacing.sm },
+  kindCell: { flex: 1, flexDirection: 'row' },
   submit: { marginTop: spacing.lg, borderRadius: radii.xl },
   submitContent: { paddingVertical: spacing.md },
 });

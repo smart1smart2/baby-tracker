@@ -9,7 +9,8 @@
     "confirm": "Підтвердити",
     "retry": "Повторити",
     "optional": "необов'язково",
-    "loading": "Завантаження…"
+    "loading": "Завантаження…",
+    "type": "Тип"
   },
   "tabs": {
     "home": "Головна",
@@ -195,7 +196,10 @@
       "notesLabel": "Нотатки (необов'язково)",
       "notesPlaceholder": "Що зазначити",
       "chooseChildFirst": "Спочатку обери дитину",
-      "startedAt": "Початок: {{time}}"
+      "startedAt": "Початок: {{time}}",
+      "startNow": "Старт зараз",
+      "stopNow": "Стоп",
+      "orLogPast": "або записати минуле"
     },
     "kinds": {
       "breastLeft": "Груди Л",

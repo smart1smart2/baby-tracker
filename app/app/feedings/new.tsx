@@ -1,17 +1,27 @@
 import { useMemo, useState } from 'react';
-import { Pressable, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Button, Text, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { enUS, uk } from 'date-fns/locale';
 
+import { ActiveFeedingCard } from '@/components/ActiveFeedingCard';
 import { AppTextInput } from '@/components/AppTextInput';
+import { ChoiceTile } from '@/components/ChoiceTile';
 import { FormScreen } from '@/components/FormScreen';
 import { FormError } from '@/components/FormError';
 import { radii, spacing } from '@/constants';
-import { useCreateFeeding } from '@/features/feedings/queries';
-import { FEEDING_KINDS, feedingKindKey } from '@/features/feedings/labels';
+import {
+  useActiveFeeding,
+  useCreateFeeding,
+  useStartFeeding,
+} from '@/features/feedings/queries';
+import {
+  FEEDING_KINDS,
+  feedingKindIcon,
+  feedingKindKey,
+} from '@/features/feedings/labels';
 import { translateError, type FriendlyError } from '@/features/errors/translate';
 import { useActiveChild } from '@/stores/activeChild';
 import type { FeedingKind } from '@/types/domain';
@@ -23,6 +33,8 @@ export default function NewFeedingScreen() {
   const dateLocale = i18n.language === 'uk' ? uk : enUS;
   const activeChildId = useActiveChild((s) => s.activeChildId);
   const createFeeding = useCreateFeeding();
+  const startFeeding = useStartFeeding();
+  const { data: activeFeeding } = useActiveFeeding(activeChildId);
 
   const [kind, setKind] = useState<FeedingKind>('breast_left');
   const [durationMin, setDurationMin] = useState('');
@@ -36,12 +48,9 @@ export default function NewFeedingScreen() {
   const isSolid = kind === 'solid';
 
   const canSubmit =
-    !createFeeding.isPending && (!isSolid || solidFood.trim().length > 0);
-
-  const kindRows = useMemo(() => {
-    const all = FEEDING_KINDS.map((k) => ({ value: k, label: t(feedingKindKey(k)) }));
-    return [all.slice(0, 2), all.slice(2, 4), all.slice(4, 5)];
-  }, [t]);
+    !createFeeding.isPending &&
+    !activeFeeding &&
+    (!isSolid || solidFood.trim().length > 0);
 
   const startedAtPreview = useMemo(() => {
     const now = new Date();
@@ -95,47 +104,64 @@ export default function NewFeedingScreen() {
     }
   };
 
+  const onStartTimer = async () => {
+    if (!activeChildId || !isBreast) return;
+    setError(null);
+    try {
+      await startFeeding.mutateAsync({ childId: activeChildId, kind });
+      router.back();
+    } catch (err) {
+      setError(translateError(err));
+    }
+  };
+
   return (
     <FormScreen onClose={() => router.back()}>
-      <View style={styles.kindBlock}>
-        {kindRows.map((row, idx) => (
-          <View key={idx} style={styles.kindRow}>
-            {row.map((opt) => {
-              const isActive = opt.value === kind;
-              return (
-                <Pressable
-                  key={opt.value}
-                  onPress={() => setKind(opt.value)}
-                  accessibilityRole="button"
-                  accessibilityState={{ selected: isActive }}
-                  style={({ pressed }) => [
-                    styles.kindPill,
-                    {
-                      backgroundColor: isActive
-                        ? theme.colors.primary
-                        : theme.colors.surface,
-                      borderColor: isActive
-                        ? theme.colors.primary
-                        : theme.colors.outlineVariant,
-                      opacity: pressed ? 0.85 : 1,
-                    },
-                  ]}
-                >
-                  <Text
-                    variant="labelLarge"
-                    style={{
-                      color: isActive ? theme.colors.onPrimary : theme.colors.onSurface,
-                      fontWeight: '600',
-                    }}
-                  >
-                    {opt.label}
-                  </Text>
-                </Pressable>
-              );
-            })}
+      {activeFeeding ? <ActiveFeedingCard feeding={activeFeeding} /> : null}
+
+      <Text
+        variant="labelSmall"
+        style={[styles.sectionLabel, { color: theme.colors.onSurfaceVariant }]}
+      >
+        {t('common.type')}
+      </Text>
+      <View style={styles.kindGrid}>
+        {FEEDING_KINDS.map((k) => (
+          <View key={k} style={styles.kindCell}>
+            <ChoiceTile
+              icon={feedingKindIcon(k)}
+              label={t(feedingKindKey(k))}
+              tint={theme.colors.primary}
+              selected={kind === k}
+              onPress={() => setKind(k)}
+            />
           </View>
         ))}
       </View>
+
+      {isBreast && !activeFeeding ? (
+        <Button
+          mode="contained"
+          icon="play-circle-outline"
+          onPress={onStartTimer}
+          loading={startFeeding.isPending}
+          disabled={startFeeding.isPending}
+          contentStyle={styles.submitContent}
+          style={styles.startButton}
+        >
+          {t('feedings.new.startNow')}
+        </Button>
+      ) : null}
+
+      {isBreast ? (
+        <View style={styles.dividerRow}>
+          <View style={[styles.dividerLine, { backgroundColor: theme.colors.outlineVariant }]} />
+          <Text variant="labelSmall" style={{ color: theme.colors.onSurfaceVariant }}>
+            {t('feedings.new.orLogPast')}
+          </Text>
+          <View style={[styles.dividerLine, { backgroundColor: theme.colors.outlineVariant }]} />
+        </View>
+      ) : null}
 
       {isBreast ? (
         <AppTextInput
@@ -198,18 +224,26 @@ export default function NewFeedingScreen() {
 }
 
 const styles = StyleSheet.create({
-  kindBlock: { gap: spacing.sm },
-  kindRow: { flexDirection: 'row', gap: spacing.sm },
-  kindPill: {
-    flex: 1,
-    minHeight: 52,
-    borderRadius: radii.pill,
-    borderWidth: 1.5,
-    paddingHorizontal: spacing.md,
-    alignItems: 'center',
-    justifyContent: 'center',
+  sectionLabel: {
+    fontWeight: '700',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
+  kindGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+  },
+  kindCell: { flexBasis: '31%', flexGrow: 1, flexDirection: 'row' },
+  dividerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    marginTop: spacing.sm,
+  },
+  dividerLine: { flex: 1, height: StyleSheet.hairlineWidth },
   submit: { marginTop: spacing.md, borderRadius: radii.xl },
   submitContent: { paddingVertical: spacing.md },
+  startButton: { borderRadius: radii.xl },
   hint: { textAlign: 'center', opacity: 0.6, marginTop: spacing.sm },
 });
