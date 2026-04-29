@@ -8,6 +8,8 @@ import { format } from 'date-fns';
 
 import { radii, spacing } from '@/constants';
 
+type Mode = 'date' | 'datetime';
+
 type Props = {
   label: string;
   value: Date | null;
@@ -15,12 +17,14 @@ type Props = {
   onChange: (date: Date) => void;
   maximumDate?: Date;
   minimumDate?: Date;
+  /** 'date' shows an inline calendar; 'datetime' shows a compact date+time picker. */
+  mode?: Mode;
 };
 
 /**
- * Date picker styled as a regular Paper TextInput so it sits in the form
- * with identical chrome to AppTextInput. The TextInput is non-editable; the
- * surrounding Pressable opens the native picker on tap.
+ * Date / date+time picker styled as a regular Paper TextInput so it sits in
+ * the form with identical chrome to AppTextInput. The TextInput is
+ * non-editable; the surrounding Pressable opens the native picker on tap.
  */
 export function DateField({
   label,
@@ -29,11 +33,14 @@ export function DateField({
   onChange,
   maximumDate,
   minimumDate,
+  mode = 'date',
 }: Props) {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
 
-  const display = value ? format(value, 'd MMM yyyy') : '';
+  const formatString = mode === 'datetime' ? 'd MMM, HH:mm' : 'd MMM yyyy';
+  const display = value ? format(value, formatString) : '';
+  const iosDisplay = mode === 'datetime' ? 'spinner' : 'inline';
 
   const handleNativeChange = (event: DateTimePickerEvent, date?: Date) => {
     // Android dispatches `dismissed` on cancel and `set` on confirm — close in either case.
@@ -58,7 +65,11 @@ export function DateField({
             outlineColor={theme.colors.outlineVariant}
             activeOutlineColor={theme.colors.primary}
             style={{ backgroundColor: theme.colors.surface }}
-            left={<TextInput.Icon icon="calendar-month-outline" />}
+            left={
+              <TextInput.Icon
+                icon={mode === 'datetime' ? 'clock-outline' : 'calendar-month-outline'}
+              />
+            }
             right={<TextInput.Icon icon={open ? 'chevron-up' : 'chevron-down'} />}
           />
         </View>
@@ -76,8 +87,8 @@ export function DateField({
         >
           <DateTimePicker
             value={value ?? new Date()}
-            mode="date"
-            display="inline"
+            mode={mode}
+            display={iosDisplay}
             maximumDate={maximumDate}
             minimumDate={minimumDate}
             onChange={(_, date) => {
@@ -85,7 +96,7 @@ export function DateField({
             }}
             themeVariant={theme.dark ? 'dark' : 'light'}
             accentColor={theme.colors.primary}
-            style={styles.iosCalendar}
+            style={mode === 'date' ? styles.iosCalendar : undefined}
           />
           <Pressable
             onPress={() => setOpen(false)}
@@ -104,7 +115,7 @@ export function DateField({
       {open && Platform.OS === 'android' ? (
         <DateTimePicker
           value={value ?? new Date()}
-          mode="date"
+          mode={mode}
           display="default"
           maximumDate={maximumDate}
           minimumDate={minimumDate}

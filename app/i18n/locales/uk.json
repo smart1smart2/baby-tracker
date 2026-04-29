@@ -163,6 +163,21 @@
     },
     "amountWithUnit": "{{amount}} мл"
   },
+  "sleeps": {
+    "new": {
+      "screenTitle": "Сон",
+      "activeSleep": "Активний сон",
+      "startNow": "Старт сну зараз",
+      "stopNow": "Стоп",
+      "manualSection": "Або записати минулий сон",
+      "startedAtLabel": "Початок",
+      "endedAtLabel": "Кінець",
+      "notesLabel": "Нотатки (необов'язково)",
+      "chooseChildFirst": "Спочатку обери дитину",
+      "endBeforeStart": "Кінець має бути після початку",
+      "durationHint": "Тривалість: {{minutes}} хв"
+    }
+  },
   "age": {
     "notBornYet": "ще не народився",
     "days_one": "{{count}} день",
