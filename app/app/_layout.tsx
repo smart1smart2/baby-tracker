@@ -42,6 +42,10 @@ export default function RootLayout() {
             name="diapers/new"
             options={{ title: t('diapers.new.screenTitle'), presentation: 'fullScreenModal' }}
           />
+          <Stack.Screen
+            name="measurements/new"
+            options={{ title: t('measurements.new.screenTitle'), presentation: 'fullScreenModal' }}
+          />
         </Stack>
       </AuthGate>
       <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />

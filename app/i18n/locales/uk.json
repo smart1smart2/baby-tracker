@@ -164,6 +164,22 @@
     },
     "amountWithUnit": "{{amount}} мл"
   },
+  "measurements": {
+    "new": {
+      "screenTitle": "Вимірювання",
+      "valueLabel": "Значення ({{unit}})",
+      "valuePlaceholder": "наприклад, 3.4",
+      "measuredAtLabel": "Дата вимірювання",
+      "notesLabel": "Нотатки (необов'язково)",
+      "chooseChildFirst": "Спочатку обери дитину",
+      "invalidValue": "Введи додатне число"
+    },
+    "kinds": {
+      "weight": "Вага",
+      "height": "Зріст",
+      "headCircumference": "Голова"
+    }
+  },
   "diapers": {
     "new": {
       "screenTitle": "Підгузок",

@@ -164,6 +164,22 @@
     },
     "amountWithUnit": "{{amount}} ml"
   },
+  "measurements": {
+    "new": {
+      "screenTitle": "Measurement",
+      "valueLabel": "Value ({{unit}})",
+      "valuePlaceholder": "e.g., 3.4",
+      "measuredAtLabel": "Measured at",
+      "notesLabel": "Notes (optional)",
+      "chooseChildFirst": "Pick a child first",
+      "invalidValue": "Enter a positive number"
+    },
+    "kinds": {
+      "weight": "Weight",
+      "height": "Height",
+      "headCircumference": "Head"
+    }
+  },
   "diapers": {
     "new": {
       "screenTitle": "Diaper",

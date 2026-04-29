@@ -30,14 +30,14 @@ type QuickAction = {
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
   tint: string;
   /** When set, tapping the card pushes this route. Else it's a no-op stub. */
-  path?: '/feedings/new' | '/sleeps/new' | '/diapers/new';
+  path?: '/feedings/new' | '/sleeps/new' | '/diapers/new' | '/measurements/new';
 };
 
 const QUICK_ACTIONS: QuickAction[] = [
   { key: 'feeding', icon: 'baby-bottle-outline', tint: categoryColors.feeding, path: '/feedings/new' },
   { key: 'sleep', icon: 'sleep', tint: categoryColors.sleep, path: '/sleeps/new' },
   { key: 'diaper', icon: 'human-baby-changing-table', tint: categoryColors.diaper, path: '/diapers/new' },
-  { key: 'measurement', icon: 'scale-bathroom', tint: categoryColors.growth },
+  { key: 'measurement', icon: 'scale-bathroom', tint: categoryColors.growth, path: '/measurements/new' },
 ];
 
 export default function HomeScreen() {
