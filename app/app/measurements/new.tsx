@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Button, Text, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 import { AppTextInput } from '@/components/AppTextInput';
-import { ChoiceTile } from '@/components/ChoiceTile';
 import { DateField } from '@/components/DateField';
 import { FormError } from '@/components/FormError';
 import { FormScreen } from '@/components/FormScreen';
+import { KindGrid } from '@/components/KindGrid';
 import { radii, spacing } from '@/constants';
 import { useCreateMeasurement } from '@/features/measurements/queries';
 import {
@@ -71,19 +71,15 @@ export default function NewMeasurementScreen() {
       >
         {t('common.type')}
       </Text>
-      <View style={styles.kindGrid}>
-        {MEASUREMENT_KINDS.map((k) => (
-          <View key={k} style={styles.kindCell}>
-            <ChoiceTile
-              icon={measurementKindIcon(k)}
-              label={t(measurementKindKey(k))}
-              tint={theme.colors.primary}
-              selected={kind === k}
-              onPress={() => setKind(k)}
-            />
-          </View>
-        ))}
-      </View>
+      <KindGrid
+        value={kind}
+        onChange={setKind}
+        items={MEASUREMENT_KINDS.map((k) => ({
+          value: k,
+          icon: measurementKindIcon(k),
+          label: t(measurementKindKey(k)),
+        }))}
+      />
 
       <AppTextInput
         label={t('measurements.new.valueLabel', { unit: defaultUnit(kind) })}
@@ -132,8 +128,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     textTransform: 'uppercase',
   },
-  kindGrid: { flexDirection: 'row', gap: spacing.sm },
-  kindCell: { flex: 1, flexDirection: 'row' },
   submit: { marginTop: spacing.lg, borderRadius: radii.xl },
   submitContent: { paddingVertical: spacing.md },
 });

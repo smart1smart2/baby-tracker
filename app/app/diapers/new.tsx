@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Button, Text, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 import { AppTextInput } from '@/components/AppTextInput';
-import { ChoiceTile } from '@/components/ChoiceTile';
 import { DateField } from '@/components/DateField';
 import { FormError } from '@/components/FormError';
 import { FormScreen } from '@/components/FormScreen';
+import { KindGrid } from '@/components/KindGrid';
 import { radii, spacing } from '@/constants';
 import { useCreateDiaper } from '@/features/diapers/queries';
 import {
@@ -59,19 +59,16 @@ export default function NewDiaperScreen() {
       >
         {t('common.type')}
       </Text>
-      <View style={styles.kindGrid}>
-        {DIAPER_KINDS.map((k) => (
-          <View key={k} style={styles.kindCell}>
-            <ChoiceTile
-              icon={diaperKindIcon(k)}
-              label={t(diaperKindKey(k))}
-              tint={theme.colors.primary}
-              selected={kind === k}
-              onPress={() => setKind(k)}
-            />
-          </View>
-        ))}
-      </View>
+      <KindGrid
+        columns={2}
+        value={kind}
+        onChange={setKind}
+        items={DIAPER_KINDS.map((k) => ({
+          value: k,
+          icon: diaperKindIcon(k),
+          label: t(diaperKindKey(k)),
+        }))}
+      />
 
       <DateField
         label={t('diapers.new.occurredAtLabel')}
@@ -111,8 +108,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     textTransform: 'uppercase',
   },
-  kindGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-  kindCell: { flexBasis: '48%', flexGrow: 1, flexDirection: 'row' },
   submit: { marginTop: spacing.lg, borderRadius: radii.xl },
   submitContent: { paddingVertical: spacing.md },
 });

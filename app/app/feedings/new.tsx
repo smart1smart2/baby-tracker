@@ -8,9 +8,9 @@ import { enUS, uk } from 'date-fns/locale';
 
 import { ActiveFeedingCard } from '@/components/ActiveFeedingCard';
 import { AppTextInput } from '@/components/AppTextInput';
-import { ChoiceTile } from '@/components/ChoiceTile';
 import { FormScreen } from '@/components/FormScreen';
 import { FormError } from '@/components/FormError';
+import { KindGrid } from '@/components/KindGrid';
 import { radii, spacing } from '@/constants';
 import {
   useActiveFeeding,
@@ -125,19 +125,15 @@ export default function NewFeedingScreen() {
       >
         {t('common.type')}
       </Text>
-      <View style={styles.kindGrid}>
-        {FEEDING_KINDS.map((k) => (
-          <View key={k} style={styles.kindCell}>
-            <ChoiceTile
-              icon={feedingKindIcon(k)}
-              label={t(feedingKindKey(k))}
-              tint={theme.colors.primary}
-              selected={kind === k}
-              onPress={() => setKind(k)}
-            />
-          </View>
-        ))}
-      </View>
+      <KindGrid
+        value={kind}
+        onChange={setKind}
+        items={FEEDING_KINDS.map((k) => ({
+          value: k,
+          icon: feedingKindIcon(k),
+          label: t(feedingKindKey(k)),
+        }))}
+      />
 
       {isBreast && !activeFeeding ? (
         <Button
@@ -193,8 +189,10 @@ export default function NewFeedingScreen() {
       ) : null}
 
       <AppTextInput
-        label={t('feedings.new.notesLabel')}
-        placeholder={t('feedings.new.notesPlaceholder')}
+        label={t(isSolid ? 'feedings.new.reactionLabel' : 'feedings.new.notesLabel')}
+        placeholder={t(
+          isSolid ? 'feedings.new.reactionPlaceholder' : 'feedings.new.notesPlaceholder',
+        )}
         value={notes}
         onChangeText={setNotes}
         multiline
@@ -229,12 +227,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     textTransform: 'uppercase',
   },
-  kindGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-  },
-  kindCell: { flexBasis: '31%', flexGrow: 1, flexDirection: 'row' },
   dividerRow: {
     flexDirection: 'row',
     alignItems: 'center',

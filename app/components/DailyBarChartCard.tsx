@@ -19,6 +19,8 @@ type Props = {
   icon: IconName;
   tint: string;
   buckets: DailyBucket[];
+  /** Callback to format the x-axis label for each bucket. Default: 'EEE'. */
+  formatLabel?: (date: Date) => string;
   /** Optional formatter for the displayed total (default: integer string). */
   formatValue?: (value: number) => string;
   onPress?: () => void;
@@ -26,14 +28,16 @@ type Props = {
 };
 
 /**
- * Stat card with a 7-day bar chart. Falls back to an empty-state placeholder
- * when there are no entries in the range.
+ * Stat card showing pre-aggregated buckets as bars. Caller decides the
+ * granularity (daily for week view, weekly for month view) and supplies
+ * `labelFormat` for the corresponding axis labels.
  */
 export function DailyBarChartCard({
   title,
   icon,
   tint,
   buckets,
+  formatLabel,
   formatValue,
   onPress,
   onAdd,
@@ -41,20 +45,27 @@ export function DailyBarChartCard({
   const theme = useTheme();
   const { t, i18n } = useTranslation();
   const dateLocale = i18n.language === 'uk' ? uk : enUS;
+  const labelFor =
+    formatLabel ?? ((d: Date) => format(d, 'EEE', { locale: dateLocale }));
 
   const total = buckets.reduce((sum, b) => sum + b.value, 0);
   const hasData = total > 0;
   const max = Math.max(...buckets.map((b) => b.value), 1);
   const fmt = formatValue ?? ((v) => String(v));
 
+  // Pick a max value that's always divisible by the section count so the
+  // auto-generated Y-axis labels land on whole numbers (e.g. 0, 3, 6, 9).
+  const SECTIONS = 4;
+  const yMax = Math.max(SECTIONS, Math.ceil((max * 1.2) / SECTIONS) * SECTIONS);
+
   const data = buckets.map((b) => ({
     value: b.value,
-    label: format(b.date, 'EEE', { locale: dateLocale }),
+    label: labelFor(b.date),
     frontColor: tint,
   }));
 
   const barWidth = Math.max(
-    18,
+    20,
     Math.floor((CHART_WIDTH - 40) / buckets.length) - 12,
   );
 
@@ -80,8 +91,9 @@ export function DailyBarChartCard({
           rulesColor={theme.colors.outlineVariant}
           xAxisLabelTextStyle={styles.axisLabel}
           yAxisTextStyle={styles.axisLabel}
-          noOfSections={3}
-          maxValue={Math.ceil(max * 1.2)}
+          noOfSections={SECTIONS}
+          maxValue={yMax}
+          formatYLabel={(v) => String(Math.round(Number(v)))}
           initialSpacing={10}
           endSpacing={10}
         />

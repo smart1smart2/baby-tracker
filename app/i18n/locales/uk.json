@@ -28,7 +28,7 @@
     "title": "Статистика",
     "empty": "Немає даних за останні 7 днів",
     "lastWeek": {
-      "title": "Останні 7 днів"
+      "title": "Статистика за останні 7 днів"
     },
     "feedings": {
       "title": "Годувань за день",
@@ -39,14 +39,19 @@
     },
     "sleep": {
       "title": "Годин сну за день",
-      "totalHours": "{{hours}} год загалом"
+      "totalHours": "{{hours}} год загалом",
+      "night": "🌙 Ніч: {{hours}} год",
+      "day": "☀️ Денний сон: {{hours}} год"
     },
     "diapers": {
       "title": "Підгузків за день",
       "totalCount_one": "{{count}} всього",
       "totalCount_few": "{{count}} всього",
       "totalCount_many": "{{count}} всього",
-      "totalCount_other": "{{count}} всього"
+      "totalCount_other": "{{count}} всього",
+      "withinRange": "✓ В межах норми ({{min}}–{{max}}/день)",
+      "belowRange": "⚠ Менше норми — у середньому {{avg}}/день",
+      "aboveRange": "⚠ Більше норми — у середньому {{avg}}/день"
     },
     "growth": {
       "title": "Зростання",
@@ -199,7 +204,9 @@
       "startedAt": "Початок: {{time}}",
       "startNow": "Старт зараз",
       "stopNow": "Стоп",
-      "orLogPast": "або записати минуле"
+      "orLogPast": "або записати минуле",
+      "reactionLabel": "Реакція (необов'язково)",
+      "reactionPlaceholder": "наприклад, висип, відмовилась, сподобалось"
     },
     "kinds": {
       "breastLeft": "Груди Л",

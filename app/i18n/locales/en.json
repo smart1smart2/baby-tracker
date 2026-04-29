@@ -28,7 +28,7 @@
     "title": "Statistics",
     "empty": "No data in the last 7 days",
     "lastWeek": {
-      "title": "Last 7 days"
+      "title": "Statistics for last 7 days"
     },
     "feedings": {
       "title": "Feedings per day",
@@ -37,12 +37,17 @@
     },
     "sleep": {
       "title": "Sleep hours per day",
-      "totalHours": "{{hours}} h total"
+      "totalHours": "{{hours}} h total",
+      "night": "🌙 Night: {{hours}} h",
+      "day": "☀️ Day naps: {{hours}} h"
     },
     "diapers": {
       "title": "Diapers per day",
       "totalCount_one": "{{count}} total",
-      "totalCount_other": "{{count}} total"
+      "totalCount_other": "{{count}} total",
+      "withinRange": "✓ Within typical range ({{min}}–{{max}}/day)",
+      "belowRange": "⚠ Below typical range — average {{avg}}/day",
+      "aboveRange": "⚠ Above typical range — average {{avg}}/day"
     },
     "growth": {
       "title": "Growth",
@@ -195,7 +200,9 @@
       "startedAt": "Started at {{time}}",
       "startNow": "Start now",
       "stopNow": "Stop",
-      "orLogPast": "or log past feeding"
+      "orLogPast": "or log past feeding",
+      "reactionLabel": "Reaction (optional)",
+      "reactionPlaceholder": "e.g., rash, refused, liked it"
     },
     "kinds": {
       "breastLeft": "Breast L",
