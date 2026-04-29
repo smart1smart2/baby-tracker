@@ -12,7 +12,41 @@
     "loading": "Loading…"
   },
   "tabs": {
-    "home": "Home"
+    "home": "Home",
+    "stats": "Stats"
+  },
+  "history": {
+    "feedings": "Feeding history",
+    "sleeps": "Sleep history",
+    "diapers": "Diaper history",
+    "measurements": "Measurement history",
+    "empty": "No entries in the last 30 days",
+    "yesterday": "Yesterday"
+  },
+  "stats": {
+    "title": "Statistics",
+    "empty": "No data in the last 7 days",
+    "lastWeek": {
+      "title": "Last 7 days"
+    },
+    "feedings": {
+      "title": "Feedings per day",
+      "totalCount_one": "{{count}} total",
+      "totalCount_other": "{{count}} total"
+    },
+    "sleep": {
+      "title": "Sleep hours per day",
+      "totalHours": "{{hours}} h total"
+    },
+    "diapers": {
+      "title": "Diapers per day",
+      "totalCount_one": "{{count}} total",
+      "totalCount_other": "{{count}} total"
+    },
+    "growth": {
+      "title": "Growth",
+      "empty": "No measurements yet. Add weight, height or head circumference to see trends here."
+    }
   },
   "auth": {
     "login": {
@@ -188,6 +222,13 @@
     },
     "event": {
       "title": "Measurement"
+    },
+    "trends": {
+      "title": "Growth trends",
+      "add": "Add",
+      "empty": "No measurements yet. Tap Add to record the first one.",
+      "noEntries": "No entries yet",
+      "needTwoPoints": "Add another reading to see the trend"
     }
   },
   "diapers": {

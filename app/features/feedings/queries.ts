@@ -7,6 +7,31 @@ import type { Feeding, FeedingInsert } from '@/types/domain';
 export const feedingsKey = (childId: string) => ['feedings', childId] as const;
 export const feedingsForDayKey = (childId: string, day: string) =>
   ['feedings', childId, 'day', day] as const;
+export const feedingsInRangeKey = (childId: string, from: string, to: string) =>
+  ['feedings', childId, 'range', from, to] as const;
+
+export function useFeedingsInRange(childId: string | null, from: Date, to: Date) {
+  const fromKey = format(from, 'yyyy-MM-dd');
+  const toKey = format(to, 'yyyy-MM-dd');
+  return useQuery({
+    queryKey: childId
+      ? feedingsInRangeKey(childId, fromKey, toKey)
+      : ['feedings', 'noop-range'],
+    enabled: Boolean(childId),
+    queryFn: async (): Promise<Feeding[]> => {
+      if (!childId) return [];
+      const { data, error } = await supabase
+        .from('feedings')
+        .select('*')
+        .eq('child_id', childId)
+        .gte('started_at', startOfDay(from).toISOString())
+        .lte('started_at', endOfDay(to).toISOString())
+        .order('started_at', { ascending: true });
+      if (error) throw error;
+      return data;
+    },
+  });
+}
 
 export function useFeedingsForDay(childId: string | null, day: Date) {
   const dayKey = format(day, 'yyyy-MM-dd');

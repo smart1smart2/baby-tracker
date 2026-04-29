@@ -7,7 +7,32 @@ import type { Sleep, SleepInsert } from '@/types/domain';
 export const sleepsKey = (childId: string) => ['sleeps', childId] as const;
 export const sleepsForDayKey = (childId: string, day: string) =>
   ['sleeps', childId, 'day', day] as const;
+export const sleepsInRangeKey = (childId: string, from: string, to: string) =>
+  ['sleeps', childId, 'range', from, to] as const;
 export const activeSleepKey = (childId: string) => ['sleeps', childId, 'active'] as const;
+
+export function useSleepsInRange(childId: string | null, from: Date, to: Date) {
+  const fromKey = format(from, 'yyyy-MM-dd');
+  const toKey = format(to, 'yyyy-MM-dd');
+  return useQuery({
+    queryKey: childId
+      ? sleepsInRangeKey(childId, fromKey, toKey)
+      : ['sleeps', 'noop-range'],
+    enabled: Boolean(childId),
+    queryFn: async (): Promise<Sleep[]> => {
+      if (!childId) return [];
+      const { data, error } = await supabase
+        .from('sleeps')
+        .select('*')
+        .eq('child_id', childId)
+        .gte('started_at', startOfDay(from).toISOString())
+        .lte('started_at', endOfDay(to).toISOString())
+        .order('started_at', { ascending: true });
+      if (error) throw error;
+      return data;
+    },
+  });
+}
 
 export function useSleepsForDay(childId: string | null, day: Date) {
   const dayKey = format(day, 'yyyy-MM-dd');

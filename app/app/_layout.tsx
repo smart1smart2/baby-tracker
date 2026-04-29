@@ -6,6 +6,7 @@ import 'react-native-reanimated';
 import '@/i18n';
 import { AppProviders } from '@/providers/AppProviders';
 import { AuthGate } from '@/components/AuthGate';
+import { HeaderBackButton } from '@/components/HeaderBackButton';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export const unstable_settings = {
@@ -19,7 +20,12 @@ export default function RootLayout() {
   return (
     <AppProviders>
       <AuthGate>
-        <Stack>
+        <Stack
+          screenOptions={{
+            headerBackButtonDisplayMode: 'minimal',
+            headerLeft: () => <HeaderBackButton />,
+          }}
+        >
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
           <Stack.Screen
@@ -35,16 +41,32 @@ export default function RootLayout() {
             options={{ title: t('feedings.new.screenTitle'), presentation: 'fullScreenModal' }}
           />
           <Stack.Screen
+            name="feedings/index"
+            options={{ title: t('history.feedings') }}
+          />
+          <Stack.Screen
             name="sleeps/new"
             options={{ title: t('sleeps.new.screenTitle'), presentation: 'fullScreenModal' }}
+          />
+          <Stack.Screen
+            name="sleeps/index"
+            options={{ title: t('history.sleeps') }}
           />
           <Stack.Screen
             name="diapers/new"
             options={{ title: t('diapers.new.screenTitle'), presentation: 'fullScreenModal' }}
           />
           <Stack.Screen
+            name="diapers/index"
+            options={{ title: t('history.diapers') }}
+          />
+          <Stack.Screen
             name="measurements/new"
             options={{ title: t('measurements.new.screenTitle'), presentation: 'fullScreenModal' }}
+          />
+          <Stack.Screen
+            name="measurements/index"
+            options={{ title: t('history.measurements') }}
           />
         </Stack>
       </AuthGate>

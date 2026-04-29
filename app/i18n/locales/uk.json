@@ -12,7 +12,45 @@
     "loading": "Завантаження…"
   },
   "tabs": {
-    "home": "Головна"
+    "home": "Головна",
+    "stats": "Статистика"
+  },
+  "history": {
+    "feedings": "Історія годувань",
+    "sleeps": "Історія сну",
+    "diapers": "Історія підгузків",
+    "measurements": "Історія вимірювань",
+    "empty": "Немає записів за останні 30 днів",
+    "yesterday": "Вчора"
+  },
+  "stats": {
+    "title": "Статистика",
+    "empty": "Немає даних за останні 7 днів",
+    "lastWeek": {
+      "title": "Останні 7 днів"
+    },
+    "feedings": {
+      "title": "Годувань за день",
+      "totalCount_one": "{{count}} всього",
+      "totalCount_few": "{{count}} всього",
+      "totalCount_many": "{{count}} всього",
+      "totalCount_other": "{{count}} всього"
+    },
+    "sleep": {
+      "title": "Годин сну за день",
+      "totalHours": "{{hours}} год загалом"
+    },
+    "diapers": {
+      "title": "Підгузків за день",
+      "totalCount_one": "{{count}} всього",
+      "totalCount_few": "{{count}} всього",
+      "totalCount_many": "{{count}} всього",
+      "totalCount_other": "{{count}} всього"
+    },
+    "growth": {
+      "title": "Зростання",
+      "empty": "Поки немає вимірювань. Додай вагу, зріст або обхват голови, щоб побачити тренди."
+    }
   },
   "auth": {
     "login": {
@@ -188,6 +226,13 @@
     },
     "event": {
       "title": "Вимірювання"
+    },
+    "trends": {
+      "title": "Тренди зростання",
+      "add": "Додати",
+      "empty": "Поки немає вимірювань. Натисни Додати, щоб записати перше.",
+      "noEntries": "Ще немає записів",
+      "needTwoPoints": "Додай ще одне вимірювання, щоб побачити тренд"
     }
   },
   "diapers": {

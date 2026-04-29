@@ -2,16 +2,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { endOfDay, format, startOfDay } from 'date-fns';
 
 import { supabase } from '@/lib/supabase';
-import type {
-  GrowthMeasurement,
-  GrowthMeasurementInsert,
-  MeasurementKind,
-} from '@/types/domain';
+import type { GrowthMeasurement, GrowthMeasurementInsert } from '@/types/domain';
 
 export const measurementsKey = (childId: string) =>
   ['measurements', childId] as const;
-export const measurementsByKindKey = (childId: string, kind: MeasurementKind) =>
-  ['measurements', childId, kind] as const;
 export const measurementsForDayKey = (childId: string, day: string) =>
   ['measurements', childId, 'day', day] as const;
 
@@ -35,23 +29,17 @@ export function useMeasurementsForDay(childId: string | null, day: Date) {
   });
 }
 
-export function useMeasurements(childId: string | null, kind?: MeasurementKind) {
+export function useMeasurements(childId: string | null) {
   return useQuery({
-    queryKey: childId
-      ? kind
-        ? measurementsByKindKey(childId, kind)
-        : measurementsKey(childId)
-      : ['measurements', 'noop'],
+    queryKey: childId ? measurementsKey(childId) : ['measurements', 'noop'],
     enabled: Boolean(childId),
     queryFn: async (): Promise<GrowthMeasurement[]> => {
       if (!childId) return [];
-      let query = supabase
+      const { data, error } = await supabase
         .from('growth_measurements')
         .select('*')
         .eq('child_id', childId)
         .order('measured_at', { ascending: false });
-      if (kind) query = query.eq('kind', kind);
-      const { data, error } = await query;
       if (error) throw error;
       return data;
     },

@@ -2,14 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ActivityIndicator, Button, IconButton, Text, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
-import {
-  addDays,
-  format,
-  formatDistanceStrict,
-  isSameDay,
-  parseISO,
-  subDays,
-} from 'date-fns';
+import { addDays, format, isSameDay, subDays } from 'date-fns';
 import { enUS, uk } from 'date-fns/locale';
 import { useTranslation } from 'react-i18next';
 import type { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -17,14 +10,18 @@ import type { MaterialCommunityIcons } from '@expo/vector-icons';
 import { supabase } from '@/lib/supabase';
 import { useChildren } from '@/features/children/queries';
 import { useDiapersForDay } from '@/features/diapers/queries';
-import { diaperKindIcon, diaperKindKey } from '@/features/diapers/labels';
 import { useFeedingsForDay } from '@/features/feedings/queries';
-import { feedingKindKey } from '@/features/feedings/labels';
 import { useMeasurementsForDay } from '@/features/measurements/queries';
-import { measurementKindIcon, measurementKindKey } from '@/features/measurements/labels';
 import { useActiveSleep, useSleepsForDay } from '@/features/sleeps/queries';
 import { useActiveChild } from '@/stores/activeChild';
 import { useAuth } from '@/providers/AuthProvider';
+import {
+  diaperToEvent,
+  feedingToEvent,
+  measurementToEvent,
+  sleepToEvent,
+  type EventItem,
+} from '@/lib/events';
 
 import { ScreenContainer } from '@/components/ScreenContainer';
 import { HeroCard } from '@/components/HeroCard';
@@ -52,15 +49,6 @@ const QUICK_ACTIONS: QuickAction[] = [
   { key: 'diaper', icon: 'human-baby-changing-table', tint: categoryColors.diaper, path: '/diapers/new' },
   { key: 'measurement', icon: 'scale-bathroom', tint: categoryColors.growth, path: '/measurements/new' },
 ];
-
-type EventItem = {
-  id: string;
-  occurredAt: Date;
-  icon: IconName;
-  tint: string;
-  title: string;
-  subtitle?: string;
-};
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -131,61 +119,12 @@ export default function HomeScreen() {
   );
 
   const events: EventItem[] = useMemo(() => {
-    const items: EventItem[] = [];
-    feedings.forEach((f) => {
-      const kindLabel = t(feedingKindKey(f.kind));
-      const amount = f.amount_ml
-        ? t('feedings.amountWithUnit', { amount: f.amount_ml })
-        : null;
-      items.push({
-        id: `f-${f.id}`,
-        occurredAt: parseISO(f.started_at),
-        icon: 'baby-bottle-outline',
-        tint: categoryColors.feeding,
-        title: t('feedings.event.title'),
-        subtitle: amount ? `${kindLabel} · ${amount}` : kindLabel,
-      });
-    });
-    sleeps.forEach((s) => {
-      const startedAt = parseISO(s.started_at);
-      const endedAt = s.ended_at ? parseISO(s.ended_at) : null;
-      const duration = formatDistanceStrict(startedAt, endedAt ?? new Date(), {
-        locale: dateLocale,
-        roundingMethod: 'floor',
-      });
-      const subtitle = endedAt
-        ? `→ ${format(endedAt, 'HH:mm')} · ${duration}`
-        : `${t('sleeps.event.ongoing')} · ${duration}`;
-      items.push({
-        id: `s-${s.id}`,
-        occurredAt: startedAt,
-        icon: 'sleep',
-        tint: categoryColors.sleep,
-        title: t('sleeps.event.title'),
-        subtitle,
-      });
-    });
-    diapers.forEach((d) => {
-      const kindLabel = t(diaperKindKey(d.kind));
-      items.push({
-        id: `d-${d.id}`,
-        occurredAt: parseISO(d.occurred_at),
-        icon: diaperKindIcon(d.kind),
-        tint: categoryColors.diaper,
-        title: t('diapers.event.title'),
-        subtitle: d.notes ? `${kindLabel} · ${d.notes}` : kindLabel,
-      });
-    });
-    measurements.forEach((m) =>
-      items.push({
-        id: `m-${m.id}`,
-        occurredAt: parseISO(m.measured_at),
-        icon: measurementKindIcon(m.kind),
-        tint: categoryColors.growth,
-        title: t('measurements.event.title'),
-        subtitle: `${t(measurementKindKey(m.kind))}: ${m.value} ${m.unit}`,
-      }),
-    );
+    const items: EventItem[] = [
+      ...feedings.map((f) => feedingToEvent(f, t)),
+      ...sleeps.map((s) => sleepToEvent(s, t, dateLocale)),
+      ...diapers.map((d) => diaperToEvent(d, t)),
+      ...measurements.map((m) => measurementToEvent(m, t)),
+    ];
     return items.sort((a, b) => b.occurredAt.getTime() - a.occurredAt.getTime());
   }, [feedings, sleeps, diapers, measurements, t, dateLocale]);
 
