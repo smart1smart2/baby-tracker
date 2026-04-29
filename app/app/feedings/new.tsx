@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { Button, Text } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
@@ -10,10 +10,11 @@ import { ActiveFeedingCard } from '@/components/ActiveFeedingCard';
 import { AppTextInput } from '@/components/AppTextInput';
 import { FormScreen } from '@/components/FormScreen';
 import { FormError } from '@/components/FormError';
+import { FormSubmitButton } from '@/components/FormSubmitButton';
 import { KindGrid } from '@/components/KindGrid';
 import { LabeledDivider } from '@/components/LabeledDivider';
 import { SectionLabel } from '@/components/SectionLabel';
-import { radii, spacing } from '@/constants';
+import { spacing } from '@/constants';
 import {
   useActiveFeeding,
   useCreateFeeding,
@@ -132,17 +133,14 @@ export default function NewFeedingScreen() {
       />
 
       {isBreast && !activeFeeding ? (
-        <Button
-          mode="contained"
+        <FormSubmitButton
           icon="play-circle-outline"
           onPress={onStartTimer}
           loading={startFeeding.isPending}
           disabled={startFeeding.isPending}
-          contentStyle={styles.submitContent}
-          style={styles.startButton}
         >
           {t('feedings.new.startNow')}
-        </Button>
+        </FormSubmitButton>
       ) : null}
 
       {isBreast ? <LabeledDivider>{t('feedings.new.orLogPast')}</LabeledDivider> : null}
@@ -189,16 +187,14 @@ export default function NewFeedingScreen() {
 
       <FormError error={error} />
 
-      <Button
-        mode="contained"
+      <FormSubmitButton
         onPress={onSubmit}
         loading={createFeeding.isPending}
         disabled={!canSubmit}
-        contentStyle={styles.submitContent}
         style={styles.submit}
       >
         {t('common.save')}
-      </Button>
+      </FormSubmitButton>
 
       <Text variant="bodySmall" style={styles.hint}>
         {t('feedings.new.startedAt', {
@@ -210,8 +206,6 @@ export default function NewFeedingScreen() {
 }
 
 const styles = StyleSheet.create({
-  submit: { marginTop: spacing.md, borderRadius: radii.xl },
-  submitContent: { paddingVertical: spacing.md },
-  startButton: { borderRadius: radii.xl },
+  submit: { marginTop: spacing.md },
   hint: { textAlign: 'center', opacity: 0.6, marginTop: spacing.sm },
 });

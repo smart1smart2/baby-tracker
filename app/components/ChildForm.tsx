@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Button, Portal, useTheme } from 'react-native-paper';
+import { Portal, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 
 import { AppTextInput } from './AppTextInput';
 import { AvatarPicker, type LocalPhoto } from './AvatarPicker';
 import { FormScreen } from './FormScreen';
 import { FormError } from './FormError';
+import { FormSubmitButton } from './FormSubmitButton';
 import { ChoiceTile } from './ChoiceTile';
 import { DateField } from './DateField';
-import { palette, radii, spacing } from '@/constants';
+import { palette, spacing } from '@/constants';
 import { useCreateChild, useUpdateChild } from '@/features/children/queries';
 import { uploadChildAvatar } from '@/features/children/avatar';
 import { translateError, type FriendlyError } from '@/features/errors/translate';
@@ -161,16 +162,14 @@ export function ChildForm({ initial, onClose }: Props) {
 
         <FormError error={error} />
 
-        <Button
-          mode="contained"
+        <FormSubmitButton
           onPress={onSubmit}
           loading={busy}
           disabled={!canSubmit}
-          contentStyle={styles.submitContent}
           style={styles.submit}
         >
           {t('common.save')}
-        </Button>
+        </FormSubmitButton>
       </FormScreen>
     </Portal.Host>
   );
@@ -178,6 +177,5 @@ export function ChildForm({ initial, onClose }: Props) {
 
 const styles = StyleSheet.create({
   sexRow: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.xs },
-  submit: { marginTop: spacing.lg, borderRadius: radii.xl },
-  submitContent: { paddingVertical: spacing.md },
+  submit: { marginTop: spacing.lg },
 });

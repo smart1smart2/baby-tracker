@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { Button, Text, useTheme } from 'react-native-paper';
+import { Text, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { differenceInMinutes } from 'date-fns';
@@ -10,8 +10,9 @@ import { AppTextInput } from '@/components/AppTextInput';
 import { DateField } from '@/components/DateField';
 import { FormError } from '@/components/FormError';
 import { FormScreen } from '@/components/FormScreen';
+import { FormSubmitButton } from '@/components/FormSubmitButton';
 import { LabeledDivider } from '@/components/LabeledDivider';
-import { radii, spacing } from '@/constants';
+import { spacing } from '@/constants';
 import {
   useActiveSleep,
   useCreateSleep,
@@ -81,17 +82,14 @@ export default function NewSleepScreen() {
       {activeSleep ? (
         <ActiveSleepCard sleep={activeSleep} />
       ) : (
-        <Button
-          mode="contained"
+        <FormSubmitButton
           icon="play-circle-outline"
           onPress={onStart}
           loading={startSleep.isPending}
           disabled={startSleep.isPending}
-          contentStyle={styles.startContent}
-          style={styles.startButton}
         >
           {t('sleeps.new.startNow')}
-        </Button>
+        </FormSubmitButton>
       )}
 
       <LabeledDivider>{t('sleeps.new.manualSection')}</LabeledDivider>
@@ -123,16 +121,14 @@ export default function NewSleepScreen() {
 
       <FormError error={error} />
 
-      <Button
-        mode="contained"
+      <FormSubmitButton
         onPress={onManualSubmit}
         loading={createSleep.isPending}
         disabled={createSleep.isPending || Boolean(activeSleep)}
-        contentStyle={styles.submitContent}
         style={styles.submit}
       >
         {t('common.save')}
-      </Button>
+      </FormSubmitButton>
 
       <Text variant="bodySmall" style={[styles.hint, { color: theme.colors.onSurfaceVariant }]}>
         {t('sleeps.new.durationHint', {
@@ -144,9 +140,6 @@ export default function NewSleepScreen() {
 }
 
 const styles = StyleSheet.create({
-  startButton: { borderRadius: radii.xl },
-  startContent: { paddingVertical: spacing.md },
-  submit: { marginTop: spacing.md, borderRadius: radii.xl },
-  submitContent: { paddingVertical: spacing.md },
+  submit: { marginTop: spacing.md },
   hint: { textAlign: 'center', marginTop: spacing.sm },
 });

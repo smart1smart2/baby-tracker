@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { Button } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
@@ -8,9 +7,10 @@ import { AppTextInput } from '@/components/AppTextInput';
 import { DateField } from '@/components/DateField';
 import { FormError } from '@/components/FormError';
 import { FormScreen } from '@/components/FormScreen';
+import { FormSubmitButton } from '@/components/FormSubmitButton';
 import { KindGrid } from '@/components/KindGrid';
 import { SectionLabel } from '@/components/SectionLabel';
-import { radii, spacing } from '@/constants';
+import { spacing } from '@/constants';
 import { useCreateMeasurement } from '@/features/measurements/queries';
 import {
   MEASUREMENT_KINDS,
@@ -103,21 +103,18 @@ export default function NewMeasurementScreen() {
 
       <FormError error={error} />
 
-      <Button
-        mode="contained"
+      <FormSubmitButton
         onPress={onSubmit}
         loading={createMeasurement.isPending}
         disabled={createMeasurement.isPending || !valid}
-        contentStyle={styles.submitContent}
         style={styles.submit}
       >
         {t('common.save')}
-      </Button>
+      </FormSubmitButton>
     </FormScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  submit: { marginTop: spacing.lg, borderRadius: radii.xl },
-  submitContent: { paddingVertical: spacing.md },
+  submit: { marginTop: spacing.lg },
 });
