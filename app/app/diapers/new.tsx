@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { Button, Text, useTheme } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
@@ -9,6 +9,7 @@ import { DateField } from '@/components/DateField';
 import { FormError } from '@/components/FormError';
 import { FormScreen } from '@/components/FormScreen';
 import { KindGrid } from '@/components/KindGrid';
+import { SectionLabel } from '@/components/SectionLabel';
 import { radii, spacing } from '@/constants';
 import { useCreateDiaper } from '@/features/diapers/queries';
 import {
@@ -22,7 +23,6 @@ import type { DiaperKind } from '@/types/domain';
 
 export default function NewDiaperScreen() {
   const router = useRouter();
-  const theme = useTheme();
   const { t } = useTranslation();
   const activeChildId = useActiveChild((s) => s.activeChildId);
   const createDiaper = useCreateDiaper();
@@ -53,12 +53,7 @@ export default function NewDiaperScreen() {
 
   return (
     <FormScreen onClose={() => router.back()}>
-      <Text
-        variant="labelSmall"
-        style={[styles.sectionLabel, { color: theme.colors.onSurfaceVariant }]}
-      >
-        {t('common.type')}
-      </Text>
+      <SectionLabel>{t('common.type')}</SectionLabel>
       <KindGrid
         columns={2}
         value={kind}
@@ -103,11 +98,6 @@ export default function NewDiaperScreen() {
 }
 
 const styles = StyleSheet.create({
-  sectionLabel: {
-    fontWeight: '700',
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
-  },
   submit: { marginTop: spacing.lg, borderRadius: radii.xl },
   submitContent: { paddingVertical: spacing.md },
 });

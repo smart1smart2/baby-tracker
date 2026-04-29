@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Button, Text, useTheme } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
+import { Button, Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
@@ -11,6 +11,8 @@ import { AppTextInput } from '@/components/AppTextInput';
 import { FormScreen } from '@/components/FormScreen';
 import { FormError } from '@/components/FormError';
 import { KindGrid } from '@/components/KindGrid';
+import { LabeledDivider } from '@/components/LabeledDivider';
+import { SectionLabel } from '@/components/SectionLabel';
 import { radii, spacing } from '@/constants';
 import {
   useActiveFeeding,
@@ -28,7 +30,6 @@ import type { FeedingKind } from '@/types/domain';
 
 export default function NewFeedingScreen() {
   const router = useRouter();
-  const theme = useTheme();
   const { t, i18n } = useTranslation();
   const dateLocale = i18n.language === 'uk' ? uk : enUS;
   const activeChildId = useActiveChild((s) => s.activeChildId);
@@ -119,12 +120,7 @@ export default function NewFeedingScreen() {
     <FormScreen onClose={() => router.back()}>
       {activeFeeding ? <ActiveFeedingCard feeding={activeFeeding} /> : null}
 
-      <Text
-        variant="labelSmall"
-        style={[styles.sectionLabel, { color: theme.colors.onSurfaceVariant }]}
-      >
-        {t('common.type')}
-      </Text>
+      <SectionLabel>{t('common.type')}</SectionLabel>
       <KindGrid
         value={kind}
         onChange={setKind}
@@ -149,15 +145,7 @@ export default function NewFeedingScreen() {
         </Button>
       ) : null}
 
-      {isBreast ? (
-        <View style={styles.dividerRow}>
-          <View style={[styles.dividerLine, { backgroundColor: theme.colors.outlineVariant }]} />
-          <Text variant="labelSmall" style={{ color: theme.colors.onSurfaceVariant }}>
-            {t('feedings.new.orLogPast')}
-          </Text>
-          <View style={[styles.dividerLine, { backgroundColor: theme.colors.outlineVariant }]} />
-        </View>
-      ) : null}
+      {isBreast ? <LabeledDivider>{t('feedings.new.orLogPast')}</LabeledDivider> : null}
 
       {isBreast ? (
         <AppTextInput
@@ -222,18 +210,6 @@ export default function NewFeedingScreen() {
 }
 
 const styles = StyleSheet.create({
-  sectionLabel: {
-    fontWeight: '700',
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
-  },
-  dividerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-    marginTop: spacing.sm,
-  },
-  dividerLine: { flex: 1, height: StyleSheet.hairlineWidth },
   submit: { marginTop: spacing.md, borderRadius: radii.xl },
   submitContent: { paddingVertical: spacing.md },
   startButton: { borderRadius: radii.xl },

@@ -9,20 +9,12 @@ import type { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { supabase } from '@/lib/supabase';
 import { useChildren } from '@/features/children/queries';
-import { useDiapersForDay } from '@/features/diapers/queries';
-import { useActiveFeeding, useFeedingsForDay } from '@/features/feedings/queries';
-import { useMeasurementsForDay } from '@/features/measurements/queries';
-import { useActiveSleep, useSleepsForDay } from '@/features/sleeps/queries';
+import { useActiveFeeding } from '@/features/feedings/queries';
+import { useActiveSleep } from '@/features/sleeps/queries';
 import { useActiveChild } from '@/stores/activeChild';
 import { useAuth } from '@/providers/AuthProvider';
-import {
-  diaperToEvent,
-  feedingToEvent,
-  measurementToEvent,
-  sleepToEvent,
-  type EventItem,
-  type EventKind,
-} from '@/lib/events';
+import { useDayEvents } from '@/hooks/use-day-events';
+import type { EventKind } from '@/lib/events';
 
 const HISTORY_ROUTES: Record<EventKind, '/feedings' | '/sleeps' | '/diapers' | '/measurements'> = {
   feeding: '/feedings',
@@ -81,10 +73,7 @@ export default function HomeScreen() {
   const [selectedDay, setSelectedDay] = useState<Date>(() => new Date());
   const isToday = isSameDay(selectedDay, new Date());
 
-  const { data: feedings = [] } = useFeedingsForDay(activeChildId, selectedDay);
-  const { data: sleeps = [] } = useSleepsForDay(activeChildId, selectedDay);
-  const { data: diapers = [] } = useDiapersForDay(activeChildId, selectedDay);
-  const { data: measurements = [] } = useMeasurementsForDay(activeChildId, selectedDay);
+  const { events, counts } = useDayEvents(activeChildId, selectedDay);
   const { data: activeSleep } = useActiveSleep(activeChildId);
   const { data: activeFeeding } = useActiveFeeding(activeChildId);
   const hasActiveTimer = Boolean(activeSleep || activeFeeding);
@@ -110,34 +99,24 @@ export default function HomeScreen() {
       {
         icon: 'baby-bottle-outline',
         tint: categoryColors.feeding,
-        value: String(feedings.length),
+        value: String(counts.feedings),
         label: t('home.stats.feedings'),
       },
       {
         icon: 'sleep',
         tint: categoryColors.sleep,
-        value: String(sleeps.length),
+        value: String(counts.sleeps),
         label: t('home.stats.sleep'),
       },
       {
         icon: 'human-baby-changing-table',
         tint: categoryColors.diaper,
-        value: String(diapers.length),
+        value: String(counts.diapers),
         label: t('home.stats.diapers'),
       },
     ],
-    [feedings.length, sleeps.length, diapers.length, t],
+    [counts.feedings, counts.sleeps, counts.diapers, t],
   );
-
-  const events: EventItem[] = useMemo(() => {
-    const items: EventItem[] = [
-      ...feedings.map((f) => feedingToEvent(f, t)),
-      ...sleeps.map((s) => sleepToEvent(s, t, dateLocale)),
-      ...diapers.map((d) => diaperToEvent(d, t)),
-      ...measurements.map((m) => measurementToEvent(m, t)),
-    ];
-    return items.sort((a, b) => b.occurredAt.getTime() - a.occurredAt.getTime());
-  }, [feedings, sleeps, diapers, measurements, t, dateLocale]);
 
   const dayLabel = isToday
     ? t('home.today')

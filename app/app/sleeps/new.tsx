@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Button, Text, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +10,7 @@ import { AppTextInput } from '@/components/AppTextInput';
 import { DateField } from '@/components/DateField';
 import { FormError } from '@/components/FormError';
 import { FormScreen } from '@/components/FormScreen';
+import { LabeledDivider } from '@/components/LabeledDivider';
 import { radii, spacing } from '@/constants';
 import {
   useActiveSleep,
@@ -93,13 +94,7 @@ export default function NewSleepScreen() {
         </Button>
       )}
 
-      <View style={styles.divider}>
-        <View style={[styles.dividerLine, { backgroundColor: theme.colors.outlineVariant }]} />
-        <Text variant="labelSmall" style={{ color: theme.colors.onSurfaceVariant }}>
-          {t('sleeps.new.manualSection')}
-        </Text>
-        <View style={[styles.dividerLine, { backgroundColor: theme.colors.outlineVariant }]} />
-      </View>
+      <LabeledDivider>{t('sleeps.new.manualSection')}</LabeledDivider>
 
       <DateField
         label={t('sleeps.new.startedAtLabel')}
@@ -151,13 +146,6 @@ export default function NewSleepScreen() {
 const styles = StyleSheet.create({
   startButton: { borderRadius: radii.xl },
   startContent: { paddingVertical: spacing.md },
-  divider: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-    marginVertical: spacing.sm,
-  },
-  dividerLine: { flex: 1, height: StyleSheet.hairlineWidth },
   submit: { marginTop: spacing.md, borderRadius: radii.xl },
   submitContent: { paddingVertical: spacing.md },
   hint: { textAlign: 'center', marginTop: spacing.sm },
