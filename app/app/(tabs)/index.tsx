@@ -3,7 +3,6 @@ import { View, StyleSheet } from 'react-native';
 import { ActivityIndicator, Button, IconButton, Text, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { addDays, format, isSameDay, subDays } from 'date-fns';
-import { enUS, uk } from 'date-fns/locale';
 import { useTranslation } from 'react-i18next';
 import type { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -13,6 +12,7 @@ import { useActiveFeeding } from '@/features/feedings/queries';
 import { useActiveSleep } from '@/features/sleeps/queries';
 import { useActiveChild } from '@/stores/activeChild';
 import { useAuth } from '@/providers/AuthProvider';
+import { useDateLocale } from '@/hooks/use-date-locale';
 import { useDayEvents } from '@/hooks/use-day-events';
 import type { EventKind } from '@/lib/events';
 
@@ -54,8 +54,8 @@ const QUICK_ACTIONS: QuickAction[] = [
 export default function HomeScreen() {
   const router = useRouter();
   const theme = useTheme();
-  const { t, i18n } = useTranslation();
-  const dateLocale = i18n.language === 'uk' ? uk : enUS;
+  const { t } = useTranslation();
+  const dateLocale = useDateLocale();
   const { session } = useAuth();
   const { data: children = [], isLoading, isRefetching, refetch } = useChildren();
   const activeChildId = useActiveChild((s) => s.activeChildId);

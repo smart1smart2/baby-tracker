@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { enUS, uk } from 'date-fns/locale';
 
 import { useDiapersForDay } from '@/features/diapers/queries';
 import { useFeedingsForDay } from '@/features/feedings/queries';
 import { useMeasurementsForDay } from '@/features/measurements/queries';
 import { useSleepsForDay } from '@/features/sleeps/queries';
+import { useDateLocale } from '@/hooks/use-date-locale';
 import {
   diaperToEvent,
   feedingToEvent,
@@ -20,8 +20,8 @@ import {
  * separately so the home stats row can read counts without re-mapping.
  */
 export function useDayEvents(childId: string | null, day: Date) {
-  const { t, i18n } = useTranslation();
-  const dateLocale = i18n.language === 'uk' ? uk : enUS;
+  const { t } = useTranslation();
+  const dateLocale = useDateLocale();
 
   const { data: feedings = [] } = useFeedingsForDay(childId, day);
   const { data: sleeps = [] } = useSleepsForDay(childId, day);

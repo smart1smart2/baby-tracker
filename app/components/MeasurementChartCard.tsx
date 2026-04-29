@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { format, parseISO } from 'date-fns';
-import { enUS, uk } from 'date-fns/locale';
 import { LineChart } from 'react-native-gifted-charts';
 
 import { ChartCard } from './ChartCard';
@@ -13,6 +12,7 @@ import {
   measurementKindIcon,
   measurementKindKey,
 } from '@/features/measurements/labels';
+import { useDateLocale } from '@/hooks/use-date-locale';
 import { CHART_WIDTH } from '@/lib/chart';
 import type { GrowthMeasurement, MeasurementKind } from '@/types/domain';
 
@@ -37,8 +37,8 @@ export function MeasurementChartCard({
   onAdd,
 }: Props) {
   const theme = useTheme();
-  const { t, i18n } = useTranslation();
-  const dateLocale = i18n.language === 'uk' ? uk : enUS;
+  const { t } = useTranslation();
+  const dateLocale = useDateLocale();
   const unit = defaultUnit(kind);
 
   // Source rows are newest-first; flip to oldest-first for left-to-right chart.

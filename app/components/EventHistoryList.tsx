@@ -3,10 +3,10 @@ import { StyleSheet, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { format, isToday, isYesterday } from 'date-fns';
-import { enUS, uk } from 'date-fns/locale';
 
 import { EventListItem } from './EventListItem';
 import { radii, shadows, spacing } from '@/constants';
+import { useDateLocale } from '@/hooks/use-date-locale';
 import type { EventItem } from '@/lib/events';
 
 type Props = {
@@ -20,8 +20,8 @@ type Props = {
  */
 export function EventHistoryList({ events, emptyText }: Props) {
   const theme = useTheme();
-  const { t, i18n } = useTranslation();
-  const dateLocale = i18n.language === 'uk' ? uk : enUS;
+  const { t } = useTranslation();
+  const dateLocale = useDateLocale();
 
   const groups = useMemo(() => {
     const sorted = events

@@ -4,11 +4,11 @@ import { Text, useTheme } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
-import { enUS, uk } from 'date-fns/locale';
 import { BarChart } from 'react-native-gifted-charts';
 
 import { ChartCard } from './ChartCard';
 import { spacing } from '@/constants';
+import { useDateLocale } from '@/hooks/use-date-locale';
 import type { DailyBucket } from '@/lib/aggregate';
 import { CHART_WIDTH } from '@/lib/chart';
 
@@ -43,8 +43,8 @@ export function DailyBarChartCard({
   onAdd,
 }: Props) {
   const theme = useTheme();
-  const { t, i18n } = useTranslation();
-  const dateLocale = i18n.language === 'uk' ? uk : enUS;
+  const { t } = useTranslation();
+  const dateLocale = useDateLocale();
   const labelFor =
     formatLabel ?? ((d: Date) => format(d, 'EEE', { locale: dateLocale }));
 

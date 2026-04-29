@@ -4,7 +4,6 @@ import { Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
-import { enUS, uk } from 'date-fns/locale';
 
 import { ActiveFeedingCard } from '@/components/ActiveFeedingCard';
 import { AppTextInput } from '@/components/AppTextInput';
@@ -15,6 +14,7 @@ import { KindGrid } from '@/components/KindGrid';
 import { LabeledDivider } from '@/components/LabeledDivider';
 import { SectionLabel } from '@/components/SectionLabel';
 import { spacing } from '@/constants';
+import { useDateLocale } from '@/hooks/use-date-locale';
 import {
   useActiveFeeding,
   useCreateFeeding,
@@ -31,8 +31,8 @@ import type { FeedingKind } from '@/types/domain';
 
 export default function NewFeedingScreen() {
   const router = useRouter();
-  const { t, i18n } = useTranslation();
-  const dateLocale = i18n.language === 'uk' ? uk : enUS;
+  const { t } = useTranslation();
+  const dateLocale = useDateLocale();
   const activeChildId = useActiveChild((s) => s.activeChildId);
   const createFeeding = useCreateFeeding();
   const startFeeding = useStartFeeding();

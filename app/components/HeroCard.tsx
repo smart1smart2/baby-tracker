@@ -3,10 +3,10 @@ import { IconButton, Text } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { LinearGradient } from 'expo-linear-gradient';
 import { format } from 'date-fns';
-import { enUS, uk } from 'date-fns/locale';
 
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { heroGradient, iconSizes, palette, radii, shadows, spacing } from '@/constants';
+import { useDateLocale } from '@/hooks/use-date-locale';
 
 type Props = {
   greetingName: string | null;
@@ -14,9 +14,9 @@ type Props = {
 };
 
 export function HeroCard({ greetingName, onLogout }: Props) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const displayName = greetingName?.trim().split(' ')[0] || t('home.defaultName');
-  const locale = i18n.language === 'uk' ? uk : enUS;
+  const locale = useDateLocale();
   const dateLine = format(new Date(), 'EEEE, d MMMM', { locale });
 
   return (

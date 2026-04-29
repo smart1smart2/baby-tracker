@@ -2,11 +2,10 @@ import { type ComponentProps } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Button, Text, useTheme } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useTranslation } from 'react-i18next';
 import { formatDistanceStrict, parseISO } from 'date-fns';
-import { enUS, uk } from 'date-fns/locale';
 
 import { iconSizes, palette, radii, shadows, spacing } from '@/constants';
+import { useDateLocale } from '@/hooks/use-date-locale';
 import { useNow } from '@/hooks/use-now';
 
 type IconName = ComponentProps<typeof MaterialCommunityIcons>['name'];
@@ -41,8 +40,7 @@ export function ActiveTimerCard({
   onPress,
 }: Props) {
   const theme = useTheme();
-  const { i18n } = useTranslation();
-  const dateLocale = i18n.language === 'uk' ? uk : enUS;
+  const dateLocale = useDateLocale();
   const now = useNow();
 
   const since = formatDistanceStrict(parseISO(startedAt), new Date(now), {
