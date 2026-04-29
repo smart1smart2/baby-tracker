@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -10,12 +10,13 @@ type Props = {
   title: string;
   subtitle?: string;
   time?: string;
+  onPress?: () => void;
 };
 
-export function EventListItem({ icon, tint, title, subtitle, time }: Props) {
+export function EventListItem({ icon, tint, title, subtitle, time, onPress }: Props) {
   const theme = useTheme();
-  return (
-    <View style={styles.row}>
+  const content = (
+    <>
       <View style={[styles.iconWrap, { backgroundColor: tint }]}>
         <MaterialCommunityIcons name={icon} size={iconSizes.md} color={palette.white} />
       </View>
@@ -34,8 +35,22 @@ export function EventListItem({ icon, tint, title, subtitle, time }: Props) {
           {time}
         </Text>
       ) : null}
-    </View>
+    </>
   );
+
+  if (onPress) {
+    return (
+      <Pressable
+        onPress={onPress}
+        accessibilityRole="button"
+        accessibilityLabel={title}
+        style={({ pressed }) => [styles.row, { opacity: pressed ? 0.6 : 1 }]}
+      >
+        {content}
+      </Pressable>
+    );
+  }
+  return <View style={styles.row}>{content}</View>;
 }
 
 const styles = StyleSheet.create({

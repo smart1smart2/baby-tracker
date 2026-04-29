@@ -21,7 +21,15 @@ import {
   measurementToEvent,
   sleepToEvent,
   type EventItem,
+  type EventKind,
 } from '@/lib/events';
+
+const HISTORY_ROUTES: Record<EventKind, '/feedings' | '/sleeps' | '/diapers' | '/measurements'> = {
+  feeding: '/feedings',
+  sleep: '/sleeps',
+  diaper: '/diapers',
+  measurement: '/measurements',
+};
 
 import { ScreenContainer } from '@/components/ScreenContainer';
 import { HeroCard } from '@/components/HeroCard';
@@ -236,6 +244,7 @@ export default function HomeScreen() {
                     title={e.title}
                     subtitle={e.subtitle}
                     time={format(e.occurredAt, 'HH:mm')}
+                    onPress={() => router.push(HISTORY_ROUTES[e.kind])}
                   />
                 </View>
               ))

@@ -20,8 +20,11 @@ import type {
 
 type IconName = ComponentProps<typeof MaterialCommunityIcons>['name'];
 
+export type EventKind = 'feeding' | 'sleep' | 'diaper' | 'measurement';
+
 export type EventItem = {
   id: string;
+  kind: EventKind;
   occurredAt: Date;
   icon: IconName;
   tint: string;
@@ -36,6 +39,7 @@ export function feedingToEvent(f: Feeding, t: TFunction): EventItem {
     : null;
   return {
     id: `f-${f.id}`,
+    kind: 'feeding',
     occurredAt: parseISO(f.started_at),
     icon: 'baby-bottle-outline',
     tint: categoryColors.feeding,
@@ -56,6 +60,7 @@ export function sleepToEvent(s: Sleep, t: TFunction, locale: Locale): EventItem 
     : `${t('sleeps.event.ongoing')} · ${duration}`;
   return {
     id: `s-${s.id}`,
+    kind: 'sleep',
     occurredAt: startedAt,
     icon: 'sleep',
     tint: categoryColors.sleep,
@@ -68,6 +73,7 @@ export function diaperToEvent(d: Diaper, t: TFunction): EventItem {
   const kindLabel = t(diaperKindKey(d.kind));
   return {
     id: `d-${d.id}`,
+    kind: 'diaper',
     occurredAt: parseISO(d.occurred_at),
     icon: diaperKindIcon(d.kind),
     tint: categoryColors.diaper,
@@ -79,6 +85,7 @@ export function diaperToEvent(d: Diaper, t: TFunction): EventItem {
 export function measurementToEvent(m: GrowthMeasurement, t: TFunction): EventItem {
   return {
     id: `m-${m.id}`,
+    kind: 'measurement',
     occurredAt: parseISO(m.measured_at),
     icon: measurementKindIcon(m.kind),
     tint: categoryColors.growth,
