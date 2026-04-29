@@ -1,16 +1,28 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Button, Text, ActivityIndicator, useTheme } from 'react-native-paper';
+import { ActivityIndicator, Button, IconButton, Text, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
-import { format, parseISO } from 'date-fns';
+import {
+  addDays,
+  format,
+  formatDistanceStrict,
+  isSameDay,
+  parseISO,
+  subDays,
+} from 'date-fns';
+import { enUS, uk } from 'date-fns/locale';
 import { useTranslation } from 'react-i18next';
+import type { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { supabase } from '@/lib/supabase';
 import { useChildren } from '@/features/children/queries';
-import { useDiapersToday } from '@/features/diapers/queries';
-import { useFeedingsToday } from '@/features/feedings/queries';
+import { useDiapersForDay } from '@/features/diapers/queries';
+import { diaperKindIcon, diaperKindKey } from '@/features/diapers/labels';
+import { useFeedingsForDay } from '@/features/feedings/queries';
 import { feedingKindKey } from '@/features/feedings/labels';
-import { useActiveSleep, useSleepsToday } from '@/features/sleeps/queries';
+import { useMeasurementsForDay } from '@/features/measurements/queries';
+import { measurementKindIcon, measurementKindKey } from '@/features/measurements/labels';
+import { useActiveSleep, useSleepsForDay } from '@/features/sleeps/queries';
 import { useActiveChild } from '@/stores/activeChild';
 import { useAuth } from '@/providers/AuthProvider';
 
@@ -23,11 +35,12 @@ import { EventListItem } from '@/components/EventListItem';
 import { ActiveChildPanel } from '@/components/ActiveChildPanel';
 import { useConfirm } from '@/components/ConfirmDialog';
 import { categoryColors, radii, shadows, spacing } from '@/constants';
-import type { MaterialCommunityIcons } from '@expo/vector-icons';
+
+type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
 
 type QuickAction = {
   key: 'feeding' | 'sleep' | 'diaper' | 'measurement';
-  icon: keyof typeof MaterialCommunityIcons.glyphMap;
+  icon: IconName;
   tint: string;
   /** When set, tapping the card pushes this route. Else it's a no-op stub. */
   path?: '/feedings/new' | '/sleeps/new' | '/diapers/new' | '/measurements/new';
@@ -40,10 +53,20 @@ const QUICK_ACTIONS: QuickAction[] = [
   { key: 'measurement', icon: 'scale-bathroom', tint: categoryColors.growth, path: '/measurements/new' },
 ];
 
+type EventItem = {
+  id: string;
+  occurredAt: Date;
+  icon: IconName;
+  tint: string;
+  title: string;
+  subtitle?: string;
+};
+
 export default function HomeScreen() {
   const router = useRouter();
   const theme = useTheme();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const dateLocale = i18n.language === 'uk' ? uk : enUS;
   const { session } = useAuth();
   const { data: children = [], isLoading, isRefetching, refetch } = useChildren();
   const activeChildId = useActiveChild((s) => s.activeChildId);
@@ -58,9 +81,13 @@ export default function HomeScreen() {
     if (!stillExists) setActiveChildId(children[0].id);
   }, [children, activeChildId, setActiveChildId]);
 
-  const { data: feedingsToday = [] } = useFeedingsToday(activeChildId);
-  const { data: sleepsToday = [] } = useSleepsToday(activeChildId);
-  const { data: diapersToday = [] } = useDiapersToday(activeChildId);
+  const [selectedDay, setSelectedDay] = useState<Date>(() => new Date());
+  const isToday = isSameDay(selectedDay, new Date());
+
+  const { data: feedings = [] } = useFeedingsForDay(activeChildId, selectedDay);
+  const { data: sleeps = [] } = useSleepsForDay(activeChildId, selectedDay);
+  const { data: diapers = [] } = useDiapersForDay(activeChildId, selectedDay);
+  const { data: measurements = [] } = useMeasurementsForDay(activeChildId, selectedDay);
   const { data: activeSleep } = useActiveSleep(activeChildId);
 
   const greetingName = useMemo(() => {
@@ -84,24 +111,87 @@ export default function HomeScreen() {
       {
         icon: 'baby-bottle-outline',
         tint: categoryColors.feeding,
-        value: String(feedingsToday.length),
+        value: String(feedings.length),
         label: t('home.stats.feedings'),
       },
       {
         icon: 'sleep',
         tint: categoryColors.sleep,
-        value: String(sleepsToday.length),
+        value: String(sleeps.length),
         label: t('home.stats.sleep'),
       },
       {
         icon: 'human-baby-changing-table',
         tint: categoryColors.diaper,
-        value: String(diapersToday.length),
+        value: String(diapers.length),
         label: t('home.stats.diapers'),
       },
     ],
-    [feedingsToday.length, sleepsToday.length, diapersToday.length, t],
+    [feedings.length, sleeps.length, diapers.length, t],
   );
+
+  const events: EventItem[] = useMemo(() => {
+    const items: EventItem[] = [];
+    feedings.forEach((f) => {
+      const kindLabel = t(feedingKindKey(f.kind));
+      const amount = f.amount_ml
+        ? t('feedings.amountWithUnit', { amount: f.amount_ml })
+        : null;
+      items.push({
+        id: `f-${f.id}`,
+        occurredAt: parseISO(f.started_at),
+        icon: 'baby-bottle-outline',
+        tint: categoryColors.feeding,
+        title: t('feedings.event.title'),
+        subtitle: amount ? `${kindLabel} · ${amount}` : kindLabel,
+      });
+    });
+    sleeps.forEach((s) => {
+      const startedAt = parseISO(s.started_at);
+      const endedAt = s.ended_at ? parseISO(s.ended_at) : null;
+      const duration = formatDistanceStrict(startedAt, endedAt ?? new Date(), {
+        locale: dateLocale,
+        roundingMethod: 'floor',
+      });
+      const subtitle = endedAt
+        ? `→ ${format(endedAt, 'HH:mm')} · ${duration}`
+        : `${t('sleeps.event.ongoing')} · ${duration}`;
+      items.push({
+        id: `s-${s.id}`,
+        occurredAt: startedAt,
+        icon: 'sleep',
+        tint: categoryColors.sleep,
+        title: t('sleeps.event.title'),
+        subtitle,
+      });
+    });
+    diapers.forEach((d) => {
+      const kindLabel = t(diaperKindKey(d.kind));
+      items.push({
+        id: `d-${d.id}`,
+        occurredAt: parseISO(d.occurred_at),
+        icon: diaperKindIcon(d.kind),
+        tint: categoryColors.diaper,
+        title: t('diapers.event.title'),
+        subtitle: d.notes ? `${kindLabel} · ${d.notes}` : kindLabel,
+      });
+    });
+    measurements.forEach((m) =>
+      items.push({
+        id: `m-${m.id}`,
+        occurredAt: parseISO(m.measured_at),
+        icon: measurementKindIcon(m.kind),
+        tint: categoryColors.growth,
+        title: t('measurements.event.title'),
+        subtitle: `${t(measurementKindKey(m.kind))}: ${m.value} ${m.unit}`,
+      }),
+    );
+    return items.sort((a, b) => b.occurredAt.getTime() - a.occurredAt.getTime());
+  }, [feedings, sleeps, diapers, measurements, t, dateLocale]);
+
+  const dayLabel = isToday
+    ? t('home.today')
+    : format(selectedDay, 'd MMMM', { locale: dateLocale });
 
   return (
     <ScreenContainer refreshing={isRefetching} onRefresh={refetch}>
@@ -158,9 +248,26 @@ export default function HomeScreen() {
             ))}
           </View>
 
-          <Text variant="titleLarge" style={[styles.sectionTitle, { color: theme.colors.onBackground }]}>
-            {t('home.today')}
-          </Text>
+          <View style={styles.daySectionHeader}>
+            <Text variant="titleLarge" style={[styles.sectionTitle, { color: theme.colors.onBackground }]}>
+              {dayLabel}
+            </Text>
+            <View style={styles.dayNav}>
+              <IconButton
+                icon="chevron-left"
+                size={20}
+                onPress={() => setSelectedDay((d) => subDays(d, 1))}
+                accessibilityLabel={t('home.day.previous')}
+              />
+              <IconButton
+                icon="chevron-right"
+                size={20}
+                disabled={isToday}
+                onPress={() => setSelectedDay((d) => addDays(d, 1))}
+                accessibilityLabel={t('home.day.next')}
+              />
+            </View>
+          </View>
 
           <View
             style={[
@@ -169,7 +276,7 @@ export default function HomeScreen() {
               { backgroundColor: theme.colors.surface },
             ]}
           >
-            {feedingsToday.length === 0 ? (
+            {events.length === 0 ? (
               <Text
                 variant="bodyMedium"
                 style={[styles.emptyList, { color: theme.colors.onSurfaceVariant }]}
@@ -177,25 +284,24 @@ export default function HomeScreen() {
                 {t('home.noEvents')}
               </Text>
             ) : (
-              feedingsToday.slice(0, 6).map((f, idx) => (
-                <View key={f.id}>
+              events.map((e, idx) => (
+                <View key={e.id}>
                   {idx > 0 ? (
                     <View
                       style={[styles.divider, { backgroundColor: theme.colors.outlineVariant }]}
                     />
                   ) : null}
                   <EventListItem
-                    icon="baby-bottle-outline"
-                    tint={categoryColors.feeding}
-                    title={t(feedingKindKey(f.kind))}
-                    subtitle={f.amount_ml ? t('feedings.amountWithUnit', { amount: f.amount_ml }) : undefined}
-                    time={format(parseISO(f.started_at), 'HH:mm')}
+                    icon={e.icon}
+                    tint={e.tint}
+                    title={e.title}
+                    subtitle={e.subtitle}
+                    time={format(e.occurredAt, 'HH:mm')}
                   />
                 </View>
               ))
             )}
           </View>
-
         </>
       )}
     </ScreenContainer>
@@ -228,6 +334,15 @@ function EmptyState({ onAdd }: { onAdd: () => void }) {
 const styles = StyleSheet.create({
   loading: { paddingVertical: spacing.xxxl, alignItems: 'center' },
   sectionTitle: { fontWeight: '700', marginTop: spacing.xs },
+  daySectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  dayNav: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   actionsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md },
   listCard: {
     paddingHorizontal: spacing.lg,

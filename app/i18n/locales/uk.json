@@ -87,6 +87,10 @@
     "today": "Сьогодні",
     "inProgress": "В процесі",
     "noEvents": "Подій ще немає. Натисни на картку дії вище.",
+    "day": {
+      "previous": "Попередній день",
+      "next": "Наступний день"
+    },
     "addAnotherChild": "Додати ще одну дитину",
     "logoutConfirm": {
       "title": "Вийти з акаунту?",
@@ -162,7 +166,10 @@
       "bottleFormula": "Пляшка • суміш",
       "solid": "Тверда їжа"
     },
-    "amountWithUnit": "{{amount}} мл"
+    "amountWithUnit": "{{amount}} мл",
+    "event": {
+      "title": "Годування"
+    }
   },
   "measurements": {
     "new": {
@@ -178,6 +185,9 @@
       "weight": "Вага",
       "height": "Зріст",
       "headCircumference": "Голова"
+    },
+    "event": {
+      "title": "Вимірювання"
     }
   },
   "diapers": {
@@ -192,6 +202,9 @@
       "dirty": "Брудний",
       "mixed": "Змішаний",
       "dry": "Сухий"
+    },
+    "event": {
+      "title": "Підгузок"
     }
   },
   "sleeps": {
@@ -207,6 +220,10 @@
       "chooseChildFirst": "Спочатку обери дитину",
       "endBeforeStart": "Кінець має бути після початку",
       "durationHint": "Тривалість: {{minutes}} хв"
+    },
+    "event": {
+      "title": "Сон",
+      "ongoing": "Триває"
     }
   },
   "age": {

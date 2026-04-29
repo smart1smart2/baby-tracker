@@ -1,24 +1,26 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { startOfDay, endOfDay } from 'date-fns';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { startOfDay, endOfDay, format } from 'date-fns';
+
 import { supabase } from '@/lib/supabase';
 import type { Feeding, FeedingInsert } from '@/types/domain';
 
 export const feedingsKey = (childId: string) => ['feedings', childId] as const;
-export const feedingsTodayKey = (childId: string) => ['feedings', childId, 'today'] as const;
+export const feedingsForDayKey = (childId: string, day: string) =>
+  ['feedings', childId, 'day', day] as const;
 
-export function useFeedingsToday(childId: string | null) {
+export function useFeedingsForDay(childId: string | null, day: Date) {
+  const dayKey = format(day, 'yyyy-MM-dd');
   return useQuery({
-    queryKey: childId ? feedingsTodayKey(childId) : ['feedings', 'noop'],
+    queryKey: childId ? feedingsForDayKey(childId, dayKey) : ['feedings', 'noop'],
     enabled: Boolean(childId),
     queryFn: async (): Promise<Feeding[]> => {
       if (!childId) return [];
-      const now = new Date();
       const { data, error } = await supabase
         .from('feedings')
         .select('*')
         .eq('child_id', childId)
-        .gte('started_at', startOfDay(now).toISOString())
-        .lte('started_at', endOfDay(now).toISOString())
+        .gte('started_at', startOfDay(day).toISOString())
+        .lte('started_at', endOfDay(day).toISOString())
         .order('started_at', { ascending: false });
       if (error) throw error;
       return data;

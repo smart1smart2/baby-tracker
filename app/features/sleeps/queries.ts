@@ -1,26 +1,27 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { startOfDay, endOfDay } from 'date-fns';
+import { endOfDay, format, startOfDay } from 'date-fns';
 
 import { supabase } from '@/lib/supabase';
 import type { Sleep, SleepInsert } from '@/types/domain';
 
 export const sleepsKey = (childId: string) => ['sleeps', childId] as const;
-export const sleepsTodayKey = (childId: string) => ['sleeps', childId, 'today'] as const;
+export const sleepsForDayKey = (childId: string, day: string) =>
+  ['sleeps', childId, 'day', day] as const;
 export const activeSleepKey = (childId: string) => ['sleeps', childId, 'active'] as const;
 
-export function useSleepsToday(childId: string | null) {
+export function useSleepsForDay(childId: string | null, day: Date) {
+  const dayKey = format(day, 'yyyy-MM-dd');
   return useQuery({
-    queryKey: childId ? sleepsTodayKey(childId) : ['sleeps', 'noop'],
+    queryKey: childId ? sleepsForDayKey(childId, dayKey) : ['sleeps', 'noop'],
     enabled: Boolean(childId),
     queryFn: async (): Promise<Sleep[]> => {
       if (!childId) return [];
-      const now = new Date();
       const { data, error } = await supabase
         .from('sleeps')
         .select('*')
         .eq('child_id', childId)
-        .gte('started_at', startOfDay(now).toISOString())
-        .lte('started_at', endOfDay(now).toISOString())
+        .gte('started_at', startOfDay(day).toISOString())
+        .lte('started_at', endOfDay(day).toISOString())
         .order('started_at', { ascending: false });
       if (error) throw error;
       return data;

@@ -87,6 +87,10 @@
     "today": "Today",
     "inProgress": "In progress",
     "noEvents": "No events yet. Tap an action card above.",
+    "day": {
+      "previous": "Previous day",
+      "next": "Next day"
+    },
     "addAnotherChild": "Add another child",
     "logoutConfirm": {
       "title": "Sign out?",
@@ -162,7 +166,10 @@
       "bottleFormula": "Bottle • formula",
       "solid": "Solid food"
     },
-    "amountWithUnit": "{{amount}} ml"
+    "amountWithUnit": "{{amount}} ml",
+    "event": {
+      "title": "Feeding"
+    }
   },
   "measurements": {
     "new": {
@@ -178,6 +185,9 @@
       "weight": "Weight",
       "height": "Height",
       "headCircumference": "Head"
+    },
+    "event": {
+      "title": "Measurement"
     }
   },
   "diapers": {
@@ -192,6 +202,9 @@
       "dirty": "Dirty",
       "mixed": "Mixed",
       "dry": "Dry"
+    },
+    "event": {
+      "title": "Diaper"
     }
   },
   "sleeps": {
@@ -207,6 +220,10 @@
       "chooseChildFirst": "Pick a child first",
       "endBeforeStart": "End time must be after start time",
       "durationHint": "Duration: {{minutes}} min"
+    },
+    "event": {
+      "title": "Sleep",
+      "ongoing": "Ongoing"
     }
   },
   "age": {

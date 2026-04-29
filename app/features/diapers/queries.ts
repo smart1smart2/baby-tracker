@@ -1,25 +1,26 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { startOfDay, endOfDay } from 'date-fns';
+import { endOfDay, format, startOfDay } from 'date-fns';
 
 import { supabase } from '@/lib/supabase';
 import type { Diaper, DiaperInsert } from '@/types/domain';
 
 export const diapersKey = (childId: string) => ['diapers', childId] as const;
-export const diapersTodayKey = (childId: string) => ['diapers', childId, 'today'] as const;
+export const diapersForDayKey = (childId: string, day: string) =>
+  ['diapers', childId, 'day', day] as const;
 
-export function useDiapersToday(childId: string | null) {
+export function useDiapersForDay(childId: string | null, day: Date) {
+  const dayKey = format(day, 'yyyy-MM-dd');
   return useQuery({
-    queryKey: childId ? diapersTodayKey(childId) : ['diapers', 'noop'],
+    queryKey: childId ? diapersForDayKey(childId, dayKey) : ['diapers', 'noop'],
     enabled: Boolean(childId),
     queryFn: async (): Promise<Diaper[]> => {
       if (!childId) return [];
-      const now = new Date();
       const { data, error } = await supabase
         .from('diapers')
         .select('*')
         .eq('child_id', childId)
-        .gte('occurred_at', startOfDay(now).toISOString())
-        .lte('occurred_at', endOfDay(now).toISOString())
+        .gte('occurred_at', startOfDay(day).toISOString())
+        .lte('occurred_at', endOfDay(day).toISOString())
         .order('occurred_at', { ascending: false });
       if (error) throw error;
       return data;
