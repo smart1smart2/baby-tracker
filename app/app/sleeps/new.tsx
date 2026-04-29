@@ -1,22 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Text, useTheme } from 'react-native-paper';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { differenceInMinutes, formatDistanceToNowStrict, parseISO } from 'date-fns';
-import { enUS, uk } from 'date-fns/locale';
+import { differenceInMinutes } from 'date-fns';
 
+import { ActiveSleepCard } from '@/components/ActiveSleepCard';
 import { AppTextInput } from '@/components/AppTextInput';
 import { DateField } from '@/components/DateField';
 import { FormError } from '@/components/FormError';
 import { FormScreen } from '@/components/FormScreen';
-import { iconSizes, palette, radii, shadows, spacing } from '@/constants';
+import { radii, spacing } from '@/constants';
 import {
   useActiveSleep,
   useCreateSleep,
   useStartSleep,
-  useStopSleep,
 } from '@/features/sleeps/queries';
 import { translateError, type FriendlyError } from '@/features/errors/translate';
 import { useActiveChild } from '@/stores/activeChild';
@@ -24,13 +22,11 @@ import { useActiveChild } from '@/stores/activeChild';
 export default function NewSleepScreen() {
   const router = useRouter();
   const theme = useTheme();
-  const { t, i18n } = useTranslation();
-  const dateLocale = i18n.language === 'uk' ? uk : enUS;
+  const { t } = useTranslation();
   const activeChildId = useActiveChild((s) => s.activeChildId);
 
   const { data: activeSleep } = useActiveSleep(activeChildId);
   const startSleep = useStartSleep();
-  const stopSleep = useStopSleep();
   const createSleep = useCreateSleep();
 
   const [startedAt, setStartedAt] = useState<Date>(() => {
@@ -42,14 +38,6 @@ export default function NewSleepScreen() {
   const [notes, setNotes] = useState('');
   const [error, setError] = useState<FriendlyError | null>(null);
 
-  // Tick once a minute so the active timer label updates.
-  const [tick, setTick] = useState(0);
-  useEffect(() => {
-    if (!activeSleep) return;
-    const id = setInterval(() => setTick((n) => n + 1), 60_000);
-    return () => clearInterval(id);
-  }, [activeSleep]);
-
   const onStart = async () => {
     if (!activeChildId) {
       setError({ messageKey: 'sleeps.new.chooseChildFirst' });
@@ -58,17 +46,6 @@ export default function NewSleepScreen() {
     setError(null);
     try {
       await startSleep.mutateAsync(activeChildId);
-      router.back();
-    } catch (err) {
-      setError(translateError(err));
-    }
-  };
-
-  const onStop = async () => {
-    if (!activeSleep) return;
-    setError(null);
-    try {
-      await stopSleep.mutateAsync(activeSleep.id);
       router.back();
     } catch (err) {
       setError(translateError(err));
@@ -98,49 +75,10 @@ export default function NewSleepScreen() {
     }
   };
 
-  const activeSince = activeSleep
-    ? formatDistanceToNowStrict(parseISO(activeSleep.started_at), {
-        locale: dateLocale,
-      })
-    : null;
-
   return (
     <FormScreen onClose={() => router.back()}>
-      {/* Active timer banner — drives sleep flow when one is in progress. */}
       {activeSleep ? (
-        <View
-          style={[
-            styles.activeBanner,
-            shadows.sm,
-            { backgroundColor: theme.colors.primaryContainer },
-          ]}
-          // tick is read so the banner re-renders every minute
-          key={tick}
-        >
-          <MaterialCommunityIcons
-            name="sleep"
-            size={iconSizes.xl}
-            color={theme.colors.primary}
-          />
-          <View style={styles.activeText}>
-            <Text variant="labelLarge" style={{ color: theme.colors.primary }}>
-              {t('sleeps.new.activeSleep')}
-            </Text>
-            <Text variant="titleMedium" style={{ color: theme.colors.onSurface }}>
-              {activeSince}
-            </Text>
-          </View>
-          <Button
-            mode="contained"
-            onPress={onStop}
-            loading={stopSleep.isPending}
-            disabled={stopSleep.isPending}
-            buttonColor={palette.error}
-            style={styles.actionButton}
-          >
-            {t('sleeps.new.stopNow')}
-          </Button>
-        </View>
+        <ActiveSleepCard sleep={activeSleep} />
       ) : (
         <Button
           mode="contained"
@@ -211,15 +149,6 @@ export default function NewSleepScreen() {
 }
 
 const styles = StyleSheet.create({
-  activeBanner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-    padding: spacing.md,
-    borderRadius: radii.lg,
-  },
-  activeText: { flex: 1, gap: 2 },
-  actionButton: { borderRadius: radii.lg },
   startButton: { borderRadius: radii.xl },
   startContent: { paddingVertical: spacing.md },
   divider: {

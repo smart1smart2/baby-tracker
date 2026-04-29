@@ -9,7 +9,7 @@ import { supabase } from '@/lib/supabase';
 import { useChildren } from '@/features/children/queries';
 import { useFeedingsToday } from '@/features/feedings/queries';
 import { feedingKindKey } from '@/features/feedings/labels';
-import { useSleepsToday } from '@/features/sleeps/queries';
+import { useActiveSleep, useSleepsToday } from '@/features/sleeps/queries';
 import { useActiveChild } from '@/stores/activeChild';
 import { useAuth } from '@/providers/AuthProvider';
 
@@ -17,6 +17,7 @@ import { ScreenContainer } from '@/components/ScreenContainer';
 import { HeroCard } from '@/components/HeroCard';
 import { StatsRow, type StatItem } from '@/components/StatsRow';
 import { ActionCard } from '@/components/ActionCard';
+import { ActiveSleepCard } from '@/components/ActiveSleepCard';
 import { EventListItem } from '@/components/EventListItem';
 import { ActiveChildPanel } from '@/components/ActiveChildPanel';
 import { useConfirm } from '@/components/ConfirmDialog';
@@ -58,6 +59,7 @@ export default function HomeScreen() {
 
   const { data: feedingsToday = [] } = useFeedingsToday(activeChildId);
   const { data: sleepsToday = [] } = useSleepsToday(activeChildId);
+  const { data: activeSleep } = useActiveSleep(activeChildId);
 
   const greetingName = useMemo(() => {
     const fullName = (session?.user.user_metadata as { full_name?: string } | undefined)?.full_name;
@@ -122,6 +124,18 @@ export default function HomeScreen() {
       ) : (
         <>
           <StatsRow items={stats} />
+
+          {activeSleep ? (
+            <>
+              <Text variant="titleLarge" style={[styles.sectionTitle, { color: theme.colors.onBackground }]}>
+                {t('home.inProgress')}
+              </Text>
+              <ActiveSleepCard
+                sleep={activeSleep}
+                onPress={() => router.push('/sleeps/new')}
+              />
+            </>
+          ) : null}
 
           <Text variant="titleLarge" style={[styles.sectionTitle, { color: theme.colors.onBackground }]}>
             {t('home.quickActions')}

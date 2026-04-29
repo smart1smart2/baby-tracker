@@ -85,6 +85,7 @@
     "noChildHint": "Add a child to start your diary",
     "quickActions": "Quick actions",
     "today": "Today",
+    "inProgress": "In progress",
     "noEvents": "No events yet. Tap an action card above.",
     "addAnotherChild": "Add another child",
     "logoutConfirm": {
