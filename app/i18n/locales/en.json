@@ -164,6 +164,20 @@
     },
     "amountWithUnit": "{{amount}} ml"
   },
+  "diapers": {
+    "new": {
+      "screenTitle": "Diaper",
+      "occurredAtLabel": "When",
+      "notesLabel": "Notes (optional)",
+      "chooseChildFirst": "Pick a child first"
+    },
+    "kinds": {
+      "wet": "Wet",
+      "dirty": "Dirty",
+      "mixed": "Mixed",
+      "dry": "Dry"
+    }
+  },
   "sleeps": {
     "new": {
       "screenTitle": "Sleep",

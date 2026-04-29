@@ -164,6 +164,20 @@
     },
     "amountWithUnit": "{{amount}} мл"
   },
+  "diapers": {
+    "new": {
+      "screenTitle": "Підгузок",
+      "occurredAtLabel": "Коли",
+      "notesLabel": "Нотатки (необов'язково)",
+      "chooseChildFirst": "Спочатку обери дитину"
+    },
+    "kinds": {
+      "wet": "Мокрий",
+      "dirty": "Брудний",
+      "mixed": "Змішаний",
+      "dry": "Сухий"
+    }
+  },
   "sleeps": {
     "new": {
       "screenTitle": "Сон",

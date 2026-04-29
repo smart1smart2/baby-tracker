@@ -38,6 +38,10 @@ export default function RootLayout() {
             name="sleeps/new"
             options={{ title: t('sleeps.new.screenTitle'), presentation: 'fullScreenModal' }}
           />
+          <Stack.Screen
+            name="diapers/new"
+            options={{ title: t('diapers.new.screenTitle'), presentation: 'fullScreenModal' }}
+          />
         </Stack>
       </AuthGate>
       <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />

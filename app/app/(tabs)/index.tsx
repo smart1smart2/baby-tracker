@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import { supabase } from '@/lib/supabase';
 import { useChildren } from '@/features/children/queries';
+import { useDiapersToday } from '@/features/diapers/queries';
 import { useFeedingsToday } from '@/features/feedings/queries';
 import { feedingKindKey } from '@/features/feedings/labels';
 import { useActiveSleep, useSleepsToday } from '@/features/sleeps/queries';
@@ -29,13 +30,13 @@ type QuickAction = {
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
   tint: string;
   /** When set, tapping the card pushes this route. Else it's a no-op stub. */
-  path?: '/feedings/new' | '/sleeps/new';
+  path?: '/feedings/new' | '/sleeps/new' | '/diapers/new';
 };
 
 const QUICK_ACTIONS: QuickAction[] = [
   { key: 'feeding', icon: 'baby-bottle-outline', tint: categoryColors.feeding, path: '/feedings/new' },
   { key: 'sleep', icon: 'sleep', tint: categoryColors.sleep, path: '/sleeps/new' },
-  { key: 'diaper', icon: 'human-baby-changing-table', tint: categoryColors.diaper },
+  { key: 'diaper', icon: 'human-baby-changing-table', tint: categoryColors.diaper, path: '/diapers/new' },
   { key: 'measurement', icon: 'scale-bathroom', tint: categoryColors.growth },
 ];
 
@@ -59,6 +60,7 @@ export default function HomeScreen() {
 
   const { data: feedingsToday = [] } = useFeedingsToday(activeChildId);
   const { data: sleepsToday = [] } = useSleepsToday(activeChildId);
+  const { data: diapersToday = [] } = useDiapersToday(activeChildId);
   const { data: activeSleep } = useActiveSleep(activeChildId);
 
   const greetingName = useMemo(() => {
@@ -94,11 +96,11 @@ export default function HomeScreen() {
       {
         icon: 'human-baby-changing-table',
         tint: categoryColors.diaper,
-        value: '0',
+        value: String(diapersToday.length),
         label: t('home.stats.diapers'),
       },
     ],
-    [feedingsToday.length, sleepsToday.length, t],
+    [feedingsToday.length, sleepsToday.length, diapersToday.length, t],
   );
 
   return (
