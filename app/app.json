@@ -7,9 +7,9 @@
     "icon": "./assets/images/icon.png",
     "scheme": "babytracker",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": false,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.baby-tracker"
     },
     "android": {
       "adaptiveIcon": {

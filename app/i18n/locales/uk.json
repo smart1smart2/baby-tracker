@@ -76,7 +76,9 @@
       "email": "Email",
       "password": "Пароль",
       "name": "Ім'я"
-    }
+    },
+    "orContinueWith": "або увійти через",
+    "continueWithGoogle": "Продовжити з Google"
   },
   "validation": {
     "emailRequired": "Введи email",

@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { AppTextInput } from '@/components/AppTextInput';
 import { AuthScaffold } from '@/components/AuthScaffold';
 import { FormError } from '@/components/FormError';
+import { GoogleSignInButton } from '@/components/GoogleSignInButton';
+import { LabeledDivider } from '@/components/LabeledDivider';
 import { PasswordField } from '@/components/PasswordField';
 import { radii, spacing } from '@/constants';
 import { translateError, type FriendlyError } from '@/features/errors/translate';
@@ -95,6 +97,9 @@ export default function SignupScreen() {
       >
         {t('auth.signup.submit')}
       </Button>
+
+      <LabeledDivider>{t('auth.orContinueWith')}</LabeledDivider>
+      <GoogleSignInButton onError={setError} />
 
       <Link href="/(auth)/login" asChild>
         <Button mode="text" icon="account-check-outline">
