@@ -89,8 +89,8 @@ export function DailyBarChartCard({
           yAxisColor="transparent"
           xAxisColor={theme.colors.outlineVariant}
           rulesColor={theme.colors.outlineVariant}
-          xAxisLabelTextStyle={styles.axisLabel}
-          yAxisTextStyle={styles.axisLabel}
+          xAxisLabelTextStyle={[styles.axisLabel, { color: theme.colors.onSurfaceVariant }]}
+          yAxisTextStyle={[styles.axisLabel, { color: theme.colors.onSurfaceVariant }]}
           noOfSections={SECTIONS}
           maxValue={yMax}
           formatYLabel={(v) => String(Math.round(Number(v)))}

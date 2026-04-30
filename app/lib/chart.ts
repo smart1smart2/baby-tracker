@@ -4,8 +4,10 @@ import { spacing } from '@/constants';
 
 /**
  * Width available for a chart inside a ChartCard rendered in ScreenContainer.
- * Subtracts the screen padding (lg) on each side and the card padding (lg)
- * on each side.
+ * Subtracts screen padding (lg) and card padding (lg) on each side, plus a
+ * fixed reserve for the Y-axis label gutter that `react-native-gifted-charts`
+ * renders to the left of the supplied `width` (rather than inside it).
  */
+const Y_AXIS_GUTTER = 40;
 export const CHART_WIDTH =
-  Dimensions.get('window').width - spacing.lg * 4;
+  Dimensions.get('window').width - spacing.lg * 4 - Y_AXIS_GUTTER;

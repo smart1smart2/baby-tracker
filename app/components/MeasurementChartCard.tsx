@@ -80,8 +80,8 @@ export function MeasurementChartCard({
           xAxisColor={theme.colors.outlineVariant}
           yAxisColor={theme.colors.outlineVariant}
           rulesColor={theme.colors.outlineVariant}
-          xAxisLabelTextStyle={styles.axisLabel}
-          yAxisTextStyle={styles.axisLabel}
+          xAxisLabelTextStyle={[styles.axisLabel, { color: theme.colors.onSurfaceVariant }]}
+          yAxisTextStyle={[styles.axisLabel, { color: theme.colors.onSurfaceVariant }]}
           initialSpacing={10}
           endSpacing={10}
           curved

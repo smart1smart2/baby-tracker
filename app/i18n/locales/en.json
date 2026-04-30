@@ -14,7 +14,8 @@
   },
   "tabs": {
     "home": "Home",
-    "stats": "Stats"
+    "stats": "Stats",
+    "settings": "Settings"
   },
   "history": {
     "feedings": "Feeding history",
@@ -75,6 +76,35 @@
     },
     "orContinueWith": "or continue with",
     "continueWithGoogle": "Continue with Google"
+  },
+  "settings": {
+    "profile": "Profile",
+    "profileLabel": "Name and email",
+    "preferences": "Preferences",
+    "account": "Account",
+    "language": "Language",
+    "theme": "Theme",
+    "themeSystem": "System",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "changePassword": "Change password",
+    "version": "Version {{version}}",
+    "delete": {
+      "title": "Delete account?",
+      "message": "This permanently removes your profile and all tracked data. This cannot be undone.",
+      "action": "Delete account"
+    },
+    "profileEdit": {
+      "screenTitle": "Edit profile",
+      "emailConfirmInfo": "Check your inbox — we sent a confirmation link to your new address."
+    },
+    "password": {
+      "screenTitle": "Change password",
+      "newLabel": "New password",
+      "confirmLabel": "Confirm new password",
+      "mismatch": "Passwords don't match",
+      "success": "Password updated"
+    }
   },
   "validation": {
     "emailRequired": "Enter an email",

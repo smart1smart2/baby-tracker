@@ -552,6 +552,7 @@ export type Database = {
     }
     Functions: {
       can_edit_child: { Args: { p_child: string }; Returns: boolean }
+      delete_my_account: { Args: Record<string, never>; Returns: undefined }
       is_caregiver: { Args: { p_child: string }; Returns: boolean }
     }
     Enums: {

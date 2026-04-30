@@ -14,7 +14,8 @@
   },
   "tabs": {
     "home": "Головна",
-    "stats": "Статистика"
+    "stats": "Статистика",
+    "settings": "Налаштування"
   },
   "history": {
     "feedings": "Історія годувань",
@@ -79,6 +80,35 @@
     },
     "orContinueWith": "або увійти через",
     "continueWithGoogle": "Продовжити з Google"
+  },
+  "settings": {
+    "profile": "Профіль",
+    "profileLabel": "Ім'я та email",
+    "preferences": "Налаштування",
+    "account": "Акаунт",
+    "language": "Мова",
+    "theme": "Тема",
+    "themeSystem": "Системна",
+    "themeLight": "Світла",
+    "themeDark": "Темна",
+    "changePassword": "Змінити пароль",
+    "version": "Версія {{version}}",
+    "delete": {
+      "title": "Видалити акаунт?",
+      "message": "Усі дані та профіль будуть видалені назавжди. Цю дію не можна скасувати.",
+      "action": "Видалити акаунт"
+    },
+    "profileEdit": {
+      "screenTitle": "Редагувати профіль",
+      "emailConfirmInfo": "Перевір пошту — ми надіслали лист підтвердження на нову адресу."
+    },
+    "password": {
+      "screenTitle": "Змінити пароль",
+      "newLabel": "Новий пароль",
+      "confirmLabel": "Підтвердити новий пароль",
+      "mismatch": "Паролі не співпадають",
+      "success": "Пароль оновлено"
+    }
   },
   "validation": {
     "emailRequired": "Введи email",

@@ -6,7 +6,6 @@ import { addDays, format, isSameDay, subDays } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import type { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { supabase } from '@/lib/supabase';
 import { useChildren } from '@/features/children/queries';
 import { useActiveFeeding } from '@/features/feedings/queries';
 import { useActiveSleep } from '@/features/sleeps/queries';
@@ -31,7 +30,6 @@ import { ActiveFeedingCard } from '@/components/ActiveFeedingCard';
 import { ActiveSleepCard } from '@/components/ActiveSleepCard';
 import { EventListItem } from '@/components/EventListItem';
 import { ActiveChildPanel } from '@/components/ActiveChildPanel';
-import { useConfirm } from '@/components/ConfirmDialog';
 import { categoryColors, radii, shadows, spacing } from '@/constants';
 
 type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
@@ -83,17 +81,6 @@ export default function HomeScreen() {
     return fullName ?? session?.user.email ?? null;
   }, [session]);
 
-  const confirm = useConfirm();
-  const confirmLogout = async () => {
-    const ok = await confirm({
-      title: t('home.logoutConfirm.title'),
-      message: t('home.logoutConfirm.message'),
-      confirmLabel: t('home.logoutConfirm.action'),
-      destructive: true,
-    });
-    if (ok) await supabase.auth.signOut();
-  };
-
   const stats: StatItem[] = useMemo(
     () => [
       {
@@ -124,7 +111,7 @@ export default function HomeScreen() {
 
   return (
     <ScreenContainer refreshing={isRefetching} onRefresh={refetch}>
-      <HeroCard greetingName={greetingName} onLogout={confirmLogout} />
+      <HeroCard greetingName={greetingName} />
 
       {children.length > 0 ? (
         <ActiveChildPanel

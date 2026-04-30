@@ -8,11 +8,11 @@ import { ActionSheetProvider } from '@/components/ActionSheet';
 import { ConfirmProvider } from '@/components/ConfirmDialog';
 import { queryClient } from '@/lib/queryClient';
 import { paperDarkTheme, paperLightTheme } from '@/lib/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useActiveColorScheme } from '@/hooks/use-active-color-scheme';
 import { AuthProvider } from './AuthProvider';
 
 export function AppProviders({ children }: { children: ReactNode }) {
-  const scheme = useColorScheme();
+  const scheme = useActiveColorScheme();
   const theme = scheme === 'dark' ? paperDarkTheme : paperLightTheme;
 
   return (

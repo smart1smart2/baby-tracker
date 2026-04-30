@@ -7,14 +7,14 @@ import '@/i18n';
 import { AppProviders } from '@/providers/AppProviders';
 import { AuthGate } from '@/components/AuthGate';
 import { HeaderBackButton } from '@/components/HeaderBackButton';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useActiveColorScheme } from '@/hooks/use-active-color-scheme';
 
 export const unstable_settings = {
   anchor: '(tabs)',
 };
 
 export default function RootLayout() {
-  const scheme = useColorScheme();
+  const scheme = useActiveColorScheme();
   const { t } = useTranslation();
 
   return (
@@ -67,6 +67,14 @@ export default function RootLayout() {
           <Stack.Screen
             name="measurements/index"
             options={{ title: t('history.measurements') }}
+          />
+          <Stack.Screen
+            name="account/profile"
+            options={{ title: t('settings.profileEdit.screenTitle') }}
+          />
+          <Stack.Screen
+            name="account/password"
+            options={{ title: t('settings.password.screenTitle') }}
           />
         </Stack>
       </AuthGate>
