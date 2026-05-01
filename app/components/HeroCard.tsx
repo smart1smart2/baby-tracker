@@ -42,8 +42,8 @@ export function HeroCard({ greetingName }: Props) {
 const styles = StyleSheet.create({
   card: {
     borderRadius: radii.xxl,
-    padding: spacing.xl,
-    minHeight: 180,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.lg,
     overflow: 'hidden',
   },
   content: {

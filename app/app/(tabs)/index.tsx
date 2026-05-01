@@ -15,11 +15,15 @@ import { useDateLocale } from '@/hooks/use-date-locale';
 import { useDayEvents } from '@/hooks/use-day-events';
 import type { EventKind } from '@/lib/events';
 
-const HISTORY_ROUTES: Record<EventKind, '/feedings' | '/sleeps' | '/diapers' | '/measurements'> = {
+const HISTORY_ROUTES: Record<
+  EventKind,
+  '/feedings' | '/sleeps' | '/diapers' | '/measurements' | '/milestones'
+> = {
   feeding: '/feedings',
   sleep: '/sleeps',
   diaper: '/diapers',
   measurement: '/measurements',
+  milestone: '/milestones',
 };
 
 import { ScreenContainer } from '@/components/ScreenContainer';
@@ -35,11 +39,16 @@ import { categoryColors, radii, shadows, spacing } from '@/constants';
 type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
 
 type QuickAction = {
-  key: 'feeding' | 'sleep' | 'diaper' | 'measurement';
+  key: 'feeding' | 'sleep' | 'diaper' | 'measurement' | 'milestone';
   icon: IconName;
   tint: string;
   /** When set, tapping the card pushes this route. Else it's a no-op stub. */
-  path?: '/feedings/new' | '/sleeps/new' | '/diapers/new' | '/measurements/new';
+  path?:
+    | '/feedings/new'
+    | '/sleeps/new'
+    | '/diapers/new'
+    | '/measurements/new'
+    | '/milestones';
 };
 
 const QUICK_ACTIONS: QuickAction[] = [
@@ -47,6 +56,7 @@ const QUICK_ACTIONS: QuickAction[] = [
   { key: 'sleep', icon: 'sleep', tint: categoryColors.sleep, path: '/sleeps/new' },
   { key: 'diaper', icon: 'human-baby-changing-table', tint: categoryColors.diaper, path: '/diapers/new' },
   { key: 'measurement', icon: 'scale-bathroom', tint: categoryColors.growth, path: '/measurements/new' },
+  { key: 'milestone', icon: 'star-outline', tint: categoryColors.milestone, path: '/milestones' },
 ];
 
 export default function HomeScreen() {
@@ -220,7 +230,7 @@ export default function HomeScreen() {
                     tint={e.tint}
                     title={e.title}
                     subtitle={e.subtitle}
-                    time={format(e.occurredAt, 'HH:mm')}
+                    time={e.kind === 'milestone' ? undefined : format(e.occurredAt, 'HH:mm')}
                     onPress={() => router.push(HISTORY_ROUTES[e.kind])}
                   />
                 </View>

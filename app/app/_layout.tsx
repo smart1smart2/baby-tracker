@@ -76,6 +76,14 @@ export default function RootLayout() {
             name="account/password"
             options={{ title: t('settings.password.screenTitle') }}
           />
+          <Stack.Screen
+            name="milestones/index"
+            options={{ title: t('milestones.screenTitle') }}
+          />
+          <Stack.Screen
+            name="milestones/[code]"
+            options={{ title: t('milestones.detail.screenTitle'), presentation: 'fullScreenModal' }}
+          />
         </Stack>
       </AuthGate>
       <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />

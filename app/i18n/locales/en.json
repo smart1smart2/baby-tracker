@@ -182,12 +182,118 @@
       "diaper": "Diaper",
       "diaperHint": "Change",
       "measurement": "Measurement",
-      "measurementHint": "Weight / height"
+      "measurementHint": "Weight / height",
+      "milestone": "Milestones",
+      "milestoneHint": "Track progress"
     },
     "empty": {
       "title": "Nothing here yet",
       "body": "Add a child to start tracking feedings, sleep, diapers and growth.",
       "cta": "Add child"
+    }
+  },
+  "milestones": {
+    "screenTitle": "Milestones",
+    "expectedRange": "Expected {{min}}–{{max}} months",
+    "event": {
+      "title": "Milestone reached"
+    },
+    "empty": {
+      "noChild": "Pick a child first to see their milestones."
+    },
+    "dueNow": {
+      "title_one": "{{count}} milestone due now",
+      "title_other": "{{count}} milestones due now",
+      "message": "These are typical for your child's age. Tap one when they reach it."
+    },
+    "category": {
+      "motor": "Motor",
+      "language": "Language",
+      "social": "Social",
+      "cognitive": "Cognitive"
+    },
+    "band": {
+      "by_2m": "By 2 months",
+      "by_4m": "By 4 months",
+      "by_6m": "By 6 months",
+      "by_9m": "By 9 months",
+      "by_12m": "By 12 months",
+      "by_15m": "By 15 months",
+      "by_18m": "By 18 months",
+      "by_24m": "By 2 years"
+    },
+    "detail": {
+      "screenTitle": "Milestone",
+      "dateLabel": "Achieved on",
+      "notesLabel": "Notes (optional)",
+      "markAchieved": "Mark as achieved",
+      "unmark": "Remove achievement"
+    },
+    "tpl": {
+      "s2_smile":           { "title": "Smiles at people",                "description": "Reacts to faces and voices with a social smile." },
+      "s2_calms":           { "title": "Calms when held",                 "description": "Calms down when picked up, talked to or held." },
+      "l2_sounds":          { "title": "Makes sounds besides crying",     "description": "Makes cooing or gurgling sounds." },
+      "m2_head_tummy":      { "title": "Lifts head briefly on tummy",     "description": "When on tummy, lifts head and turns it side to side." },
+      "c2_watches":         { "title": "Watches you move",                "description": "Follows you with eyes when you move nearby." },
+
+      "s4_laughs":          { "title": "Laughs out loud",                 "description": "Laughs in response to play or funny faces." },
+      "s4_seeks_attention": { "title": "Seeks attention",                 "description": "Smiles or moves to get attention from familiar adults." },
+      "l4_coos":            { "title": "Coos and babbles",                "description": "Makes vowel sounds (\"oooh\", \"aaah\") and babbles back when talked to." },
+      "l4_turns_voice":     { "title": "Turns toward voices",             "description": "Turns head to find the source of a familiar voice." },
+      "m4_head_steady":     { "title": "Holds head steady",               "description": "Keeps head upright when supported in a sitting position." },
+      "m4_holds_toy":       { "title": "Holds a toy",                     "description": "Holds a toy when it is placed in their hand." },
+      "m4_push_up":         { "title": "Pushes up on elbows",             "description": "When on tummy, pushes up on forearms." },
+
+      "s6_knows_people":    { "title": "Recognizes familiar people",      "description": "Knows familiar faces and reacts differently than to strangers." },
+      "l6_raspberries":     { "title": "Blows raspberries",               "description": "Blows raspberries and makes squealing or back-and-forth sounds." },
+      "m6_rolls":           { "title": "Rolls both ways",                 "description": "Rolls front-to-back and back-to-front." },
+      "m6_lean_sit":        { "title": "Sits leaning on hands",           "description": "Holds a sitting position with hands as support." },
+      "c6_reaches":         { "title": "Reaches for objects",             "description": "Reaches for and grabs nearby toys." },
+      "c6_mouths":          { "title": "Mouths objects to explore",       "description": "Puts things in mouth to explore textures and shapes." },
+
+      "s9_clingy":          { "title": "Shy or clingy with strangers",    "description": "Sticks close to familiar adults; warms up slowly to new people." },
+      "s9_peekaboo":        { "title": "Plays peek-a-boo",                "description": "Engages in simple back-and-forth games like peek-a-boo or pat-a-cake." },
+      "l9_babble_strings":  { "title": "Repetitive babble",               "description": "Strings sounds together: \"mamamama\", \"bababa\"." },
+      "l9_responds_name":   { "title": "Responds to own name",            "description": "Looks toward you when name is called." },
+      "m9_sits_alone":      { "title": "Sits without support",            "description": "Holds a sitting position without using hands for balance." },
+      "m9_crawls":          { "title": "Crawls or scoots",                "description": "Moves across the floor on hands and knees, or by scooting." },
+      "c9_finds_partly":    { "title": "Looks for objects out of sight",  "description": "Searches for things they saw being hidden." },
+      "c9_bangs_objects":   { "title": "Bangs two objects together",      "description": "Holds one toy in each hand and bangs them together." },
+
+      "s12_pat_a_cake":     { "title": "Plays games like pat-a-cake",     "description": "Joins in for back-and-forth games and turn-taking." },
+      "l12_waves":          { "title": "Waves bye-bye",                   "description": "Waves or claps in greetings and farewells." },
+      "l12_first_word":     { "title": "First word with meaning",         "description": "Calls a parent \"mama\" / \"dada\" or another word for a specific person/thing." },
+      "l12_understands_no": { "title": "Understands \"no\"",              "description": "Pauses or stops a behaviour when told \"no\"." },
+      "m12_pulls_to_stand": { "title": "Pulls to stand",                  "description": "Pulls up to a standing position holding furniture." },
+      "m12_cruises":        { "title": "Cruises holding furniture",       "description": "Walks sideways while holding onto furniture." },
+      "m12_pincer":         { "title": "Picks up with pincer grasp",      "description": "Picks up small things between thumb and forefinger." },
+      "c12_finds_hidden":   { "title": "Finds hidden objects",            "description": "Looks under a cup or blanket for a toy hidden there." },
+
+      "s15_copies_kids":    { "title": "Copies other children",           "description": "Watches other children playing and copies what they do." },
+      "s15_affection":      { "title": "Shows affection",                 "description": "Hugs stuffed animals, dolls, or familiar people." },
+      "l15_few_words":      { "title": "Says a few words",                "description": "Tries to say one or two words besides \"mama\" / \"dada\"." },
+      "m15_first_steps":    { "title": "Takes a few steps alone",         "description": "Walks several steps without holding onto anything." },
+      "m15_finger_food":    { "title": "Feeds self finger food",          "description": "Picks up food and brings it to mouth with fingers." },
+      "c15_uses_objects":   { "title": "Uses everyday objects correctly", "description": "Pretends to talk on a phone, drink from an empty cup, page through a book." },
+
+      "s18_points_interest":{ "title": "Points to show interest",         "description": "Points to objects to share what they notice." },
+      "s18_helps_undress":  { "title": "Helps with undressing",           "description": "Holds out arms or pulls off socks when getting undressed." },
+      "l18_three_words":    { "title": "Says three or more words",        "description": "Tries to say at least three words besides \"mama\" / \"dada\"." },
+      "l18_follows_steps":  { "title": "Follows simple directions",       "description": "Follows a one-step direction without gestures (\"Give it to me\")." },
+      "m18_walks":          { "title": "Walks without holding",           "description": "Walks steadily without holding onto a person or object." },
+      "m18_scribbles":      { "title": "Scribbles",                       "description": "Makes marks on paper with a crayon." },
+      "m18_climbs":         { "title": "Climbs on and off furniture",     "description": "Climbs on and off a couch or chair without help." },
+      "c18_pretend_play":   { "title": "Imitates chores",                 "description": "Pretends to do chores like sweeping or cooking." },
+
+      "s24_notices_others": { "title": "Notices others' feelings",        "description": "Looks to see how others feel and reacts to upset friends." },
+      "l24_two_words":      { "title": "Combines two words",              "description": "Joins two words into a phrase (\"more milk\", \"go car\")." },
+      "l24_points_book":    { "title": "Points to things in book",        "description": "Points to pictures when asked (\"Where is the bear?\")." },
+      "l24_body_parts":     { "title": "Points to body parts",            "description": "Points to at least two body parts when named." },
+      "m24_runs":           { "title": "Runs steadily",                   "description": "Runs without falling on most attempts." },
+      "m24_kicks":          { "title": "Kicks a ball",                    "description": "Kicks a ball forward." },
+      "m24_stairs":         { "title": "Walks up stairs with help",       "description": "Walks up a few stairs holding a hand or rail." },
+      "m24_spoon":          { "title": "Eats with a spoon",               "description": "Uses a spoon to eat, with some spilling." },
+      "c24_plays_two_toys": { "title": "Plays with multiple toys",        "description": "Plays with more than one toy at a time (puts blocks in a truck)." }
     }
   },
   "children": {

@@ -11,16 +11,19 @@ import {
   measurementKindIcon,
   measurementKindKey,
 } from '@/features/measurements/labels';
+import { templateKey as milestoneTemplateKey } from '@/features/milestones/labels';
 import type {
   Diaper,
   Feeding,
   GrowthMeasurement,
+  Milestone,
+  MilestoneTemplate,
   Sleep,
 } from '@/types/domain';
 
 type IconName = ComponentProps<typeof MaterialCommunityIcons>['name'];
 
-export type EventKind = 'feeding' | 'sleep' | 'diaper' | 'measurement';
+export type EventKind = 'feeding' | 'sleep' | 'diaper' | 'measurement' | 'milestone';
 
 export type EventItem = {
   id: string;
@@ -91,5 +94,25 @@ export function measurementToEvent(m: GrowthMeasurement, t: TFunction): EventIte
     tint: categoryColors.growth,
     title: t('measurements.event.title'),
     subtitle: `${t(measurementKindKey(m.kind))}: ${m.value} ${m.unit}`,
+  };
+}
+
+export function milestoneToEvent(
+  mark: Milestone,
+  template: MilestoneTemplate | null,
+  t: TFunction,
+): EventItem {
+  const fallback = template?.title ?? mark.custom_title ?? '';
+  const subtitle = template
+    ? t(milestoneTemplateKey(template.code, 'title'), { defaultValue: fallback })
+    : (mark.custom_title ?? fallback);
+  return {
+    id: `ms-${mark.id}`,
+    kind: 'milestone',
+    occurredAt: mark.achieved_at ? parseISO(mark.achieved_at) : parseISO(mark.created_at),
+    icon: 'star-outline',
+    tint: categoryColors.milestone,
+    title: t('milestones.event.title'),
+    subtitle,
   };
 }
