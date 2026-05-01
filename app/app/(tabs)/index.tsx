@@ -14,6 +14,15 @@ import { useAuth } from '@/providers/AuthProvider';
 import { useDateLocale } from '@/hooks/use-date-locale';
 import { useDayEvents } from '@/hooks/use-day-events';
 import type { EventKind } from '@/lib/events';
+import { ScreenContainer } from '@/components/ScreenContainer';
+import { HeroCard } from '@/components/HeroCard';
+import { StatsRow, type StatItem } from '@/components/StatsRow';
+import { ActionCard } from '@/components/ActionCard';
+import { ActiveFeedingCard } from '@/components/ActiveFeedingCard';
+import { ActiveSleepCard } from '@/components/ActiveSleepCard';
+import { EventListItem } from '@/components/EventListItem';
+import { ActiveChildPanel } from '@/components/ActiveChildPanel';
+import { categoryColors, radii, shadows, spacing } from '@/constants';
 
 const HISTORY_ROUTES: Record<
   EventKind,
@@ -25,16 +34,6 @@ const HISTORY_ROUTES: Record<
   measurement: '/measurements',
   milestone: '/milestones',
 };
-
-import { ScreenContainer } from '@/components/ScreenContainer';
-import { HeroCard } from '@/components/HeroCard';
-import { StatsRow, type StatItem } from '@/components/StatsRow';
-import { ActionCard } from '@/components/ActionCard';
-import { ActiveFeedingCard } from '@/components/ActiveFeedingCard';
-import { ActiveSleepCard } from '@/components/ActiveSleepCard';
-import { EventListItem } from '@/components/EventListItem';
-import { ActiveChildPanel } from '@/components/ActiveChildPanel';
-import { categoryColors, radii, shadows, spacing } from '@/constants';
 
 type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
 
@@ -125,7 +124,7 @@ export default function HomeScreen() {
 
       {children.length > 0 ? (
         <ActiveChildPanel
-          children={children}
+          items={children}
           activeId={activeChildId}
           onSelect={setActiveChildId}
           onAdd={() => router.push('/children/new')}

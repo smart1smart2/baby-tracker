@@ -11,7 +11,6 @@ import { FormScreen } from '@/components/FormScreen';
 import { FormSubmitButton } from '@/components/FormSubmitButton';
 import { spacing } from '@/constants';
 import {
-  categoryIcon,
   normalizeCategory,
   templateKey,
 } from '@/features/milestones/labels';

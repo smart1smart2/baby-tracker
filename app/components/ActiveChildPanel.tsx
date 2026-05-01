@@ -27,7 +27,7 @@ const PILL_RING_GAP = 4;
 const PILL_SLOT = PILL_AVATAR + (PILL_RING_BORDER + PILL_RING_GAP) * 2;
 
 type Props = {
-  children: Child[];
+  items: Child[];
   activeId: string | null;
   onSelect: (id: string) => void;
   onAdd: () => void;
@@ -40,14 +40,14 @@ type Props = {
  * add affordance. Brand accents (violet ring, decorative tint blob) tie it
  * back to the hero without stacking another gradient.
  */
-export function ActiveChildPanel({ children, activeId, onSelect, onAdd, onEdit }: Props) {
+export function ActiveChildPanel({ items, activeId, onSelect, onAdd, onEdit }: Props) {
   const theme = useTheme();
   const { t } = useTranslation();
 
-  const active = children.find((c) => c.id === activeId) ?? children[0] ?? null;
+  const active = items.find((c) => c.id === activeId) ?? items[0] ?? null;
   if (!active) return null;
 
-  const hasSiblings = children.length > 1;
+  const hasSiblings = items.length > 1;
 
   return (
     <View
@@ -123,7 +123,7 @@ export function ActiveChildPanel({ children, activeId, onSelect, onAdd, onEdit }
         contentContainerStyle={styles.pillRow}
       >
         {hasSiblings
-          ? children.map((c) => (
+          ? items.map((c) => (
               <SwitchPill
                 key={c.id}
                 child={c}

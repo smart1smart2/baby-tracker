@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Portal, useTheme } from 'react-native-paper';
+import { Portal } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 
 import { AppTextInput } from './AppTextInput';
