@@ -8,12 +8,15 @@ import { AppProviders } from '@/providers/AppProviders';
 import { AuthGate } from '@/components/AuthGate';
 import { HeaderBackButton } from '@/components/HeaderBackButton';
 import { useActiveColorScheme } from '@/hooks/use-active-color-scheme';
+import { initSentry, Sentry, sentryEnabled } from '@/lib/sentry';
+
+initSentry();
 
 export const unstable_settings = {
   anchor: '(tabs)',
 };
 
-export default function RootLayout() {
+function RootLayout() {
   const scheme = useActiveColorScheme();
   const { t } = useTranslation();
 
@@ -90,3 +93,5 @@ export default function RootLayout() {
     </AppProviders>
   );
 }
+
+export default sentryEnabled ? Sentry.wrap(RootLayout) : RootLayout;

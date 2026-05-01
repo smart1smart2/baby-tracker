@@ -10,4 +10,6 @@ const required = (name: string, value: string | undefined) => {
 export const env = {
   supabaseUrl: required('EXPO_PUBLIC_SUPABASE_URL', process.env.EXPO_PUBLIC_SUPABASE_URL),
   supabaseAnonKey: required('EXPO_PUBLIC_SUPABASE_ANON_KEY', process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY),
+  /** Optional. When unset, Sentry stays disabled and no events are sent. */
+  sentryDsn: process.env.EXPO_PUBLIC_SENTRY_DSN ?? null,
 };
