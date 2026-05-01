@@ -53,6 +53,16 @@
     "growth": {
       "title": "Growth",
       "empty": "No measurements yet. Add weight, height or head circumference to see trends here."
+    },
+    "exportPdf": "Export PDF",
+    "export": {
+      "shareTitle": "Share statistics",
+      "dateColumn": "Date",
+      "valueColumn": "Value",
+      "rangeLabel": "{{from}} – {{to}}",
+      "generated": "Generated {{date}}",
+      "noMeasurements": "No measurements recorded yet.",
+      "failed": "Couldn't generate the PDF. Try again from a dev build."
     }
   },
   "auth": {
