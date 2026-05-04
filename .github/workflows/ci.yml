@@ -7,7 +7,7 @@ on:
 
 jobs:
   app:
-    name: Lint & type-check
+    name: Lint, type-check, test
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -29,3 +29,6 @@ jobs:
 
       - name: Type-check
         run: npx tsc --noEmit
+
+      - name: Unit tests
+        run: npm test -- --ci
