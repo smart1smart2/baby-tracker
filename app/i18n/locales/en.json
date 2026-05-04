@@ -194,7 +194,9 @@
       "measurement": "Measurement",
       "measurementHint": "Weight / height",
       "milestone": "Milestones",
-      "milestoneHint": "Track progress"
+      "milestoneHint": "Track progress",
+      "vaccination": "Vaccinations",
+      "vaccinationHint": "Calendar by age"
     },
     "empty": {
       "title": "Nothing here yet",
@@ -304,6 +306,43 @@
       "m24_stairs":         { "title": "Walks up stairs with help",       "description": "Walks up a few stairs holding a hand or rail." },
       "m24_spoon":          { "title": "Eats with a spoon",               "description": "Uses a spoon to eat, with some spilling." },
       "c24_plays_two_toys": { "title": "Plays with multiple toys",        "description": "Plays with more than one toy at a time (puts blocks in a truck)." }
+    }
+  },
+  "vaccinations": {
+    "screenTitle": "Vaccinations",
+    "dose": "Dose {{n}}",
+    "expectedRange": "Recommended {{min}}–{{max}} months",
+    "dueNow": {
+      "title_one": "{{count}} vaccination due now",
+      "title_other": "{{count}} vaccinations due now",
+      "message": "These are recommended for your child's age."
+    },
+    "empty": {
+      "noChild": "Pick a child first to see vaccinations.",
+      "noTemplates": "Vaccination schedule not loaded. Run the latest database migration to seed it."
+    },
+    "slot": {
+      "birth": "At birth",
+      "m2": "2 months",
+      "m4": "4 months",
+      "m6": "6 months",
+      "m12": "12 months",
+      "m18": "18 months"
+    },
+    "group": {
+      "bcg": "BCG (Tuberculosis)",
+      "hepb": "Hepatitis B",
+      "dtap": "DTaP (Diphtheria, Tetanus, Pertussis)",
+      "ipv": "IPV (Polio)",
+      "hib": "Hib (H. influenzae b)",
+      "mmr": "MMR (Measles, Mumps, Rubella)"
+    },
+    "detail": {
+      "screenTitle": "Vaccination",
+      "administeredLabel": "Administered on",
+      "notesLabel": "Notes (optional)",
+      "markGiven": "Mark as administered",
+      "unmark": "Remove record"
     }
   },
   "children": {

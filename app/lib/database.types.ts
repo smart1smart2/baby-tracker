@@ -233,6 +233,36 @@ export type Database = {
           },
         ]
       }
+      vaccination_templates: {
+        Row: {
+          code: string
+          dose_number: number
+          expected_age_max_months: number
+          expected_age_min_months: number
+          group_code: string
+          id: string
+          name: string
+        }
+        Insert: {
+          code: string
+          dose_number: number
+          expected_age_max_months: number
+          expected_age_min_months: number
+          group_code: string
+          id?: string
+          name: string
+        }
+        Update: {
+          code?: string
+          dose_number?: number
+          expected_age_max_months?: number
+          expected_age_min_months?: number
+          group_code?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       milestone_templates: {
         Row: {
           category: string

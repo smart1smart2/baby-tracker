@@ -87,6 +87,14 @@ function RootLayout() {
             name="milestones/[code]"
             options={{ title: t('milestones.detail.screenTitle'), presentation: 'fullScreenModal' }}
           />
+          <Stack.Screen
+            name="vaccinations/index"
+            options={{ title: t('vaccinations.screenTitle') }}
+          />
+          <Stack.Screen
+            name="vaccinations/[code]"
+            options={{ title: t('vaccinations.detail.screenTitle'), presentation: 'fullScreenModal' }}
+          />
         </Stack>
       </AuthGate>
       <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />

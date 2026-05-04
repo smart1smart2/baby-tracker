@@ -22,7 +22,7 @@ import { ActiveFeedingCard } from '@/components/ActiveFeedingCard';
 import { ActiveSleepCard } from '@/components/ActiveSleepCard';
 import { EventListItem } from '@/components/EventListItem';
 import { ActiveChildPanel } from '@/components/ActiveChildPanel';
-import { categoryColors, radii, shadows, spacing } from '@/constants';
+import { categoryColors, palette, radii, shadows, spacing } from '@/constants';
 
 const HISTORY_ROUTES: Record<
   EventKind,
@@ -38,7 +38,7 @@ const HISTORY_ROUTES: Record<
 type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
 
 type QuickAction = {
-  key: 'feeding' | 'sleep' | 'diaper' | 'measurement' | 'milestone';
+  key: 'feeding' | 'sleep' | 'diaper' | 'measurement' | 'milestone' | 'vaccination';
   icon: IconName;
   tint: string;
   /** When set, tapping the card pushes this route. Else it's a no-op stub. */
@@ -47,7 +47,8 @@ type QuickAction = {
     | '/sleeps/new'
     | '/diapers/new'
     | '/measurements/new'
-    | '/milestones';
+    | '/milestones'
+    | '/vaccinations';
 };
 
 const QUICK_ACTIONS: QuickAction[] = [
@@ -56,6 +57,7 @@ const QUICK_ACTIONS: QuickAction[] = [
   { key: 'diaper', icon: 'human-baby-changing-table', tint: categoryColors.diaper, path: '/diapers/new' },
   { key: 'measurement', icon: 'scale-bathroom', tint: categoryColors.growth, path: '/measurements/new' },
   { key: 'milestone', icon: 'star-outline', tint: categoryColors.milestone, path: '/milestones' },
+  { key: 'vaccination', icon: 'needle', tint: palette.accentSky, path: '/vaccinations' },
 ];
 
 export default function HomeScreen() {

@@ -46,6 +46,8 @@ export type ReminderKind = Enums['reminder_kind'];
 
 // Vaccinations
 export type Vaccination = Tables['vaccinations']['Row'];
+export type VaccinationInsert = Tables['vaccinations']['Insert'];
+export type VaccinationTemplate = Tables['vaccination_templates']['Row'];
 
 // Photos
 export type Photo = Tables['photos']['Row'];
