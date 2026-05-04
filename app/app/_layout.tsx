@@ -6,7 +6,7 @@ import 'react-native-reanimated';
 import '@/i18n';
 import { AppProviders } from '@/providers/AppProviders';
 import { AuthGate } from '@/components/AuthGate';
-import { HeaderBackButton } from '@/components/HeaderBackButton';
+import { ModalCloseButton } from '@/components/ModalCloseButton';
 import { useActiveColorScheme } from '@/hooks/use-active-color-scheme';
 import { initSentry, Sentry, sentryEnabled } from '@/lib/sentry';
 
@@ -25,23 +25,27 @@ function RootLayout() {
       <AuthGate>
         <Stack
           screenOptions={{
-            headerBackButtonDisplayMode: 'minimal',
-            headerLeft: () => <HeaderBackButton />,
+            // All non-tab routes open as bottom-up full-screen modals with
+            // an X close in the top-right, so navigation feels uniform.
+            presentation: 'fullScreenModal',
+            headerLeft: () => null,
+            headerRight: () => <ModalCloseButton />,
+            headerBackVisible: false,
           }}
         >
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
           <Stack.Screen
             name="children/new"
-            options={{ title: t('children.new.screenTitle'), presentation: 'fullScreenModal' }}
+            options={{ title: t('children.new.screenTitle') }}
           />
           <Stack.Screen
             name="children/[id]/edit"
-            options={{ title: t('children.edit.screenTitle'), presentation: 'fullScreenModal' }}
+            options={{ title: t('children.edit.screenTitle') }}
           />
           <Stack.Screen
             name="feedings/new"
-            options={{ title: t('feedings.new.screenTitle'), presentation: 'fullScreenModal' }}
+            options={{ title: t('feedings.new.screenTitle') }}
           />
           <Stack.Screen
             name="feedings/index"
@@ -49,7 +53,7 @@ function RootLayout() {
           />
           <Stack.Screen
             name="sleeps/new"
-            options={{ title: t('sleeps.new.screenTitle'), presentation: 'fullScreenModal' }}
+            options={{ title: t('sleeps.new.screenTitle') }}
           />
           <Stack.Screen
             name="sleeps/index"
@@ -57,7 +61,7 @@ function RootLayout() {
           />
           <Stack.Screen
             name="diapers/new"
-            options={{ title: t('diapers.new.screenTitle'), presentation: 'fullScreenModal' }}
+            options={{ title: t('diapers.new.screenTitle') }}
           />
           <Stack.Screen
             name="diapers/index"
@@ -65,7 +69,7 @@ function RootLayout() {
           />
           <Stack.Screen
             name="measurements/new"
-            options={{ title: t('measurements.new.screenTitle'), presentation: 'fullScreenModal' }}
+            options={{ title: t('measurements.new.screenTitle') }}
           />
           <Stack.Screen
             name="measurements/index"
@@ -85,7 +89,7 @@ function RootLayout() {
           />
           <Stack.Screen
             name="milestones/[code]"
-            options={{ title: t('milestones.detail.screenTitle'), presentation: 'fullScreenModal' }}
+            options={{ title: t('milestones.detail.screenTitle') }}
           />
           <Stack.Screen
             name="vaccinations/index"
@@ -93,7 +97,7 @@ function RootLayout() {
           />
           <Stack.Screen
             name="vaccinations/[code]"
-            options={{ title: t('vaccinations.detail.screenTitle'), presentation: 'fullScreenModal' }}
+            options={{ title: t('vaccinations.detail.screenTitle') }}
           />
         </Stack>
       </AuthGate>

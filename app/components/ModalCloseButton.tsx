@@ -5,15 +5,14 @@ import { useRouter } from 'expo-router';
 import { iconSizes, spacing } from '@/constants';
 
 /**
- * Header back button styled to match the FormScreen close (X) button —
- * same IconButton chrome and sizing — so navigation chrome is consistent
- * across stack screens and modal forms.
+ * Header close (X) button rendered in the top-right of every full-screen
+ * modal so dismiss feels the same everywhere.
  */
-export function HeaderBackButton() {
+export function ModalCloseButton() {
   const router = useRouter();
   return (
     <IconButton
-      icon="arrow-left"
+      icon="close"
       size={iconSizes.lg}
       onPress={() => router.back()}
       style={styles.button}
@@ -22,5 +21,5 @@ export function HeaderBackButton() {
 }
 
 const styles = StyleSheet.create({
-  button: { marginTop: spacing.xs, marginLeft: -spacing.xs },
+  button: { marginTop: spacing.xs, marginRight: -spacing.xs },
 });

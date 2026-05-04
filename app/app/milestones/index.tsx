@@ -189,12 +189,6 @@ function MilestoneRow({
         <Text variant="titleSmall" style={{ color: theme.colors.onSurface }}>
           {title}
         </Text>
-        <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
-          {t('milestones.expectedRange', {
-            min: template.expected_age_min_months,
-            max: template.expected_age_max_months,
-          })}
-        </Text>
       </View>
       <MaterialCommunityIcons
         name={achieved ? 'check-circle' : 'circle-outline'}
