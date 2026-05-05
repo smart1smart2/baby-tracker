@@ -8,13 +8,21 @@ import { AppProviders } from '@/providers/AppProviders';
 import { AuthGate } from '@/components/AuthGate';
 import { ModalCloseButton } from '@/components/ModalCloseButton';
 import { useActiveColorScheme } from '@/hooks/use-active-color-scheme';
+import { useChildRealtime } from '@/lib/realtime';
 import { initSentry, Sentry, sentryEnabled } from '@/lib/sentry';
+import { useActiveChild } from '@/stores/activeChild';
 
 initSentry();
 
 export const unstable_settings = {
   anchor: '(tabs)',
 };
+
+function RealtimeBridge() {
+  const activeChildId = useActiveChild((s) => s.activeChildId);
+  useChildRealtime(activeChildId);
+  return null;
+}
 
 function RootLayout() {
   const scheme = useActiveColorScheme();
@@ -23,6 +31,7 @@ function RootLayout() {
   return (
     <AppProviders>
       <AuthGate>
+        <RealtimeBridge />
         <Stack
           screenOptions={{
             // All non-tab routes open as bottom-up full-screen modals with
