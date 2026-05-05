@@ -31,15 +31,18 @@ alter table public.vaccinations           enable row level security;
 
 select plan(8);
 
--- Two families with one child each.
+-- Two families with one child each. The `handle_new_user()` trigger on
+-- auth.users insert already creates a public.profiles row, so we update
+-- the auto-created rows in place instead of inserting fresh ones.
 insert into auth.users (id, email)
 values
   ('11111111-1111-1111-1111-111111111111', 'parent_a@example.com'),
   ('22222222-2222-2222-2222-222222222222', 'parent_b@example.com');
 
-insert into public.profiles (id, full_name) values
-  ('11111111-1111-1111-1111-111111111111', 'Parent A'),
-  ('22222222-2222-2222-2222-222222222222', 'Parent B');
+update public.profiles set full_name = 'Parent A'
+  where id = '11111111-1111-1111-1111-111111111111';
+update public.profiles set full_name = 'Parent B'
+  where id = '22222222-2222-2222-2222-222222222222';
 
 insert into public.children (id, full_name, date_of_birth)
 values
@@ -90,12 +93,14 @@ select throws_ok(
   'Parent A cannot insert against family B''s child'
 );
 
-select throws_ok(
+-- RLS doesn't raise on UPDATE — it just hides the target row from the
+-- WHERE clause, so 0 rows match. Assert via RETURNING that the update
+-- affected nothing.
+select is_empty(
   $$ update public.feedings
      set notes = 'tampered'
-     where id = 'cccc2222-2222-2222-2222-222222222222' $$,
-  null,
-  null,
+     where id = 'cccc2222-2222-2222-2222-222222222222'
+     returning id $$,
   'Parent A''s update against family B''s row affects 0 rows (no-op under RLS)'
 );
 
