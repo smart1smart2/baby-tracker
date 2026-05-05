@@ -5,7 +5,7 @@ import {
   type WhoMetric,
   type WhoRow,
   type WhoSex,
-} from './who-standards';
+} from './standards';
 import type { GrowthMeasurement, MeasurementKind, Sex } from '@/types/domain';
 
 const KIND_TO_METRIC: Record<MeasurementKind, WhoMetric> = {
