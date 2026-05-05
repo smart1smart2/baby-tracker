@@ -427,6 +427,13 @@
       "empty": "No measurements yet. Tap Add to record the first one.",
       "noEntries": "No entries yet",
       "needTwoPoints": "Add another reading to see the trend"
+    },
+    "percentileBand": {
+      "below_p3": "Below 3rd percentile",
+      "p3_p15": "3rd–15th percentile",
+      "p15_p85": "Around average (15–85)",
+      "p85_p97": "85th–97th percentile",
+      "above_p97": "Above 97th percentile"
     }
   },
   "diapers": {

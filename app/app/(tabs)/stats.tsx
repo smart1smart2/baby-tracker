@@ -146,6 +146,7 @@ export default function StatsScreen() {
           kind={kind}
           tint={measurementKindTint(kind)}
           measurements={measurements.filter((m) => m.kind === kind)}
+          child={child}
           onPress={() => router.push('/measurements')}
           onAdd={() => router.push('/measurements/new')}
         />
