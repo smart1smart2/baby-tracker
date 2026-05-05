@@ -1,0 +1,26 @@
+# Maestro flow: log in with a pre-seeded test account.
+# Reused by other flows via `runFlow`.
+#
+# Usage:
+#   MAESTRO_EMAIL=test@example.com MAESTRO_PASSWORD=... maestro test .maestro/login.yaml
+#
+# The account must already exist in Supabase with `email_confirmed_at` set
+# (create via dashboard → Authentication → Users → Add user, ticking
+# "Auto Confirm User").
+
+appId: com.anonymous.baby-tracker
+---
+- launchApp:
+    clearState: true
+- assertVisible:
+    text: "Sign in"
+- tapOn:
+    text: "Email"
+- inputText: ${MAESTRO_EMAIL}
+- tapOn:
+    text: "Password"
+- inputText: ${MAESTRO_PASSWORD}
+- tapOn:
+    text: "Log in"
+- assertVisible:
+    text: "Quick actions"

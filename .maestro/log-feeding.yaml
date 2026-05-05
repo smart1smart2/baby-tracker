@@ -1,0 +1,44 @@
+# Maestro happy-path flow: log in → tap the Feeding quick action → save a
+# bottle/formula entry → verify it shows in the Today list.
+#
+# Prereq: see `login.yaml` for the test account requirements.
+#
+# Run:
+#   MAESTRO_EMAIL=... MAESTRO_PASSWORD=... maestro test .maestro/log-feeding.yaml
+
+appId: com.anonymous.baby-tracker
+---
+- runFlow: login.yaml
+
+# At least one child needed for Quick Actions to do anything.
+- runFlow:
+    when:
+      visible:
+        text: "Add child"
+    commands:
+      - tapOn:
+          text: "Add child"
+      - tapOn:
+          text: "Child's name"
+      - inputText: "Maestro Baby"
+      - tapOn:
+          text: "Date of birth"
+      - tapOn:
+          text: "OK"
+      - tapOn:
+          text: "Save"
+
+- tapOn:
+    text: "Feeding"
+- tapOn:
+    text: "Bottle • formula"
+- tapOn:
+    text: "Amount (ml)"
+- inputText: "120"
+- tapOn:
+    text: "Save"
+
+- assertVisible:
+    text: "Today"
+- assertVisible:
+    text: "Bottle • formula"
