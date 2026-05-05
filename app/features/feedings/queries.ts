@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { startOfDay, endOfDay, format } from 'date-fns';
 
-import { supabase } from '@/lib/supabase';
+import { getCurrentUserId, supabase } from '@/lib/supabase';
 import type { Feeding, FeedingInsert, FeedingKind } from '@/types/domain';
 
 export const feedingsKey = (childId: string) => ['feedings', childId] as const;
@@ -87,8 +87,7 @@ export function useStartFeeding() {
       childId: string;
       kind: FeedingKind;
     }): Promise<Feeding> => {
-      const { data: session } = await supabase.auth.getSession();
-      const userId = session.session?.user.id;
+      const userId = await getCurrentUserId();
       const { data, error } = await supabase
         .from('feedings')
         .insert({
@@ -132,8 +131,7 @@ export function useCreateFeeding() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: FeedingInsert): Promise<Feeding> => {
-      const { data: session } = await supabase.auth.getSession();
-      const userId = session.session?.user.id;
+      const userId = await getCurrentUserId();
       const { data, error } = await supabase
         .from('feedings')
         .insert({ ...input, created_by: userId })

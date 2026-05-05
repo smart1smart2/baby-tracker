@@ -19,6 +19,7 @@ import {
   useVaccinationTemplates,
 } from '@/features/vaccinations/queries';
 import { translateError, type FriendlyError } from '@/features/errors/translate';
+import { formatDateOnly } from '@/lib/date';
 import { useActiveChild } from '@/stores/activeChild';
 
 export default function VaccinationDetailScreen() {
@@ -75,7 +76,7 @@ export default function VaccinationDetailScreen() {
 
   const onSubmit = async () => {
     setError(null);
-    const administeredAt = date.toISOString().slice(0, 10);
+    const administeredAt = formatDateOnly(date);
     try {
       if (existing) {
         await updateVaccination.mutateAsync({

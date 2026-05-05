@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { endOfDay, format, startOfDay } from 'date-fns';
 
-import { supabase } from '@/lib/supabase';
+import { getCurrentUserId, supabase } from '@/lib/supabase';
 import type { Sleep, SleepInsert } from '@/types/domain';
 
 export const sleepsKey = (childId: string) => ['sleeps', childId] as const;
@@ -79,8 +79,7 @@ export function useStartSleep() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (childId: string): Promise<Sleep> => {
-      const { data: session } = await supabase.auth.getSession();
-      const userId = session.session?.user.id;
+      const userId = await getCurrentUserId();
       const { data, error } = await supabase
         .from('sleeps')
         .insert({
@@ -124,8 +123,7 @@ export function useCreateSleep() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: SleepInsert): Promise<Sleep> => {
-      const { data: session } = await supabase.auth.getSession();
-      const userId = session.session?.user.id;
+      const userId = await getCurrentUserId();
       const { data, error } = await supabase
         .from('sleeps')
         .insert({ ...input, created_by: userId })

@@ -10,10 +10,9 @@ import { SectionLabel } from '@/components/SectionLabel';
 import { SettingsRow } from '@/components/SettingsRow';
 import { useConfirm } from '@/components/ConfirmDialog';
 import { radii, shadows, spacing } from '@/constants';
-import { useDeleteMyAccount } from '@/features/auth/mutations';
+import { useDeleteMyAccount, useSignOut } from '@/features/auth/mutations';
 import { useMyProfile } from '@/features/profile/queries';
 import { useAuth } from '@/providers/AuthProvider';
-import { supabase } from '@/lib/supabase';
 import { useThemePreferenceStore, type ThemePreference } from '@/stores/themePreference';
 
 const THEME_OPTIONS: ThemePreference[] = ['system', 'light', 'dark'];
@@ -26,6 +25,7 @@ export default function SettingsScreen() {
   const { data: profile } = useMyProfile();
   const confirm = useConfirm();
   const deleteAccount = useDeleteMyAccount();
+  const signOut = useSignOut();
   const themePreference = useThemePreferenceStore((s) => s.preference);
   const setThemePreference = useThemePreferenceStore((s) => s.setPreference);
 
@@ -43,7 +43,7 @@ export default function SettingsScreen() {
       confirmLabel: t('home.logoutConfirm.action'),
       destructive: true,
     });
-    if (ok) await supabase.auth.signOut();
+    if (ok) await signOut.mutateAsync();
   };
 
   const onDelete = async () => {

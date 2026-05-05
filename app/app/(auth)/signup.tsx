@@ -10,17 +10,17 @@ import { GoogleSignInButton } from '@/components/GoogleSignInButton';
 import { LabeledDivider } from '@/components/LabeledDivider';
 import { PasswordField } from '@/components/PasswordField';
 import { radii, spacing } from '@/constants';
+import { useSignUp } from '@/features/auth/mutations';
 import { translateError, type FriendlyError } from '@/features/errors/translate';
 import { validateEmail, validateFullName, validatePassword } from '@/features/auth/validation';
 import { useFormField } from '@/hooks/use-form-field';
-import { supabase } from '@/lib/supabase';
 
 export default function SignupScreen() {
   const { t } = useTranslation();
   const fullName = useFormField();
   const email = useFormField();
   const password = useFormField();
-  const [submitting, setSubmitting] = useState(false);
+  const signUp = useSignUp();
   const [error, setError] = useState<FriendlyError | null>(null);
   const [info, setInfo] = useState<string | null>(null);
 
@@ -36,21 +36,16 @@ export default function SignupScreen() {
     password.setError(passwordIssue);
     if (nameIssue || emailIssue || passwordIssue) return;
 
-    setSubmitting(true);
-    const { error: err, data } = await supabase.auth.signUp({
-      email: email.value.trim(),
-      password: password.value,
-      options: { data: { full_name: fullName.value.trim() } },
-    });
-    setSubmitting(false);
-
-    if (err) {
+    try {
+      const { needsConfirmation } = await signUp.mutateAsync({
+        email: email.value,
+        password: password.value,
+        fullName: fullName.value,
+      });
+      if (needsConfirmation) setInfo(t('auth.signup.emailConfirmInfo'));
+    } catch (err) {
       setError(translateError(err));
-      return;
     }
-
-    if (data.session) return;
-    setInfo(t('auth.signup.emailConfirmInfo'));
   };
 
   return (
@@ -90,8 +85,8 @@ export default function SignupScreen() {
       <Button
         mode="contained"
         onPress={onSubmit}
-        loading={submitting}
-        disabled={submitting}
+        loading={signUp.isPending}
+        disabled={signUp.isPending}
         contentStyle={{ paddingVertical: spacing.sm }}
         style={{ marginTop: spacing.sm, borderRadius: radii.lg }}
       >

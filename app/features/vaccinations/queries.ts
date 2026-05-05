@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { formatDateOnly } from '@/lib/date';
 import { supabase } from '@/lib/supabase';
 import type { Vaccination, VaccinationTemplate } from '@/types/domain';
 
@@ -57,7 +58,7 @@ export function useMarkVaccination() {
           vaccine_name: input.template.name,
           dose_number: input.template.dose_number,
           administered_at:
-            input.administeredAt ?? new Date().toISOString().slice(0, 10),
+            input.administeredAt ?? formatDateOnly(new Date()),
           notes: input.notes ?? null,
         })
         .select('*')

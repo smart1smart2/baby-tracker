@@ -12,3 +12,13 @@ export const supabase = createClient<Database>(env.supabaseUrl, env.supabaseAnon
     detectSessionInUrl: false,
   },
 });
+
+/**
+ * Reads the persisted session and returns the current user's id, or `null`
+ * when no session exists. Used by every domain mutation to stamp
+ * `created_by` on inserts.
+ */
+export async function getCurrentUserId(): Promise<string | null> {
+  const { data } = await supabase.auth.getSession();
+  return data.session?.user.id ?? null;
+}

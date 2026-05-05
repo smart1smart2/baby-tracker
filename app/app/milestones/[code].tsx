@@ -22,6 +22,7 @@ import {
   useUpdateMilestone,
 } from '@/features/milestones/queries';
 import { translateError, type FriendlyError } from '@/features/errors/translate';
+import { formatDateOnly } from '@/lib/date';
 import { useActiveChild } from '@/stores/activeChild';
 
 export default function MilestoneDetailScreen() {
@@ -82,7 +83,7 @@ export default function MilestoneDetailScreen() {
 
   const onSubmit = async () => {
     setError(null);
-    const achievedAt = date.toISOString().slice(0, 10);
+    const achievedAt = formatDateOnly(date);
     try {
       if (existing) {
         await updateMilestone.mutateAsync({

@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { endOfDay, format, startOfDay } from 'date-fns';
 
-import { supabase } from '@/lib/supabase';
+import { getCurrentUserId, supabase } from '@/lib/supabase';
 import type { Diaper, DiaperInsert } from '@/types/domain';
 
 export const diapersKey = (childId: string) => ['diapers', childId] as const;
@@ -57,8 +57,7 @@ export function useCreateDiaper() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: DiaperInsert): Promise<Diaper> => {
-      const { data: session } = await supabase.auth.getSession();
-      const userId = session.session?.user.id;
+      const userId = await getCurrentUserId();
       const { data, error } = await supabase
         .from('diapers')
         .insert({ ...input, created_by: userId })

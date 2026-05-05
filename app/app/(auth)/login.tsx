@@ -10,16 +10,16 @@ import { GoogleSignInButton } from '@/components/GoogleSignInButton';
 import { LabeledDivider } from '@/components/LabeledDivider';
 import { PasswordField } from '@/components/PasswordField';
 import { radii, spacing } from '@/constants';
+import { useSignIn } from '@/features/auth/mutations';
 import { translateError, type FriendlyError } from '@/features/errors/translate';
 import { validateEmail, validatePassword } from '@/features/auth/validation';
 import { useFormField } from '@/hooks/use-form-field';
-import { supabase } from '@/lib/supabase';
 
 export default function LoginScreen() {
   const { t } = useTranslation();
   const email = useFormField();
   const password = useFormField();
-  const [submitting, setSubmitting] = useState(false);
+  const signIn = useSignIn();
   const [error, setError] = useState<FriendlyError | null>(null);
 
   const onSubmit = async () => {
@@ -30,13 +30,11 @@ export default function LoginScreen() {
     password.setError(passwordIssue);
     if (emailIssue || passwordIssue) return;
 
-    setSubmitting(true);
-    const { error: err } = await supabase.auth.signInWithPassword({
-      email: email.value.trim(),
-      password: password.value,
-    });
-    setSubmitting(false);
-    if (err) setError(translateError(err));
+    try {
+      await signIn.mutateAsync({ email: email.value, password: password.value });
+    } catch (err) {
+      setError(translateError(err));
+    }
   };
 
   return (
@@ -66,8 +64,8 @@ export default function LoginScreen() {
       <Button
         mode="contained"
         onPress={onSubmit}
-        loading={submitting}
-        disabled={submitting}
+        loading={signIn.isPending}
+        disabled={signIn.isPending}
         contentStyle={{ paddingVertical: spacing.sm }}
         style={{ marginTop: spacing.sm, borderRadius: radii.lg }}
       >

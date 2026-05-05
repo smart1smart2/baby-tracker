@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 
+import { formatDateOnly } from '@/lib/date';
 import { supabase } from '@/lib/supabase';
 import type { Milestone, MilestoneTemplate } from '@/types/domain';
 
@@ -73,7 +74,7 @@ export function useMarkMilestone() {
         .insert({
           child_id: input.childId,
           template_id: input.templateId,
-          achieved_at: input.achievedAt ?? new Date().toISOString().slice(0, 10),
+          achieved_at: input.achievedAt ?? formatDateOnly(new Date()),
           notes: input.notes ?? null,
         })
         .select('*')

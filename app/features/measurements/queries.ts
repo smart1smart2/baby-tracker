@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { endOfDay, format, startOfDay } from 'date-fns';
 
-import { supabase } from '@/lib/supabase';
+import { getCurrentUserId, supabase } from '@/lib/supabase';
 import type { GrowthMeasurement, GrowthMeasurementInsert } from '@/types/domain';
 
 export const measurementsKey = (childId: string) =>
@@ -50,8 +50,7 @@ export function useCreateMeasurement() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: GrowthMeasurementInsert): Promise<GrowthMeasurement> => {
-      const { data: session } = await supabase.auth.getSession();
-      const userId = session.session?.user.id;
+      const userId = await getCurrentUserId();
       const { data, error } = await supabase
         .from('growth_measurements')
         .insert({ ...input, created_by: userId })

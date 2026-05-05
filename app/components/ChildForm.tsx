@@ -14,6 +14,7 @@ import { palette, spacing } from '@/constants';
 import { useCreateChild, useUpdateChild } from '@/features/children/queries';
 import { uploadChildAvatar } from '@/features/children/avatar';
 import { translateError, type FriendlyError } from '@/features/errors/translate';
+import { formatDateOnly } from '@/lib/date';
 import { useActiveChild } from '@/stores/activeChild';
 import type { Child, Sex } from '@/types/domain';
 
@@ -74,7 +75,7 @@ export function ChildForm({ initial, onClose }: Props) {
     try {
       const fields = {
         full_name: fullName.trim(),
-        date_of_birth: dob.toISOString().slice(0, 10),
+        date_of_birth: formatDateOnly(dob),
         sex,
         notes: notes.trim() || null,
       };
