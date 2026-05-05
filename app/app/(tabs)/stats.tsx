@@ -8,6 +8,7 @@ import { LoadingScreen } from '@/components/LoadingScreen';
 import { DailyBarChartCard } from '@/components/DailyBarChartCard';
 import { MeasurementChartCard } from '@/components/MeasurementChartCard';
 import { ScreenContainer } from '@/components/ScreenContainer';
+import { SleepPatternChart } from '@/components/SleepPatternChart';
 import { categoryColors, spacing } from '@/constants';
 import { useChild } from '@/features/children/queries';
 import {
@@ -16,6 +17,7 @@ import {
 } from '@/features/measurements/labels';
 import { useMeasurements } from '@/features/measurements/queries';
 import { useDateLocale } from '@/hooks/use-date-locale';
+import { useSleepPattern } from '@/hooks/use-sleep-pattern';
 import { useStatsBuckets } from '@/hooks/use-stats-buckets';
 import { exportStatsPdf } from '@/lib/pdf';
 import { Sentry } from '@/lib/sentry';
@@ -35,6 +37,7 @@ export default function StatsScreen() {
   const activeChildId = useActiveChild((s) => s.activeChildId);
 
   const buckets = useStatsBuckets(activeChildId, RANGE_DAYS);
+  const sleepPattern = useSleepPattern(activeChildId, RANGE_DAYS);
   const { data: measurements = [], isLoading: measurementsLoading } =
     useMeasurements(activeChildId);
   const { data: child } = useChild(activeChildId);
@@ -118,6 +121,11 @@ export default function StatsScreen() {
           </Text>
         </View>
       ) : null}
+
+      <SleepPatternChart
+        days={sleepPattern}
+        onPress={() => router.push('/sleeps')}
+      />
 
       <DailyBarChartCard
         title={t('stats.diapers.title')}

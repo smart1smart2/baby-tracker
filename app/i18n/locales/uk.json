@@ -44,6 +44,11 @@
       "night": "🌙 Ніч: {{hours}} год",
       "day": "☀️ Денний сон: {{hours}} год"
     },
+    "sleepPattern": {
+      "title": "Патерн сну",
+      "subtitle": "У середньому {{hours}} год/день",
+      "empty": "Сну за цей тиждень не записано"
+    },
     "diapers": {
       "title": "Підгузків за день",
       "totalCount_one": "{{count}} всього",

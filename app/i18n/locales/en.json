@@ -42,6 +42,11 @@
       "night": "🌙 Night: {{hours}} h",
       "day": "☀️ Day naps: {{hours}} h"
     },
+    "sleepPattern": {
+      "title": "Sleep pattern",
+      "subtitle": "Avg {{hours}} h/day",
+      "empty": "No sleep logged this week"
+    },
     "diapers": {
       "title": "Diapers per day",
       "totalCount_one": "{{count}} total",
