@@ -7,6 +7,13 @@
 # The account must already exist in Supabase with `email_confirmed_at` set
 # (create via dashboard → Authentication → Users → Add user, ticking
 # "Auto Confirm User").
+#
+# Known issue (iOS only): Maestro's `inputText` types to the iOS
+# UITextField but does not always trigger React Native's `onChangeText`
+# for `secureTextEntry={true}` Paper inputs, so the password field's
+# controlled state stays empty and the form rejects the submit. The
+# flow runs through cleanly on Android. Workarounds: target by testID,
+# or swap PasswordField for AppTextInput in a test build.
 
 appId: com.anonymous.baby-tracker
 ---
@@ -17,10 +24,20 @@ appId: com.anonymous.baby-tracker
 - tapOn:
     text: "Email"
 - inputText: ${MAESTRO_EMAIL}
+# Tap a non-interactive title to dismiss the keyboard / autofill bar.
+# Maestro's `hideKeyboard` is unreliable on iOS Paper inputs.
+- tapOn:
+    text: "Welcome back!"
 - tapOn:
     text: "Password"
+- eraseText:
+    charactersToErase: 50
 - inputText: ${MAESTRO_PASSWORD}
 - tapOn:
+    text: "Welcome back!"
+- tapOn:
     text: "Log in"
-- assertVisible:
-    text: "Quick actions"
+- extendedWaitUntil:
+    visible:
+      text: "Quick actions"
+    timeout: 10000

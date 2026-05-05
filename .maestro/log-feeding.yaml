@@ -30,10 +30,12 @@ appId: com.anonymous.baby-tracker
 
 - tapOn:
     text: "Feeding"
+# `Bottle • formula` contains a U+2022 bullet that Maestro's regex matcher
+# doesn't always handle cleanly — match on the unique trailing word.
 - tapOn:
-    text: "Bottle • formula"
+    text: "formula"
 - tapOn:
-    text: "Amount (ml)"
+    text: "Amount \\(ml\\)"
 - inputText: "120"
 - tapOn:
     text: "Save"
@@ -41,4 +43,4 @@ appId: com.anonymous.baby-tracker
 - assertVisible:
     text: "Today"
 - assertVisible:
-    text: "Bottle • formula"
+    text: "formula"
