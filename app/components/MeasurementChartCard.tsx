@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { format, parseISO } from 'date-fns';
@@ -163,10 +163,18 @@ export function MeasurementChartCard({
             dataPointsRadius={4}
           />
           {latestBand ? (
-            <View
-              style={[
+            <Pressable
+              onPress={() =>
+                Alert.alert(
+                  t(`measurements.percentileBand.${latestBand}`),
+                  t(`measurements.percentileBandHint.${latestBand}`),
+                )
+              }
+              accessibilityRole="button"
+              accessibilityHint={t('measurements.percentileBandTapHint')}
+              style={({ pressed }) => [
                 styles.bandChip,
-                { backgroundColor: `${BAND_COLORS[latestBand]}22` },
+                { backgroundColor: `${BAND_COLORS[latestBand]}22`, opacity: pressed ? 0.7 : 1 },
               ]}
             >
               <View
@@ -178,7 +186,13 @@ export function MeasurementChartCard({
               >
                 {t(`measurements.percentileBand.${latestBand}`)}
               </Text>
-            </View>
+              <Text
+                variant="labelSmall"
+                style={{ color: theme.colors.onSurfaceVariant, marginLeft: 2 }}
+              >
+                ⓘ
+              </Text>
+            </Pressable>
           ) : null}
         </>
       ) : (

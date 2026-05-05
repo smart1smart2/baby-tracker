@@ -439,6 +439,14 @@
       "p15_p85": "Around average (15–85)",
       "p85_p97": "85th–97th percentile",
       "above_p97": "Above 97th percentile"
+    },
+    "percentileBandTapHint": "Tap for an explanation",
+    "percentileBandHint": {
+      "below_p3": "Your child is among the smallest 3% of children of this age and sex in the WHO reference. Often this is normal family variation, but it's worth discussing with a pediatrician at the next visit.",
+      "p3_p15": "Your child sits on the lower end of the typical range — between the 3rd and 15th percentile. This is generally normal; the trend over time matters more than any single reading.",
+      "p15_p85": "Your child is within the typical range (15th–85th percentile) — where the majority of healthy children fall in the WHO reference.",
+      "p85_p97": "Your child sits on the higher end of the typical range — between the 85th and 97th percentile. This is generally normal; the trend over time matters more than any single reading.",
+      "above_p97": "Your child is among the largest 3% of children of this age and sex in the WHO reference. Often this is normal family variation, but it's worth discussing with a pediatrician at the next visit."
     }
   },
   "diapers": {
