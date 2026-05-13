@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { Text, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import Svg, { G, Line, Rect, Text as SvgText } from 'react-native-svg';
 
 import { ChartCard } from './ChartCard';
-import { categoryColors } from '@/constants';
+import { categoryColors, spacing } from '@/constants';
 import { useDateLocale } from '@/hooks/use-date-locale';
 import {
   SLEEP_PATTERN_HOURS,
@@ -54,12 +54,11 @@ export function SleepPatternChart({ days, onPress }: Props) {
   const blockPadding = 3;
   const hourToY = (h: number) => TOP_PAD + (h / SLEEP_PATTERN_HOURS) * innerHeight;
 
-  const subtitle =
-    totalSleep > 0
-      ? t('stats.sleepPattern.subtitle', {
-          hours: (totalSleep / Math.max(days.length, 1)).toFixed(1),
-        })
-      : t('stats.sleepPattern.empty');
+  const subtitle = totalSleep > 0
+    ? t('stats.sleepPattern.subtitle', {
+        hours: (totalSleep / Math.max(days.length, 1)).toFixed(1),
+      })
+    : undefined;
 
   return (
     <ChartCard
@@ -69,6 +68,14 @@ export function SleepPatternChart({ days, onPress }: Props) {
       subtitle={subtitle}
       onPress={onPress}
     >
+      {totalSleep === 0 ? (
+        <Text
+          variant="bodySmall"
+          style={[styles.placeholder, { color: theme.colors.onSurfaceVariant }]}
+        >
+          {t('stats.empty')}
+        </Text>
+      ) : (
       <Svg width={width} height={CHART_HEIGHT} style={styles.svg}>
         <G>
           {HOUR_TICKS.map((h) => (
@@ -133,10 +140,12 @@ export function SleepPatternChart({ days, onPress }: Props) {
           })}
         </G>
       </Svg>
+      )}
     </ChartCard>
   );
 }
 
 const styles = StyleSheet.create({
   svg: { backgroundColor: 'transparent' },
+  placeholder: { textAlign: 'center', paddingVertical: spacing.lg },
 });
