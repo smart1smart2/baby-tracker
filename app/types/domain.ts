@@ -40,14 +40,7 @@ export type MeasurementKind = Enums['measurement_kind'];
 export type Milestone = Tables['milestones']['Row'];
 export type MilestoneTemplate = Tables['milestone_templates']['Row'];
 
-// Reminders
-export type Reminder = Tables['reminders']['Row'];
-export type ReminderKind = Enums['reminder_kind'];
-
 // Vaccinations
 export type Vaccination = Tables['vaccinations']['Row'];
 export type VaccinationInsert = Tables['vaccinations']['Insert'];
 export type VaccinationTemplate = Tables['vaccination_templates']['Row'];
-
-// Photos
-export type Photo = Tables['photos']['Row'];

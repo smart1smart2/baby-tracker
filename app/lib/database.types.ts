@@ -351,51 +351,6 @@ export type Database = {
           },
         ]
       }
-      photos: {
-        Row: {
-          caption: string | null
-          child_id: string
-          created_at: string
-          created_by: string | null
-          id: string
-          storage_path: string
-          taken_at: string
-        }
-        Insert: {
-          caption?: string | null
-          child_id: string
-          created_at?: string
-          created_by?: string | null
-          id?: string
-          storage_path: string
-          taken_at?: string
-        }
-        Update: {
-          caption?: string | null
-          child_id?: string
-          created_at?: string
-          created_by?: string | null
-          id?: string
-          storage_path?: string
-          taken_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "photos_child_id_fkey"
-            columns: ["child_id"]
-            isOneToOne: false
-            referencedRelation: "children"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "photos_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -422,60 +377,6 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
-      }
-      reminders: {
-        Row: {
-          child_id: string
-          created_at: string
-          created_by: string | null
-          due_at: string
-          id: string
-          is_done: boolean
-          kind: Database["public"]["Enums"]["reminder_kind"]
-          notes: string | null
-          recurrence: string | null
-          title: string
-        }
-        Insert: {
-          child_id: string
-          created_at?: string
-          created_by?: string | null
-          due_at: string
-          id?: string
-          is_done?: boolean
-          kind: Database["public"]["Enums"]["reminder_kind"]
-          notes?: string | null
-          recurrence?: string | null
-          title: string
-        }
-        Update: {
-          child_id?: string
-          created_at?: string
-          created_by?: string | null
-          due_at?: string
-          id?: string
-          is_done?: boolean
-          kind?: Database["public"]["Enums"]["reminder_kind"]
-          notes?: string | null
-          recurrence?: string | null
-          title?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "reminders_child_id_fkey"
-            columns: ["child_id"]
-            isOneToOne: false
-            referencedRelation: "children"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reminders_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       sleeps: {
         Row: {
@@ -595,7 +496,6 @@ export type Database = {
         | "bottle_formula"
         | "solid"
       measurement_kind: "weight" | "height" | "head_circumference"
-      reminder_kind: "feeding" | "sleep" | "medicine" | "vaccination" | "custom"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -733,7 +633,6 @@ export const Constants = {
         "solid",
       ],
       measurement_kind: ["weight", "height", "head_circumference"],
-      reminder_kind: ["feeding", "sleep", "medicine", "vaccination", "custom"],
     },
   },
 } as const
