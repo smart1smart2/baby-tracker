@@ -94,6 +94,8 @@ serve(async (req) => {
     ? articles.map((a) => `## ${a.title}\n\n${a.body}`).join('\n\n---\n\n')
     : null;
 
+  const promptLang = /[а-яёіїєґ]/i.test(prompt) ? 'uk' : 'en';
+
   const systemMessage = [
     'Ти корисний помічник для батьків немовлят. Відповідай стисло, практично і тепло.',
     childAgeMonths !== null ? `Дитина батьків: ${childAgeMonths} міс.` : null,
@@ -101,7 +103,9 @@ serve(async (req) => {
       ? `Використовуй такі матеріали як контекст (не цитуй їх дослівно):\n\n${contextBlock}`
       : 'Надавай відповідь зі своїх загальних знань.',
     "Якщо питання не стосується здоров'я, розвитку або виховання дитини — ввічливо поясни, що ти спеціалізуєшся лише на цих темах.",
-    'Відповідай тією ж мовою, що й запит (українська або англійська).',
+    promptLang === 'uk'
+      ? 'МОВА ВІДПОВІДІ: виключно українська. Жодних слів зі словацької, чеської, польської, російської чи будь-якої іншої мови. Якщо не знаєш українського слова — опиши його українськими словами.'
+      : 'LANGUAGE: English only. No words from any other language.',
   ].filter(Boolean).join('\n\n');
 
   // --- Step 4: call Groq (OpenAI-compatible API, free tier) ---
@@ -115,7 +119,7 @@ serve(async (req) => {
       model: 'llama-3.3-70b-versatile',
       messages: [
         { role: 'system', content: systemMessage },
-        { role: 'user',   content: prompt },
+        { role: 'user',   content: promptLang === 'uk' ? `${prompt}\n\n[Відповідай лише українською мовою]` : prompt },
       ],
       max_tokens: 600,
     }),

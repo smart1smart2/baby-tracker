@@ -2,6 +2,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
 import 'react-native-reanimated';
+import Constants, { ExecutionEnvironment } from 'expo-constants';
 
 import '@/i18n';
 import { AppProviders } from '@/providers/AppProviders';
@@ -12,6 +13,9 @@ import { useChildRealtime } from '@/lib/realtime';
 import { initSentry, Sentry, sentryEnabled } from '@/lib/sentry';
 import { useRasp } from '@/lib/rasp';
 import { useActiveChild } from '@/stores/activeChild';
+
+// freeRASP requires a native dev/production build — not available in Expo Go
+const IS_EXPO_GO = Constants.executionEnvironment === ExecutionEnvironment.StoreClient;
 
 initSentry();
 
@@ -38,7 +42,7 @@ function RootLayout() {
     <AppProviders>
       <AuthGate>
         <RealtimeBridge />
-        <RaspBridge />
+        {!IS_EXPO_GO ? <RaspBridge /> : null}
         <Stack
           screenOptions={{
             // All non-tab routes open as bottom-up full-screen modals with
