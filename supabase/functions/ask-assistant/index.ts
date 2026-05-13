@@ -59,7 +59,6 @@ serve(async (req) => {
     global: { headers: { Authorization: auth } },
   });
 
-  // --- Step 1: semantic search via Supabase AI embeddings ---
   let articles: { id: string; title: string; body: string; category: string }[] = [];
 
   try {
@@ -78,7 +77,6 @@ serve(async (req) => {
     // Embeddings not yet computed — fall through to text fallback.
   }
 
-  // --- Step 2: text search fallback ---
   if (articles.length === 0) {
     const keyword = prompt.split(/\s+/).slice(0, 4).join(' ');
     const { data } = await client
@@ -89,7 +87,6 @@ serve(async (req) => {
     articles = (data ?? []) as typeof articles;
   }
 
-  // --- Step 3: build context ---
   const contextBlock = articles.length > 0
     ? articles.map((a) => `## ${a.title}\n\n${a.body}`).join('\n\n---\n\n')
     : null;
@@ -108,7 +105,6 @@ serve(async (req) => {
       : 'LANGUAGE: English only. No words from any other language.',
   ].filter(Boolean).join('\n\n');
 
-  // --- Step 4: call Groq (OpenAI-compatible API, free tier) ---
   const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
     headers: {

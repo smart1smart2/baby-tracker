@@ -37,10 +37,6 @@ export function translateError(error: unknown): FriendlyError {
   return { messageKey: 'errors.generic', raw: String(error) };
 }
 
-// -----------------------------------------------------------------------------
-// Supabase Auth
-// -----------------------------------------------------------------------------
-
 type AuthCtx = { code: string; lower: string; status: number | undefined };
 
 const AUTH_MATCHES: {
@@ -114,10 +110,6 @@ function translateAuthError(error: AuthError): FriendlyError {
   return { messageKey: 'errors.generic', raw };
 }
 
-// -----------------------------------------------------------------------------
-// PostgREST
-// -----------------------------------------------------------------------------
-
 function translatePostgrestError(error: PostgrestError): FriendlyError {
   const code = error.code ?? '';
   const message = (error.message ?? '').toLowerCase();
@@ -144,10 +136,6 @@ function translatePostgrestError(error: PostgrestError): FriendlyError {
 
   return { messageKey: 'errors.db.generic', raw };
 }
-
-// -----------------------------------------------------------------------------
-// Type guards
-// -----------------------------------------------------------------------------
 
 function isAuthError(error: unknown): error is AuthError {
   return (

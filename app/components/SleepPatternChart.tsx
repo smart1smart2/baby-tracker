@@ -70,7 +70,6 @@ export function SleepPatternChart({ days, onPress }: Props) {
       onPress={onPress}
     >
       <Svg width={width} height={CHART_HEIGHT} style={styles.svg}>
-        {/* Hour gridlines + labels */}
         <G>
           {HOUR_TICKS.map((h) => (
             <G key={`tick-${h}`}>
@@ -96,7 +95,6 @@ export function SleepPatternChart({ days, onPress }: Props) {
           ))}
         </G>
 
-        {/* Sleep blocks per day */}
         <G>
           {days.map((day, idx) => {
             const colX = LEFT_GUTTER + idx * dayWidth;

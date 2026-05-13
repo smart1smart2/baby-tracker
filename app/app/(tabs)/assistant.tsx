@@ -80,7 +80,6 @@ export default function AssistantScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={80}
       >
-        {/* Hero */}
         <LinearGradient
           colors={[...heroGradient]}
           start={{ x: 0, y: 0 }}
@@ -115,7 +114,6 @@ export default function AssistantScreen() {
           </View>
         </LinearGradient>
 
-        {/* Chat area */}
         <ScrollView
           ref={scrollRef}
           style={styles.messageList}
@@ -151,7 +149,6 @@ export default function AssistantScreen() {
           ) : null}
         </ScrollView>
 
-        {/* Input */}
         <View style={[styles.inputRow, shadows.sm, { backgroundColor: theme.colors.surface }]}>
           <TextInput
             style={[styles.input, { color: theme.colors.onSurface }]}
