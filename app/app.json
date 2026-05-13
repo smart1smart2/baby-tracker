@@ -42,7 +42,8 @@
       ],
       "expo-localization",
       "@react-native-community/datetimepicker",
-      "@sentry/react-native"
+      "@sentry/react-native",
+      "freerasp-react-native"
     ],
     "experiments": {
       "typedRoutes": true,

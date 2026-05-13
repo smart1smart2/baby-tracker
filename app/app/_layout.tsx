@@ -10,6 +10,7 @@ import { ModalCloseButton } from '@/components/ModalCloseButton';
 import { useActiveColorScheme } from '@/hooks/use-active-color-scheme';
 import { useChildRealtime } from '@/lib/realtime';
 import { initSentry, Sentry, sentryEnabled } from '@/lib/sentry';
+import { useRasp } from '@/lib/rasp';
 import { useActiveChild } from '@/stores/activeChild';
 
 initSentry();
@@ -24,6 +25,11 @@ function RealtimeBridge() {
   return null;
 }
 
+function RaspBridge() {
+  useRasp();
+  return null;
+}
+
 function RootLayout() {
   const scheme = useActiveColorScheme();
   const { t } = useTranslation();
@@ -32,6 +38,7 @@ function RootLayout() {
     <AppProviders>
       <AuthGate>
         <RealtimeBridge />
+        <RaspBridge />
         <Stack
           screenOptions={{
             // All non-tab routes open as bottom-up full-screen modals with
