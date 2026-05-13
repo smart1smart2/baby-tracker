@@ -15,7 +15,25 @@
   "tabs": {
     "home": "Home",
     "stats": "Stats",
+    "assistant": "Assistant",
     "settings": "Settings"
+  },
+  "assistant": {
+    "screenTitle": "AI Assistant",
+    "subtitle": "Ask about your baby's health and development",
+    "childContext": "Context: {{name}}, {{months}} mo.",
+    "noChildContext": "Select a child for personalized answers",
+    "placeholder": "Ask about development, sleep, feeding…",
+    "send": "Send",
+    "loading": "Processing your question…",
+    "error": "Something went wrong. Please try again.",
+    "sources": "Sources",
+    "suggestions": {
+      "sleep": "How much should my baby sleep?",
+      "feeding": "When to introduce solid food?",
+      "milestone": "What skills at 6 months?",
+      "teeth": "When do first teeth come in?"
+    }
   },
   "history": {
     "feedings": "Feeding history",
