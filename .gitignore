@@ -31,7 +31,6 @@ supabase/.env
 Thumbs.db
 
 # IDE
-.vscode/
 .idea/
 
 # Logs

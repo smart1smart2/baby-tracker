@@ -22,7 +22,9 @@ type ExportOptions = {
 export async function exportStatsPdf(opts: ExportOptions) {
   // Lazy-loaded so the Stats screen still bundles in Expo Go (which lacks
   // these native modules). Export itself only works in a dev build.
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const Print = require('expo-print') as typeof import('expo-print');
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const Sharing = require('expo-sharing') as typeof import('expo-sharing');
 
   const html = buildHtml(opts);

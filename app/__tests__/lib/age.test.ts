@@ -5,9 +5,9 @@ import { formatAge } from '@/lib/age';
 // Stub `t`: capture the call shape so we can assert without bringing i18next.
 function makeT(): {
   t: (key: string, opts?: Record<string, unknown>) => string;
-  calls: Array<{ key: string; opts?: Record<string, unknown> }>;
+  calls: { key: string; opts?: Record<string, unknown> }[];
 } {
-  const calls: Array<{ key: string; opts?: Record<string, unknown> }> = [];
+  const calls: { key: string; opts?: Record<string, unknown> }[] = [];
   const t = (key: string, opts?: Record<string, unknown>) => {
     calls.push({ key, opts });
     if (opts && typeof opts.count === 'number') return `${opts.count} ${key}`;

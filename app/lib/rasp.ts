@@ -4,6 +4,7 @@ import { Sentry } from './sentry';
 // where the native module doesn't exist and would crash immediately.
 const freeRasp = (() => {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     return require('freerasp-react-native') as typeof import('freerasp-react-native');
   } catch {
     return null;

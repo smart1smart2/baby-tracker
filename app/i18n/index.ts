@@ -19,6 +19,7 @@ const fallbackLanguage: SupportedLanguage = isSupported(deviceLanguageCode)
   ? deviceLanguageCode
   : 'en';
 
+// eslint-disable-next-line import/no-named-as-default-member
 i18n.use(initReactI18next).init({
   compatibilityJSON: 'v4',
   resources: {
@@ -34,6 +35,7 @@ i18n.use(initReactI18next).init({
 // Restore previously chosen language from storage; falls back to device locale.
 AsyncStorage.getItem(STORAGE_KEY)
   .then((stored) => {
+    // eslint-disable-next-line import/no-named-as-default-member
     if (isSupported(stored)) void i18n.changeLanguage(stored);
   })
   .catch(() => {
@@ -42,6 +44,7 @@ AsyncStorage.getItem(STORAGE_KEY)
 
 /** Change the active language and persist the choice. */
 export async function setLanguage(lang: SupportedLanguage): Promise<void> {
+  // eslint-disable-next-line import/no-named-as-default-member
   await i18n.changeLanguage(lang);
   try {
     await AsyncStorage.setItem(STORAGE_KEY, lang);
