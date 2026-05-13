@@ -44,7 +44,8 @@ serve(async (req) => {
   for (const article of articles) {
     const text = `${article.title}\n\n${article.body}`;
     const output = await session.run(text, { mean_pool: true, normalize: true });
-    const embedding = Array.from(output.data as Float32Array);
+    // gte-small returns a Float32Array directly (no .data wrapper)
+    const embedding = Array.from(output as Float32Array);
     await client.from('articles').update({ embedding }).eq('id', article.id);
     processed++;
   }

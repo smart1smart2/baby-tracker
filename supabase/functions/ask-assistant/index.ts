@@ -66,7 +66,7 @@ serve(async (req) => {
     // @ts-ignore — Supabase.ai injected by edge runtime
     const session = new Supabase.ai.Session('gte-small');
     const output = await session.run(prompt, { mean_pool: true, normalize: true });
-    const embedding = Array.from(output.data as Float32Array);
+    const embedding = Array.from(output as Float32Array);
 
     const { data } = await client.rpc('match_articles', {
       query_embedding: embedding,
