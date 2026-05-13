@@ -1,16 +1,13 @@
 // Edge Function: ask-assistant
 //
 // RAG pipeline:
-//   1. Embed user prompt via Supabase AI (gte-small, 384 dims)
+//   1. Embed user prompt via Supabase AI (gte-small, 384 dims) — free
 //   2. Semantic search over articles via pgvector cosine distance
 //   3. Build context from top-3 articles
-//   4. Call Claude to produce a grounded, parent-friendly answer
+//   4. Call Groq (Llama 3.3 70B) for a grounded answer — free tier
 //
 // Falls back to full-text ILIKE search when embeddings are not yet
 // computed (i.e., right after seeding before embed-articles runs).
-//
-// Auth: caller passes Supabase session JWT; RLS ensures only
-// authenticated users can read articles and the child record.
 //
 // POST /functions/v1/ask-assistant
 // { "prompt": "...", "child_age_months": 6 }
@@ -52,17 +49,17 @@ serve(async (req) => {
 
   const childAgeMonths = typeof body.child_age_months === 'number' ? body.child_age_months : null;
 
-  const supabaseUrl  = Deno.env.get('SUPABASE_URL')!;
-  const anonKey      = Deno.env.get('SUPABASE_ANON_KEY')!;
-  const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY');
+  const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+  const anonKey    = Deno.env.get('SUPABASE_ANON_KEY')!;
+  const groqKey    = Deno.env.get('GROQ_API_KEY');
 
-  if (!anthropicKey) return json(500, { error: 'anthropic_key_not_configured' });
+  if (!groqKey) return json(500, { error: 'groq_key_not_configured' });
 
   const client = createClient(supabaseUrl, anonKey, {
     global: { headers: { Authorization: auth } },
   });
 
-  // --- Step 1: semantic search ---
+  // --- Step 1: semantic search via Supabase AI embeddings ---
   let articles: { id: string; title: string; body: string; category: string }[] = [];
 
   try {
@@ -92,52 +89,45 @@ serve(async (req) => {
     articles = (data ?? []) as typeof articles;
   }
 
-  // --- Step 3: build context for Claude ---
-  const contextBlock =
-    articles.length > 0
-      ? articles.map((a) => `## ${a.title}\n\n${a.body}`).join('\n\n---\n\n')
-      : null;
+  // --- Step 3: build context ---
+  const contextBlock = articles.length > 0
+    ? articles.map((a) => `## ${a.title}\n\n${a.body}`).join('\n\n---\n\n')
+    : null;
 
-  const childCtx =
-    childAgeMonths !== null
-      ? `Дитина батьків: ${childAgeMonths} міс.`
-      : null;
-
-  const system = [
+  const systemMessage = [
     'Ти корисний помічник для батьків немовлят. Відповідай стисло, практично і тепло.',
-    childCtx,
+    childAgeMonths !== null ? `Дитина батьків: ${childAgeMonths} міс.` : null,
     contextBlock
       ? `Використовуй такі матеріали як контекст (не цитуй їх дослівно):\n\n${contextBlock}`
       : 'Надавай відповідь зі своїх загальних знань.',
-    'Якщо питання не стосується здоров\'я, розвитку або виховання дитини — ввічливо поясни, що ти спеціалізуєшся лише на цих темах.',
+    "Якщо питання не стосується здоров'я, розвитку або виховання дитини — ввічливо поясни, що ти спеціалізуєшся лише на цих темах.",
     'Відповідай тією ж мовою, що й запит (українська або англійська).',
-  ]
-    .filter(Boolean)
-    .join('\n\n');
+  ].filter(Boolean).join('\n\n');
 
-  // --- Step 4: call Claude ---
-  const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
+  // --- Step 4: call Groq (OpenAI-compatible API, free tier) ---
+  const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
     headers: {
-      'x-api-key': anthropicKey,
-      'anthropic-version': '2023-06-01',
-      'content-type': 'application/json',
+      'Authorization': `Bearer ${groqKey}`,
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
+      model: 'llama-3.3-70b-versatile',
+      messages: [
+        { role: 'system', content: systemMessage },
+        { role: 'user',   content: prompt },
+      ],
       max_tokens: 600,
-      system,
-      messages: [{ role: 'user', content: prompt }],
     }),
   });
 
-  if (!claudeRes.ok) {
-    const detail = await claudeRes.text();
-    return json(502, { error: 'claude_failed', detail });
+  if (!groqRes.ok) {
+    const detail = await groqRes.text();
+    return json(502, { error: 'groq_failed', detail });
   }
 
-  const claudeData = await claudeRes.json();
-  const answer: string = claudeData.content?.[0]?.text ?? '';
+  const groqData = await groqRes.json();
+  const answer: string = groqData.choices?.[0]?.message?.content ?? '';
 
   const sources: ArticleSource[] = articles.map((a) => ({
     id: a.id,
