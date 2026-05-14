@@ -8,12 +8,15 @@ export function useChildren() {
   return useQuery({
     queryKey: childrenKey,
     queryFn: async (): Promise<Child[]> => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return [];
       const { data, error } = await supabase
-        .from('children')
-        .select('*')
-        .order('date_of_birth', { ascending: false });
+        .from('caregivers')
+        .select('children(*)')
+        .eq('profile_id', user.id)
+        .order('date_of_birth', { ascending: false, referencedTable: 'children' });
       if (error) throw error;
-      return data;
+      return (data ?? []).map((row) => row.children as Child).filter(Boolean);
     },
   });
 }
