@@ -1,0 +1,11 @@
+\usepackage{caption}
+\usepackage[below]{placeins}
+\usepackage{flafter}
+
+\counterwithin{figure}{section}
+\counterwithin{table}{section}
+
+\DeclareCaptionLabelSeparator{endash}{ – }
+\captionsetup{labelsep=endash, justification=centering, font=normalsize}
+\captionsetup[figure]{aboveskip=8pt, belowskip=4pt}
+\captionsetup[table]{position=above, aboveskip=4pt, belowskip=8pt, justification=centering}

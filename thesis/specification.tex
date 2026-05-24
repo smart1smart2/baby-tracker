@@ -1,0 +1,146 @@
+\documentclass[%
+  ukrainian, utf8, columnvii, simple, reduceheight=2mm%
+]{eskdtab}
+
+\input{common/preamble}
+
+\usepackage{eskdlang}
+\usepackage{eskdstamp}
+\usepackage{rotating}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{multirow}
+
+\makeatletter
+
+\newsavebox{\ESKDFRAM}
+
+\newcommand{\ESKD@ShipoutPictur}{%
+    \ifESKD@twoside
+      \ifodd\c@page
+        \ESKDframeX=\ESKD@margin@si
+      \else
+        \ESKDframeX=\ESKD@margin@so
+      \fi
+    \else
+      \ESKDframeX=\ESKD@margin@si
+    \fi
+    \ESKDframeY=\ESKD@margin@b
+    \ESKDstampX=\ESKDframeX
+    \advance\ESKDstampX \ESKDframeW
+    \advance\ESKDstampX -185mm
+    \ESKDstampY=\ESKDframeY
+    \savebox{\ESKDFRAME}(0,0){
+    \unitlength=1mm
+    \begin{picture}(0,0)(\ESKDltu{\ESKD@origin@x},\ESKDltu{\ESKD@origin@y})%
+      \ifx\ESKD@thisstyle\@empty
+        \let\ESKD@thisstyle\ESKD@curstyle
+      \fi
+      \loop
+      \ifnum \ESKD@hash@pos{@style@draw@\ESKD@thisstyle} %
+        < \ESKD@hash@count{@style@draw@\ESKD@thisstyle}
+        \ESKD@hash@next@value{@style@draw@\ESKD@thisstyle}\relax
+      \repeat
+      \global\let\ESKD@thisstyle\@empty%
+    \end{picture}}%
+}
+
+\RequirePackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhf{}
+\fancyhead[L]{%
+\unitlength=1mm
+\begin{picture}(0,0)(0,0)
+  \ifthenelse{\equal{\ESKD@curstyle}{title}}{%
+  \ESKD@ShipoutPicture
+  \put(2,-12){\usebox{\ESKDFRAME}}
+  }{%
+  \ESKD@ShipoutPicture
+  \put(5,-17){\usebox{\ESKDFRAME}}
+  }
+\end{picture}
+}
+
+\makeatother
+
+\newcommand{\spf}{\gostfont\fontsize{12pt}{14pt}\selectfont\slshape}
+\newcommand{\rh}{\rule{0pt}{7.5mm}}
+\newcommand{\doctitle}{Кросплатформна клієнт-серверна система агрегації та обробки медико-біологічних даних з використанням хмарних технологій}
+
+\stampDocName{\OAtranscript}
+\stampDocId{\OAid}{\OA}
+
+\begin{document}
+
+\setlength{\tabcolsep}{0pt}
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+\setlength{\LTpre}{0mm}
+\setlength{\LTpost}{0mm}
+
+\begin{longtable}{%
+  |>{\centering\spf}p{7mm}%
+  |>{\centering\spf}p{10mm}%
+  |>{\centering\spf}p{46mm}%
+  |>{\centering\spf}p{82mm}%
+  |>{\centering\spf}p{12mm}%
+  |>{\centering\spf}p{10mm}%
+  |>{\centering\arraybackslash\spf}p{10mm}|}
+
+\hline
+\rh\rotatebox{90}{\spf\ Довідки} &
+\rotatebox{90}{\spf Формат} &
+Значення &
+Найменування &
+\rotatebox{90}{\spf Кіл.\ листів} &
+\rotatebox{90}{\spf №\ екз.} &
+\rotatebox{90}{\spf Додаток} \tabularnewline
+\hline
+\endfirsthead
+
+\hline
+\rh\rotatebox{90}{\spf\ Довідки} &
+\rotatebox{90}{\spf Формат} &
+Значення &
+Найменування &
+\rotatebox{90}{\spf Кіл.\ листів} &
+\rotatebox{90}{\spf №\ екз.} &
+\rotatebox{90}{\spf Додаток} \tabularnewline
+\hline
+\endhead
+
+%----- Завдання на дипломний проект -----%
+\rh & & & Завдання на дипломний проект & 2 & & \tabularnewline\hline
+
+%----- Опис альбому -----%
+\rh & A4 & \theStampCode.\OAid\ \OA & \doctitle & 1 & & \tabularnewline\hline
+\rh & & & \OAtranscript & & & \tabularnewline\hline
+
+%----- Технічне завдання -----%
+\rh & A4 & \theStampCode.\TZid\ \TZ & \doctitle & 4 & & \tabularnewline\hline
+\rh & & & \TZtranscript & & & \tabularnewline\hline
+
+%----- Пояснювальна записка -----%
+\rh & A4 & \theStampCode.\PZid\ \PZ & \doctitle & 69 & & \tabularnewline\hline
+\rh & & & \PZtranscript & & & \tabularnewline\hline
+
+%----- Принципова схема -----%
+\rh & A4 & \theStampCode.\PSid\ \PS & \doctitle & 1 & & \tabularnewline\hline
+\rh & & & \PStranscript & & & \tabularnewline\hline
+
+%----- Функціональна схема -----%
+\rh & A4 & \theStampCode.\FSid\ \FS & \doctitle & 1 & & \tabularnewline\hline
+\rh & & & \FStranscript & & & \tabularnewline\hline
+
+%----- Структурна схема -----%
+\rh & A4 & \theStampCode.\SSid\ \SSh & \doctitle & 1 & & \tabularnewline\hline
+\rh & & & \SStranscript & & & \tabularnewline\hline
+
+%----- Текст програмного коду -----%
+\rh & A4 & \theStampCode.\PCid\ \PC & \doctitle & 21 & & \tabularnewline\hline
+\rh & & & \PCtranscript & & & \tabularnewline\hline
+
+\end{longtable}
+
+\end{document}

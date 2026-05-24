@@ -1,0 +1,137 @@
+\documentclass[%
+  ukrainian, utf8, columnvii, simple,
+  hpadding=10mm, vpadding=10mm, reduceheight=2mm,
+  floatsection,
+]{eskdtext}
+
+\input{common/packages}
+\input{common/preamble}
+\usetikzlibrary{positioning, arrows.meta, calc}
+
+\stampDocName{\SStranscript}
+\stampDocId{\SSid}{\SSh}
+
+\tikzset{
+  %% Small component block inside outer boxes
+  ss/blk/.style={
+    rectangle, draw=black, thick, fill=white,
+    minimum width=2.7cm, minimum height=1.4cm,
+    align=center, font=\gostfont\small,
+    inner sep=5pt, text width=2.6cm,
+  },
+  %% Wide "core" block
+  ss/wblk/.style={
+    rectangle, draw=black, thick, fill=white,
+    minimum height=1.3cm,
+    align=center, font=\gostfont\small, inner sep=6pt,
+  },
+  ss/arr/.style={-{Stealth[length=6pt]}, thick},
+}
+
+\begin{document}
+
+%% ── Cover page ──────────────────────────────────────────────────────────────
+\pagenumbering{gobble}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{3cm}
+{\large\textbf{ДОДАТОК В}}
+
+\vspace{1.5cm}
+{\normalsize Кросплатформна клієнт-серверна система агрегації та обробки\\
+медико-біологічних даних з використанням хмарних технологій}
+
+\vfill
+{\large\textbf{Структурна схема}}\\[0.6em]
+{\normalsize ІАЛЦ.467200.006~Д3}
+
+\vspace{2.5cm}
+{\normalsize Аркушів 1}
+
+\vfill
+{\large\textbf{Київ 2026~р}}
+\end{center}
+\clearpage
+\pagenumbering{arabic}
+
+%% ═══════════════════════════════════════════════════════════════════════════
+%%  АРКУШ 1 — Структурна схема системи
+%% ═══════════════════════════════════════════════════════════════════════════
+\setcounter{page}{1}
+\null\vfill
+\begin{center}
+\resizebox{0.90\textwidth}{!}{%
+\begin{tikzpicture}
+
+%% ═══════════════════════════════════════════════════════════════════════════
+%%  КЛІЄНТСЬКА ЧАСТИНА
+%% ═══════════════════════════════════════════════════════════════════════════
+\draw[thick] (-6.0, 8.0) rectangle (6.0, 12.8);
+\node[font=\gostfont\small\bfseries] at (0, 12.45)
+  {Клієнтська частина (iOS / Android)};
+
+\node[ss/blk] (cl1) at (-3.2, 11.55) {Expo Router};
+\node[ss/blk] (cl2) at ( 0.0, 11.55) {Zustand};
+\node[ss/blk] (cl3) at ( 3.2, 11.55) {TanStack Query};
+
+\node[ss/wblk, minimum width=10.0cm, text width=9.5cm] (rn) at (0, 9.45)
+  {React Native / Expo\\(UI, Логіка клієнта)};
+
+\draw[ss/arr] (cl1.south) -- (cl1.south |- rn.north);
+\draw[ss/arr] (cl2.south) -- (cl2.south |- rn.north);
+\draw[ss/arr] (cl3.south) -- (cl3.south |- rn.north);
+
+%% ═══════════════════════════════════════════════════════════════════════════
+%%  USER (stick figure — to the left of client box)
+%% ═══════════════════════════════════════════════════════════════════════════
+\begin{scope}[shift={(-9.0, 10.40)}]
+  \draw[thick] (0, 0.34) circle (0.29);
+  \draw[thick] (0, 0.05) -- (0, -0.52);
+  \draw[thick] (0,-0.12) -- (-0.40,-0.46);
+  \draw[thick] (0,-0.12) -- ( 0.40,-0.46);
+  \draw[thick] (0,-0.52) -- (-0.28,-1.00);
+  \draw[thick] (0,-0.52) -- ( 0.28,-1.00);
+  \node[font=\gostfont\small, below=2pt] at (0,-1.08) {Користувач};
+\end{scope}
+\draw[ss/arr] (-8.3, 10.40) -- (-6.0, 10.40);
+
+%% ═══════════════════════════════════════════════════════════════════════════
+%%  ARROW: client → server
+%% ═══════════════════════════════════════════════════════════════════════════
+\draw[ss/arr] (0, 8.0) -- (0, 7.0)
+  node[midway, right=6pt, font=\gostfont\footnotesize] {HTTPS / WebSocket};
+
+%% ═══════════════════════════════════════════════════════════════════════════
+%%  СЕРВЕРНА ЧАСТИНА (Supabase BaaS)
+%% ═══════════════════════════════════════════════════════════════════════════
+\draw[thick] (-7.0, 4.2) rectangle (7.0, 7.0);
+\node[font=\gostfont\small\bfseries] at (0, 6.70)
+  {Серверна частина (Supabase BaaS)};
+
+\node[ss/blk] (sv1) at (-4.5, 5.60) {PostgREST};
+\node[ss/blk] (sv2) at (-1.5, 5.60) {Auth};
+\node[ss/blk] (sv3) at ( 1.5, 5.60) {Realtime};
+\node[ss/blk] (sv4) at ( 4.5, 5.60) {Storage};
+
+%% ═══════════════════════════════════════════════════════════════════════════
+%%  ARROW: server → database
+%% ═══════════════════════════════════════════════════════════════════════════
+\draw[ss/arr] (0, 4.2) -- (0, 2.5)
+  node[midway, right=6pt, font=\gostfont\footnotesize] {SQL};
+
+%% ═══════════════════════════════════════════════════════════════════════════
+%%  БАЗА ДАНИХ
+%% ═══════════════════════════════════════════════════════════════════════════
+\draw[thick] (-4.0, -1.0) rectangle (4.0, 2.5);
+\node[font=\gostfont\small\bfseries] at (0, 2.1)
+  {База даних};
+
+\node[ss/blk, minimum width=6.0cm, minimum height=2.6cm, text width=5.8cm]
+  at (0, 0.5) {PostgreSQL};
+
+\end{tikzpicture}
+}%resizebox
+\end{center}
+\vfill\null
+
+\end{document}

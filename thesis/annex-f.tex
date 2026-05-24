@@ -1,0 +1,205 @@
+\documentclass[%
+  ukrainian, utf8, columnvii, simple,
+  hpadding=10mm, vpadding=10mm, reduceheight=2mm,
+  floatsection,
+]{eskdtext}
+
+\input{common/packages}
+\input{common/preamble}
+\usetikzlibrary{positioning, arrows.meta, calc}
+
+\stampDocName{\FStranscript}
+\stampDocId{\FSid}{\FS}
+
+\tikzset{
+  er/h/.style={
+    rectangle, draw=black, thick, fill=gray!20,
+    minimum width=4.0cm, minimum height=0.65cm,
+    text centered, font=\gostfont\small\bfseries,
+    text width=3.8cm,
+  },
+  er/b/.style={
+    rectangle, draw=black, thick, fill=white,
+    minimum width=4.0cm,
+    text width=3.7cm,
+    align=left,
+    font=\gostfont\footnotesize,
+    inner xsep=6pt, inner ysep=5pt,
+  },
+  arr/.style={-{Stealth[length=5pt]}, thick},
+  bus/.style={thick},
+}
+
+\begin{document}
+
+%% ── Cover page ──────────────────────────────────────────────────────────────
+\pagenumbering{gobble}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{3cm}
+{\large\textbf{ДОДАТОК Б}}
+
+\vspace{1.5cm}
+{\normalsize Кросплатформна клієнт-серверна система агрегації та обробки\\
+медико-біологічних даних з використанням хмарних технологій}
+
+\vfill
+{\large\textbf{Функціональна схема}}\\[0.6em]
+{\normalsize ІАЛЦ.467200.005~Д2}
+
+\vspace{2.5cm}
+{\normalsize Аркушів 1}
+
+\vfill
+{\large\textbf{Київ 2026~р}}
+\end{center}
+\clearpage
+\pagenumbering{arabic}
+
+%% ═══════════════════════════════════════════════════════════════════════════
+%%  АРКУШ 1 — ER-діаграма бази даних
+%% ═══════════════════════════════════════════════════════════════════════════
+\setcounter{page}{1}
+\null\vfill
+\begin{center}
+\resizebox{0.97\textwidth}{!}{%
+\begin{tikzpicture}
+
+%% ── Рядок 1: profiles / caregivers / children ───────────────────────────────
+\node[er/h] (pr_h) at (-7, 0) {profiles};
+\node[er/b, below=0pt of pr_h] (pr_b) {
+  id (PK)\\
+  full\_name\\
+  avatar\_url\\
+  locale
+};
+
+\node[er/h] (cg_h) at (-2, 0) {caregivers};
+\node[er/b, below=0pt of cg_h] (cg_b) {
+  \textit{profile\_id} (FK)\\
+  \textit{child\_id} (FK)\\
+  role
+};
+
+\node[er/h] (ch_h) at (4, 0) {children};
+\node[er/b, below=0pt of ch_h] (ch_b) {
+  id (PK)\\
+  full\_name\\
+  date\_of\_birth\\
+  sex\\
+  avatar\_url
+};
+
+%% ── Рядок 2: активності ────────────────────────────────────────────────────
+\node[er/h] (fd_h) at (-8.5, -7) {feedings};
+\node[er/b, below=0pt of fd_h] (fd_b) {
+  id (PK)\\
+  \textit{child\_id} (FK)\\
+  kind\\
+  started\_at\\
+  ended\_at\\
+  amount\_ml
+};
+
+\node[er/h] (sl_h) at (-3.5, -7) {sleeps};
+\node[er/b, below=0pt of sl_h] (sl_b) {
+  id (PK)\\
+  \textit{child\_id} (FK)\\
+  started\_at\\
+  ended\_at
+};
+
+\node[er/h] (dp_h) at (1.5, -7) {diapers};
+\node[er/b, below=0pt of dp_h] (dp_b) {
+  id (PK)\\
+  \textit{child\_id} (FK)\\
+  kind\\
+  occurred\_at
+};
+
+\node[er/h] (gm_h) at (7, -7) {growth\_measurements};
+\node[er/b, below=0pt of gm_h] (gm_b) {
+  id (PK)\\
+  \textit{child\_id} (FK)\\
+  kind\\
+  value\\
+  unit\\
+  measured\_at
+};
+
+%% ── Рядок 3: здоров'я ───────────────────────────────────────────────────────
+\node[er/h] (mt_h) at (-8.5, -16) {milestone\_templates};
+\node[er/b, below=0pt of mt_h] (mt_b) {
+  id (PK)\\
+  code\\
+  title\\
+  category\\
+  age\_min\_months\\
+  age\_max\_months
+};
+
+\node[er/h] (ms_h) at (-2.5, -16) {milestones};
+\node[er/b, below=0pt of ms_h] (ms_b) {
+  id (PK)\\
+  \textit{child\_id} (FK)\\
+  \textit{template\_id} (FK)\\
+  custom\_title\\
+  achieved\_at
+};
+
+\node[er/h] (vc_h) at (4.5, -16) {vaccinations};
+\node[er/b, below=0pt of vc_h] (vc_b) {
+  id (PK)\\
+  \textit{child\_id} (FK)\\
+  vaccine\_code\\
+  vaccine\_name\\
+  scheduled\_for\\
+  administered\_at
+};
+
+%% ── profiles ↔ caregivers ↔ children ────────────────────────────────────────
+\draw[arr] (cg_h.west) -- (pr_h.east)
+  node[near start, above, font=\gostfont\scriptsize] {M}
+  node[near end,   above, font=\gostfont\scriptsize] {1};
+
+\draw[arr] (cg_h.east) -- (ch_h.west)
+  node[near start, above, font=\gostfont\scriptsize] {M}
+  node[near end,   above, font=\gostfont\scriptsize] {1};
+
+%% ── Стовбур від children вниз до шини 1 ────────────────────────────────────
+\draw[bus] (ch_b.south) -- ++(0,-1.6) coordinate (b1)
+  node[pos=0.2, right, font=\gostfont\scriptsize] {1};
+
+%% ── Шина 1 (між children і активностями): від feedings до growth ────────────
+\draw[bus] (b1 -| fd_h) -- (b1 -| gm_h);
+\draw[arr] (b1 -| fd_h) -- (fd_h.north)
+  node[near end, right, font=\gostfont\scriptsize] {M};
+\draw[arr] (b1 -| sl_h) -- (sl_h.north)
+  node[near end, right, font=\gostfont\scriptsize] {M};
+\draw[arr] (b1 -| dp_h) -- (dp_h.north)
+  node[near end, right, font=\gostfont\scriptsize] {M};
+\draw[arr] (b1 -| gm_h) -- (gm_h.north)
+  node[near end, right, font=\gostfont\scriptsize] {M};
+
+%% ── Центральний стовбур від b1 вниз між diapers і growth до шини 2 ─────────
+\draw[bus] (b1) -- (b1 |- gm_b.south) -- ++(0,-1.6) coordinate (b2);
+
+%% ── Шина 2 (між активностями і здоров'ям): milestones ↔ vaccinations ────────
+\draw[bus] (b2 -| ms_h) -- (b2 -| vc_h);
+\draw[arr] (b2 -| ms_h) -- (ms_h.north)
+  node[near end, right, font=\gostfont\scriptsize] {M};
+\draw[arr] (b2 -| vc_h) -- (vc_h.north)
+  node[near end, right, font=\gostfont\scriptsize] {M};
+
+%% ── milestone_templates → milestones (1 : M) ────────────────────────────────
+\draw[arr] (ms_h.west) -- (mt_h.east)
+  node[near start, above, font=\gostfont\scriptsize] {M}
+  node[near end,   above, font=\gostfont\scriptsize] {1};
+
+
+\end{tikzpicture}
+}%resizebox
+\end{center}
+\vfill\null
+
+\end{document}
