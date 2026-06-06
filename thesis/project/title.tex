@@ -1,13 +1,13 @@
 % Титульный лист (ГОСТ Р 7.0.11-2001, 5.1)
 \thispagestyle{empty}%
 \begin{center}%
-\thesisOrganization
+\textbf{\MakeUppercase{\thesisOrganization}}
 
-\thesisOOrganization
+\textbf{"\MakeUppercase{Київський політехнічний інститут}\\імені \MakeUppercase{Ігоря Сікорського}"}
 
-\thesisInstitute
+\underline{\thesisInstitute}
 
-\thesisDepartment
+\underline{\thesisDepartment}
 \end{center}
 %
 \vspace{0pt plus4fill} 
@@ -18,60 +18,59 @@
 %\end{flushleft}%
 
 \begin{flushright}%
-До захисту допущено:
+\textbf{До захисту допущено:}
 
-\textsl{В.о. завідувача кафедри}
+\textbf{В.о. завідувача кафедри}
 \begin{flushright}
-$\underset{\text{\tiny(підпис)}}{\underline{\hspace{0.15\textwidth}}}$ \; \textbf{\thisisHD}
+$\underset{\text{\tiny(підпис)}}{\underline{\hspace{0.15\textwidth}}}$ \; \underline{\textbf{\thisisHD}}
 \end{flushright}%
 \begin{flushright}
-$\underset{\text{\tiny(число)}}{\underline{\hspace{0.1\textwidth}}}$ $\underset{\text{\tiny(місяць)}} {\underline{\hspace{0.2\textwidth}}}$ \; \text{\the\year\ р.}
+\text{``}\underline{\hspace{0.05\textwidth}}\text{''}~\underline{\hspace{0.22\textwidth}}~\the\year\ р.
 \end{flushright}%
 \end{flushright}%
 %
 \vspace{0pt plus4fill}
 \begin{center}
-\textbf {\Large{Дипломний проєкт}}
+\textbf{\Large{Дипломний проєкт}}
 
-на здобуття ступеня бакалавра
+\textbf{на здобуття ступеня бакалавра}
 
-за освітньо-професійною програмою <<\thesisOsvitnyaPrograma>>
-
-спеціальність \thesisSpecialtyNumber~---
-<<\thesisSpecialtyTitle>>
+\textbf{за освітньо-професійною програмою "\thesisOsvitnyaPrograma" спеціальності \thesisSpecialtyNumber\ "\thesisSpecialtyTitle"}
 \end{center}
 
-\vspace{0pt plus1fill} 
-\begin{center}%
-\todo{\textbf {\large \MakeUppercase{\thesisTitle}}}
+\vspace{0pt plus1fill}
+\noindent на тему:\hspace{3mm}\uline{Кросплатформна клієнт-серверна система агрегації та обробки\hspace*{\fill}}\\
+\uline{\strut медико-біологічних даних з використанням хмарних технологій\hspace*{\fill}}
 
-\end{center}%
-%
 \vspace{0pt plus5fill} %Число перед fill = кратність відносно деякої відстані fill, шматками якої заповнені порожні місця
 \begin{flushleft}%
 
-\textbf{\theWordDone} \\
-\todo{\thesisAuthor,\ \theStudent\ \theSYear\ курсу, група \theGroup} \; $\underset{\text{\tiny(підпис)}}{\underline{\hspace{0.15\textwidth}}}$
+\theWordDone\ : \theStudent\ $\underset{\phantom{\text{\scriptsize(шифр групи)}}}{\underline{\hspace{0.06\textwidth}\text{\theSYear}\hspace{0.06\textwidth}}}$ курсу, групи $\underset{\text{\scriptsize(шифр групи)}}{\underline{\hspace{0.02\textwidth}\text{\theGroup}\hspace{0.02\textwidth}}}$
 
 \vspace{2mm}
-\textbf{Керівник}\\
-\todo{\supervisorFio,\ \supervisorRegalia} \; $\underset{\text{\tiny(підпис)}}{\underline{\hspace{0.15\textwidth}}}$
+\noindent\underline{\makebox[0.70\linewidth][c]{\thesisAuthor}} \hfill $\underset{\text{\tiny(підпис)}}{\underline{\hspace{0.15\textwidth}}}$\\[-1mm]
+\makebox[0.70\linewidth][c]{\scriptsize(прізвище, ім'я, по батькові)}
 
 \vspace{2mm}
-\textbf{Консультант}\\
-\todo{\consultantFio,\  \consultantRegalia} \; $\underset{\text{\tiny(підпис)}}{\underline{\hspace{0.15\textwidth}}}$
+\noindent Керівник \underline{\makebox[0.56\linewidth][c]{\supervisorRegalia,\ \supervisorInitials}} \hfill $\underset{\text{\tiny(підпис)}}{\underline{\hspace{0.15\textwidth}}}$\\[-1mm]
+\hspace*{5.2em}\makebox[0.56\linewidth][c]{\scriptsize(посада, науковий ступінь, вчене звання, прізвище та ініціали)}
 
 \vspace{2mm}
-\textbf{Рецензент}\\
-\todo{\visorFio,\  \visorRegalia} \; $\underset{\text{\tiny(підпис)}}{\underline{\hspace{0.15\textwidth}}}$
+\noindent Консультант \underline{(\consultantPart)}\;\underline{\consultantRegalia\ \consultantFio} \hfill $\underset{\text{\tiny(підпис)}}{\underline{\hspace{0.12\textwidth}}}$\\[-1mm]
+{\scriptsize\hspace{6.2em}(назва розділу)\hspace{2em}(посада, вчене знання, науковий ступінь, прізвище та ініціали)}
+
+\vspace{2mm}
+\noindent Рецензент \underline{\makebox[0.56\linewidth][c]{}} \hfill $\underset{\text{\tiny(підпис)}}{\underline{\hspace{0.15\textwidth}}}$\\[-1mm]
+\hspace*{5.2em}\makebox[0.56\linewidth][c]{\scriptsize(посада, науковий ступінь, вчене звання, прізвище та ініціали)}
+
 \end{flushleft}%
 
 \begin{flushright}
-Засвідчую, що у цьому дипломному проєкті немає запозичень \\ з праць інших авторів без відповідних посилань
+\parbox{0.52\textwidth}{%
+Засвідчую, що у цьому дипломному проєкті немає запозичень з праць інших авторів без відповідних посилань.
 
-\begin{flushright}
-$\underset{\text{\tiny(підпис)}}{\underline{\hspace{0.15\textwidth}}}$ \; \textbf{\thesisAuthorInitials}
-\end{flushright}%
+\noindent Студент $\underset{\text{\tiny(підпис)}}{\underline{\hspace{0.22\textwidth}}}$
+}
 \end{flushright}
 
 \vspace{0pt plus5fill} %Число перед fill = кратність відносно деякої відстані fill, шматками якої заповнені порожні місця
