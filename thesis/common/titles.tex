@@ -39,6 +39,18 @@
   \setcounter{secnumdepth}{3}
 }
 
+\makeatletter
+\newenvironment{conclusionsection}{%
+  \clearpage
+  \ESKD@enable@column@viifalse
+  \setcounter{secnumdepth}{0}
+  \renewcommand{\sectionbreak}{}%
+}{%
+  \clearpage
+  \setcounter{secnumdepth}{3}%
+}
+\makeatother
+
 % --- TOC entry formatting (match ДСТУ/ESKD style, no bold) ---
 \contentsmargin{0pt}
 
