@@ -5,7 +5,7 @@
 \counterwithin{figure}{section}
 \counterwithin{table}{section}
 
-\DeclareCaptionLabelSeparator{endash}{ – }
+\DeclareCaptionLabelSeparator{endash}{\mbox{ - }}
 \captionsetup{labelsep=endash, justification=centering, font=normalsize}
-\captionsetup[figure]{aboveskip=8pt, belowskip=4pt}
-\captionsetup[table]{position=above, aboveskip=4pt, belowskip=8pt, justification=centering}
+\captionsetup[figure]{labelsep=endash, aboveskip=8pt, belowskip=4pt}
+\captionsetup[table]{labelsep=endash, position=above, aboveskip=4pt, belowskip=8pt, justification=centering}
